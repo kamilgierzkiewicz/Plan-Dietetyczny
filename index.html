@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dieta keto — plan Kamila</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Dieta">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0E1417" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F2EEE6" media="(prefers-color-scheme: light)">
+<meta name="description" content="Plan keto na 7 dni: wybór posiłków, licznik węglowodanów, lista zakupów.">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="icon" href="./favicon-32.png" sizes="32x32">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+
+  --ink:#0E1417;
+  --slab:#182126;
+  --slab-2:#202B31;
+  --line:#2C3A41;
+  --bone:#EDE8DF;
+  --mute:#8FA0A8;
+
+  --fat:#E8B84B;
+  --iron:#C4553A;
+  --moss:#88A97C;
+
+  --ok:#88A97C;
+  --hot:#C4553A;
+
+  --r-tile:10px;
+  --r-sheet:20px;
+
+  --d-fast:.14s;
+  --d-med:.32s;
+}
+:root:not([data-theme="light"]){color-scheme:dark}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    color-scheme:light;
+    --ink:#F2EEE6;
+    --slab:#FFFFFF;
+    --slab-2:#F7F3EB;
+    --line:#DFD7C8;
+    --bone:#15201F;
+    --mute:#6B7A72;
+    --fat:#B8851A;
+    --iron:#A83E26;
+    --moss:#4E6F45;
+    --ok:#4E6F45;
+    --hot:#A83E26;
+  }
+}
+:root[data-theme="light"]{
+  color-scheme:light;
+  --ink:#F2EEE6;--slab:#FFFFFF;--slab-2:#F7F3EB;--line:#DFD7C8;
+  --bone:#15201F;--mute:#6B7A72;--fat:#B8851A;--iron:#A83E26;--moss:#4E6F45;
+  --ok:#4E6F45;--hot:#A83E26;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--ink);color:var(--bone);
+  font-family:Archivo,"Helvetica Neue",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:15px;line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  padding-bottom:78px;
+}
+h1,h2,h3{font-family:"Bricolage Grotesque",Archivo,"Helvetica Neue",sans-serif;font-weight:700;margin:0;letter-spacing:-.02em;line-height:1.1}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;padding:0}
+:focus-visible{outline:2px solid var(--fat);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+
+.wrap{max-width:640px;margin:0 auto;padding:0 16px}
+
+/* ── day rail ───────────────────────────── */
+.railwrap{
+  position:sticky;top:0;z-index:30;
+  background:var(--ink);
+  padding-top:env(safe-area-inset-top,0px);
+  border-bottom:1px solid var(--line);
+}
+.rail{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;padding:10px 16px 0}
+.rail::-webkit-scrollbar{display:none}
+.day{
+  flex:1 0 auto;min-width:44px;padding:7px 9px 10px;text-align:center;
+  border-bottom:2px solid transparent;color:var(--mute);
+  font-size:13px;font-weight:600;transition:color var(--d-fast);
+  white-space:nowrap;
+}
+.day.on{color:var(--bone);border-bottom-color:var(--fat)}
+.day .dot{display:block;width:4px;height:4px;border-radius:50%;background:var(--moss);margin:3px auto -3px}
+
+/* ── hero gauge ─────────────────────────── */
+.hero{padding:22px 0 18px}
+.hero-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:12px}
+.hero-label{font-size:13px;color:var(--mute);font-weight:500}
+.carbnum{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(46px,15vw,68px);line-height:.85;letter-spacing:-.045em;font-variant-numeric:tabular-nums}
+.carbnum span{font-size:.32em;font-weight:600;letter-spacing:0;margin-left:5px;color:var(--mute)}
+
+.gauge{position:relative;height:14px;background:var(--slab);border-radius:2px;overflow:hidden}
+.gfill{position:absolute;inset:0 auto 0 0;width:0;background:var(--moss);transition:width var(--d-med) cubic-bezier(.22,.7,.3,1),background var(--d-med)}
+.gfill.low{background:var(--fat)}
+.gfill.over{background:var(--iron)}
+.gmark{position:absolute;top:0;bottom:0;width:1px;background:var(--ink);opacity:.85}
+.gscale{display:flex;justify-content:space-between;margin-top:6px;font-size:11px;color:var(--mute);font-variant-numeric:tabular-nums}
+.gscale b{font-weight:600;color:var(--mute)}
+
+.macros{display:flex;gap:0;margin-top:18px;border-top:1px solid var(--line)}
+.macro{flex:1;padding:11px 0 2px}
+.macro+.macro{border-left:1px solid var(--line);padding-left:12px}
+.macro .v{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:20px;letter-spacing:-.02em;font-variant-numeric:tabular-nums;display:block}
+.macro .k{font-size:11.5px;color:var(--mute)}
+
+.flag{
+  display:flex;gap:9px;align-items:flex-start;
+  margin-top:16px;padding:11px 13px;border-radius:var(--r-tile);
+  background:color-mix(in srgb,var(--iron) 14%,transparent);
+  border-left:3px solid var(--iron);font-size:13.5px;line-height:1.45;
+}
+.flag.tip{background:color-mix(in srgb,var(--moss) 13%,transparent);border-left-color:var(--moss)}
+.flag svg{flex:0 0 auto;margin-top:2px}
+
+/* ── slots ──────────────────────────────── */
+.slot{margin-top:26px}
+.slot-h{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:9px}
+.slot-h h2{font-size:17px}
+.slot-h .hint{font-size:12px;color:var(--mute)}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.opt{
+  position:relative;text-align:left;padding:13px 13px 12px 15px;
+  background:var(--slab);border-radius:var(--r-tile);
+  border:1px solid transparent;
+  transition:background var(--d-fast),border-color var(--d-fast);
+  min-height:118px;display:flex;flex-direction:column;
+}
+.opt::before{
+  content:"";position:absolute;left:0;top:10px;bottom:10px;width:3px;
+  border-radius:0 3px 3px 0;background:transparent;transition:background var(--d-fast);
+}
+.opt.on{background:var(--slab-2);border-color:var(--line)}
+.opt.on::before{background:var(--fat)}
+.opt-n{font-weight:600;font-size:14px;line-height:1.28;margin-bottom:auto;padding-bottom:9px}
+.opt-meta{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--mute);font-variant-numeric:tabular-nums}
+.opt-meta .kcal{color:var(--bone);font-weight:600}
+.opt-carb{
+  display:inline-flex;align-items:center;gap:3px;margin-top:6px;
+  font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--iron);
+}
+.opt-carb i{width:5px;height:5px;border-radius:50%;background:var(--iron);font-style:normal}
+.opt-see{
+  margin-top:9px;font-size:12px;color:var(--mute);font-weight:500;
+  text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--line);
+  align-self:flex-start;
+}
+.sweet{position:absolute;top:11px;right:11px;font-size:14px;line-height:1;opacity:.75}
+
+/* ── views ──────────────────────────────── */
+.view{display:none;animation:fade var(--d-med) ease}
+.view.on{display:block}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.vhead{padding:24px 0 4px}
+.vhead h1{font-size:26px;margin-bottom:5px}
+.vhead p{margin:0;color:var(--mute);font-size:13.5px;max-width:52ch}
+
+/* ── shopping ───────────────────────────── */
+.cat{margin-top:24px}
+.cat h3{font-size:14px;color:var(--fat);padding-bottom:7px;border-bottom:1px solid var(--line);margin-bottom:2px}
+.item{display:flex;align-items:center;gap:11px;padding:11px 2px;border-bottom:1px solid var(--line);width:100%;text-align:left}
+.item:last-child{border-bottom:none}
+.box{flex:0 0 19px;height:19px;border:1.5px solid var(--mute);border-radius:4px;display:grid;place-items:center;transition:all var(--d-fast)}
+.item.done .box{background:var(--moss);border-color:var(--moss)}
+.item.done .box svg{opacity:1}
+.box svg{opacity:0;transition:opacity var(--d-fast)}
+.item.done .nm{text-decoration:line-through;color:var(--mute)}
+.nm{flex:1;font-size:14.5px;line-height:1.3}
+.nm small{display:block;color:var(--mute);font-size:12px;margin-top:1px}
+.qty{font-size:13.5px;color:var(--mute);font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:500}
+.item.done .qty{opacity:.5}
+
+.bar{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}
+.btn{
+  padding:10px 15px;border-radius:8px;background:var(--slab);
+  font-size:13.5px;font-weight:600;transition:background var(--d-fast);
+  border:1px solid var(--line);
+}
+.btn:active{background:var(--slab-2)}
+.btn.pri{background:var(--fat);color:#15201F;border-color:var(--fat)}
+
+/* ── recipe sheet ───────────────────────── */
+.scrim{
+  position:fixed;inset:0;z-index:60;background:rgba(6,10,12,.66);
+  opacity:0;pointer-events:none;transition:opacity var(--d-med);
+  backdrop-filter:blur(3px);
+}
+.scrim.on{opacity:1;pointer-events:auto}
+.sheet{
+  position:fixed;left:0;right:0;bottom:0;z-index:61;
+  max-height:88vh;max-width:640px;margin:0 auto;
+  background:var(--ink);border-radius:var(--r-sheet) var(--r-sheet) 0 0;
+  border-top:1px solid var(--line);
+  transform:translateY(101%);transition:transform var(--d-med) cubic-bezier(.22,.7,.3,1);
+  display:flex;flex-direction:column;
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+.sheet.on{transform:translateY(0)}
+.grip{width:34px;height:4px;border-radius:2px;background:var(--line);margin:9px auto 0;flex:0 0 auto}
+.sheet-in{overflow-y:auto;padding:14px 18px 26px;-webkit-overflow-scrolling:touch}
+.sheet h2{font-size:21px;margin-bottom:6px;padding-right:34px}
+.sheet-meta{display:flex;gap:14px;font-size:12.5px;color:var(--mute);margin-bottom:16px;flex-wrap:wrap;font-variant-numeric:tabular-nums}
+.x{position:absolute;top:16px;right:16px;width:30px;height:30px;border-radius:50%;background:var(--slab);display:grid;place-items:center}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{text-align:left;font-weight:600;color:var(--mute);font-size:11.5px;padding:0 0 6px;border-bottom:1px solid var(--line)}
+th:nth-child(2){text-align:right}
+td{padding:8px 0;border-bottom:1px solid var(--line);vertical-align:top}
+td:nth-child(2){text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:600;width:62px}
+td:nth-child(3){color:var(--mute);text-align:right;white-space:nowrap;padding-left:10px;font-size:12.5px}
+.how{margin:17px 0 0;font-size:14px;line-height:1.6}
+.how strong{color:var(--fat);font-weight:600}
+.mrow{display:flex;gap:0;margin-top:17px;border:1px solid var(--line);border-radius:var(--r-tile);overflow:hidden}
+.mcell{flex:1;padding:10px 4px;text-align:center}
+.mcell+.mcell{border-left:1px solid var(--line)}
+.mcell .v{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:17px;display:block;font-variant-numeric:tabular-nums}
+.mcell .k{font-size:10.5px;color:var(--mute)}
+.mcell.c .v{color:var(--iron)}
+
+/* ── scale + rules ──────────────────────── */
+.tgt{display:flex;align-items:center;gap:10px;margin-top:14px}
+.tgt input{
+  flex:1;min-width:0;padding:11px 13px;border-radius:8px;background:var(--slab);
+  border:1px solid var(--line);color:var(--bone);font:600 16px Archivo,sans-serif;
+  font-variant-numeric:tabular-nums;
+}
+.advice{margin-top:14px;padding:15px;border-radius:var(--r-tile);background:var(--slab);font-size:14px;line-height:1.55}
+.advice b{font-family:"Bricolage Grotesque",sans-serif;font-size:19px;letter-spacing:-.02em}
+.advice ul{margin:9px 0 0;padding-left:17px}
+.advice li{margin:4px 0}
+
+.rule{padding:15px 0;border-bottom:1px solid var(--line)}
+.rule:last-child{border-bottom:none}
+.rule h3{font-size:15px;margin-bottom:5px}
+.rule p{margin:0;font-size:13.5px;color:var(--mute);line-height:1.55}
+.rule p b{color:var(--bone);font-weight:600}
+
+.rgroup{margin-top:22px}
+.rgroup>h3{font-size:13.5px;color:var(--fat);padding-bottom:7px;border-bottom:1px solid var(--line);margin-bottom:0}
+.rlink{display:flex;align-items:center;gap:11px;width:100%;text-align:left;padding:12px 2px;border-bottom:1px solid var(--line)}
+.rlink:last-child{border-bottom:none}
+.rlink .rn{flex:1;font-size:14.5px;font-weight:500}
+.rlink .rq{font-size:12.5px;color:var(--mute);font-variant-numeric:tabular-nums;white-space:nowrap}
+
+/* ── tabs ───────────────────────────────── */
+.tabs{
+  position:fixed;left:0;right:0;bottom:0;z-index:40;
+  display:flex;background:var(--slab);border-top:1px solid var(--line);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+.tab{flex:1;padding:9px 2px 8px;display:grid;justify-items:center;gap:2px;color:var(--mute);transition:color var(--d-fast)}
+.tab.on{color:var(--fat)}
+.tab span{font-size:10.5px;font-weight:600}
+.foot{margin:30px 0 8px;font-size:12px;color:var(--mute);line-height:1.55}
+</style>
+</head>
+<body>
+
+<div class="railwrap">
+  <div class="rail" id="rail"></div>
+</div>
+
+<main class="wrap">
+
+  <!-- ══ PLAN ══ -->
+  <section class="view on" id="v-plan">
+    <div class="hero">
+      <div class="hero-top">
+        <div>
+          <div class="hero-label">Węglowodany dziś</div>
+          <div class="carbnum" id="carbN">0<span>g</span></div>
+        </div>
+      </div>
+      <div class="gauge">
+        <div class="gfill" id="gfill"></div>
+        <div class="gmark" style="left:37.5%"></div>
+        <div class="gmark" style="left:87.5%"></div>
+      </div>
+      <div class="gscale"><span>0</span><span><b>30</b> minimum</span><span><b>70</b> sufit</span></div>
+
+      <div class="macros">
+        <div class="macro"><span class="v" id="mK">0</span><span class="k">kcal</span></div>
+        <div class="macro"><span class="v" id="mB">0</span><span class="k">białko g</span></div>
+        <div class="macro"><span class="v" id="mT">0</span><span class="k">tłuszcz g</span></div>
+        <div class="macro"><span class="v" id="mF">0</span><span class="k">błonnik g</span></div>
+      </div>
+      <div id="flags"></div>
+    </div>
+    <div id="slots"></div>
+    <p class="foot">Wybierasz jeden posiłek z pary. Licznik przelicza się od razu, wybory zostają w telefonie.</p>
+  </section>
+
+  <!-- ══ ZAKUPY ══ -->
+  <section class="view" id="v-shop">
+    <div class="vhead">
+      <h1>Zakupy</h1>
+      <p id="shopSub"></p>
+    </div>
+    <div class="bar">
+      <button class="btn" id="btnCopy">Skopiuj listę</button>
+      <button class="btn" id="btnClear">Odznacz wszystko</button>
+    </div>
+    <div id="shop"></div>
+    <p class="foot">Warzywa i owoce bierz na 3–4 dni, nie na cały tydzień. Pomidory i ogórki się nie doczekają.</p>
+  </section>
+
+  <!-- ══ PRZEPISY ══ -->
+  <section class="view" id="v-rec">
+    <div class="vhead">
+      <h1>Przepisy</h1>
+      <p>Dwanaście dań, z których złożony jest cały tydzień. Gramatury na jedną porcję.</p>
+    </div>
+    <div id="recs"></div>
+  </section>
+
+  <!-- ══ ZASADY ══ -->
+  <section class="view" id="v-rules">
+    <div class="vhead">
+      <h1>Zasady</h1>
+      <p>Dlaczego plan wygląda tak, jak wygląda, i jak go przestawić pod inną kaloryczność.</p>
+    </div>
+
+    <div class="rgroup">
+      <h3>Twoja kaloryczność</h3>
+      <div class="tgt">
+        <input type="number" id="target" inputmode="numeric" step="50" min="1200" max="5000">
+        <span style="color:var(--mute);font-size:13px">kcal / dzień</span>
+      </div>
+      <div class="advice" id="advice"></div>
+    </div>
+
+    <div class="rgroup">
+      <h3>Rozkład węglowodanów w dobie</h3>
+      <div class="rule"><h3>Rano: 4–11 g</h3><p>Same warzywa. Zero skoku insuliny, kortyzol pracuje po swojemu.</p></div>
+      <div class="rule"><h3>Obiad: 26–31 g</h3><p>Ryż, batat albo ziemniaki. Glikogen wraca <b>z zewnątrz</b>, więc organizm nie rozbiera mięśni na glukoneogenezę.</p></div>
+      <div class="rule"><h3>Kolacja: 13–29 g</h3><p>Płatki albo owoce jagodowe. Serotonina przechodzi w melatoninę — stąd lepszy sen.</p></div>
+    </div>
+
+    <div class="rgroup">
+      <h3>Na co uważać przy keto</h3>
+      <div class="rule"><h3>Sód 3–5 g dziennie</h3><p>Czyli <b>8–12 g soli</b>. Na keto nerki wyrzucają go szybciej. Bez tego przychodzą skurcze, ból głowy i spadek siły na treningu.</p></div>
+      <div class="rule"><h3>Magnez i potas</h3><p>Warzywa liściaste i awokado masz codziennie, ale suplement magnezu ma sens.</p></div>
+      <div class="rule"><h3>Błonnik 21–33 g</h3><p>W dni z kolacją wytrawną schodzi najniżej. Dorzuć wtedy <b>15 g siemienia lnianego</b> albo dodatkową porcję brokułów.</p></div>
+      <div class="rule"><h3>Woda 3–3,5 l</h3><p>Przy większej utracie sodu tym bardziej.</p></div>
+      <div class="rule"><h3>Badania raz na pół roku</h3><p>Lipidogram, morfologia, ALT, glukoza na czczo, ferrytyna.</p></div>
+    </div>
+
+    <div class="rgroup">
+      <h3>Dwie rzeczy, które zmieniłem</h3>
+      <div class="rule">
+        <h3>Słodkie kolacje są mniejsze niż w Twoim dokumencie</h3>
+        <p>Oryginał daje 75–100 g płatków na porcję męską, czyli <b>46–97 g węglowodanów w samej kolacji</b>. Przy sufcie 70 g na dobę to się nie mieści. Zszedłem do 20 g płatków, a słodycz dobrałem z owoców jagodowych, mleczka kokosowego i kakao.</p>
+      </div>
+      <div class="rule">
+        <h3>Plan jest poniżej polskiej normy węglowodanowej</h3>
+        <p>Normy żywienia dla populacji Polski podają <b>130 g</b> jako wartość referencyjną. Ten plan świadomie idzie niżej. Przy adaptacji ketonowej to działa, ale warto trzymać to pod okiem lekarza.</p>
+      </div>
+    </div>
+    <p class="foot">Kaloryczność w planie to wartość robocza 2400 kcal. Wpisz swoją wyżej, a aplikacja policzy różnicę.</p>
+  </section>
+
+</main>
+
+<nav class="tabs" id="tabs"></nav>
+
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Przepis">
+  <div class="grip"></div>
+  <button class="x" id="sheetX" aria-label="Zamknij">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+  </button>
+  <div class="sheet-in" id="sheetIn"></div>
+</div>
+
+<script>
+/* ════════════════ DANE ════════════════ */
+const MEALS = {
+  s1:{n:"Jajecznica z łososiem wędzonym",t:"7 min",k:734,b:51.6,f:54.7,c:8.6,fb:2.5,
+    i:[["Jajka",220,"4 szt. L","bialko"],["Łosoś wędzony",100,"1 małe opakowanie","bialko"],
+       ["Masło klarowane",15,"1 czubata łyżka","tluszcz"],["Oliwa z oliwek",10,"1 łyżka","tluszcz"],
+       ["Pomidor",150,"1 duży","warzywa"],["Ogórek",100,"1/2 dużego","warzywa"]],
+    h:"Masło na patelnię, jajka roztrzepane, mieszasz na małym ogniu do kremowej konsystencji. Łosoś wrzucasz na <strong>20 sekund na koniec</strong> — nie smażysz go. Pomidor i ogórek pokrojone, skropione oliwą, sól, pieprz."},
+
+  s2:{n:"Patelnia wołowa z papryką i awokado",t:"12 min",k:753,b:49.5,f:53.4,c:11.3,fb:8.5,
+    i:[["Wołowina mielona 15%",200,"1 duża porcja","bialko"],["Jajka",55,"1 szt. L","bialko"],
+       ["Masło klarowane",10,"2 łyżeczki","tluszcz"],["Cebula",50,"1/2 małej","warzywa"],
+       ["Papryka czerwona",100,"1/2 sztuki","warzywa"],["Szpinak",100,"2 duże garście","warzywa"],
+       ["Awokado",50,"1/4 dużego","tluszcz"]],
+    h:"Wszystko na <strong>jednej patelni</strong> — odpowiednik jajecznicy, tylko na wołowinie. Cebula na maśle 2 min, wołowina, rozbijasz łopatką, 6 min. Papryka 2 min, szpinak 1 min. Na koniec wbijasz jajko i mieszasz, aż się zetnie. Awokado w plastrach na wierzch. Sól, pieprz, papryka wędzona."},
+
+  s3:{n:"Omlet z serem i pieczarkami",t:"10 min",k:775,b:50.9,f:61.1,c:4.2,fb:2.8,
+    i:[["Jajka",275,"5 szt. L","bialko"],["Ser gouda",50,"2 plastry","bialko"],
+       ["Pieczarki",100,"4–5 sztuk","warzywa"],["Masło klarowane",12,"1 łyżka","tluszcz"],
+       ["Rukola",50,"1 duża garść","warzywa"],["Oliwa z oliwek",8,"1 mała łyżka","tluszcz"]],
+    h:"Pieczarki na maśle do zrumienienia, zalewasz jajkami, ser na wierzch, przykrywasz na 3 min. Rukola obok, skropiona oliwą. <strong>Najniższe węgle ze wszystkich pierwszych posiłków</strong> — dobry wybór pod ciężki obiad."},
+
+  s4:{n:"Makrela z jajkami na twardo i awokado",t:"5 min",k:699,b:48.5,f:51.1,c:9.3,fb:7.9,
+    i:[["Makrela wędzona",150,"1 mała sztuka (filet)","bialko"],["Jajka",110,"2 szt. L","bialko"],
+       ["Awokado",80,"1/2 sztuki","tluszcz"],["Pomidor",150,"1 duży","warzywa"],
+       ["Ogórek",100,"1/2 dużego","warzywa"],["Oliwa z oliwek",5,"1/2 łyżki","tluszcz"]],
+    h:"<strong>Zero gotowania.</strong> Jajka gotujesz z zapasem raz na kilka dni. Wszystko kroisz, składasz na talerzu, oliwa, sól, pieprz, cytryna."},
+
+  o1:{n:"Łosoś pieczony z brokułami i ryżem",t:"25 min",k:855,b:59.2,f:55.2,c:25.8,fb:7.8,
+    i:[["Łosoś, filet",250,"1 duży filet","bialko"],["Brokuły",250,"1/2 dużej różyczki","warzywa"],
+       ["Ryż basmati (suchy)",25,"2 łyżki","wegle"],["Olej z awokado",15,"1,5 łyżki","tluszcz"],
+       ["Masło klarowane",5,"1 łyżeczka","tluszcz"]],
+    h:"Piekarnik 200°C. Łosoś na blachę, sól, pieprz, cytryna, 15 min. Brokuły na parze 6 min, potem masło klarowane. Ryż gotujesz równolegle. Olej z awokado wlewasz <strong>na zimno po upieczeniu</strong> — nie grzejesz go."},
+
+  o2:{n:"Kurczak w śmietanie z cukinią i batatem",t:"30 min",k:858,b:62.5,f:53.3,c:28.8,fb:7.3,
+    i:[["Pierś z kurczaka",250,"1 duża pierś","bialko"],["Śmietana 30%",80,"5 łyżek","tluszcz"],
+       ["Cukinia",200,"1 mała","warzywa"],["Pieczarki",100,"4–5 sztuk","warzywa"],
+       ["Batat",110,"1 mały","wegle"],["Masło klarowane",15,"1 czubata łyżka","tluszcz"],
+       ["Oliwa z oliwek",10,"1 łyżka","tluszcz"]],
+    h:"Batat w kostkę, na blachę z oliwą, 200°C, 25 min. W tym czasie kurczak w paskach na maśle 6 min, pieczarki 3 min, cukinia 3 min, zalewasz śmietaną, 4 min na małym ogniu. Czosnek, tymianek, pieprz."},
+
+  o3:{n:"Gulasz wołowy z ziemniakami",t:"45 min",k:871,b:61.0,f:54.2,c:30.7,fb:6.6,
+    i:[["Wołowina gulaszowa",280,"1 duża porcja","bialko"],["Cebula",50,"1/2 małej","warzywa"],
+       ["Papryka czerwona",100,"1/2 sztuki","warzywa"],["Passata pomidorowa",80,"4 łyżki","wegle"],
+       ["Ziemniaki",110,"1 średni","wegle"],["Masło klarowane",10,"2 łyżeczki","tluszcz"],
+       ["Oliwa z oliwek",10,"1 łyżka","tluszcz"]],
+    h:"<strong>Rób podwójną porcję</strong> — drugiego dnia jest lepszy. Cebula na maśle, mięso obsmażone ze wszystkich stron, passata, papryka, woda do przykrycia, dusisz 35 min pod przykryciem. Ziemniaki gotowane osobno. Oliwa na talerzu, na zimno. Papryka wędzona, majeranek, liść laurowy."},
+
+  o4:{n:"Kotlety mielone z kalafiorem i ryżem",t:"25 min",k:872,b:66.5,f:49.7,c:31.3,fb:6.3,
+    i:[["Wołowina mielona 15%",220,"1 duża porcja","bialko"],["Jajka",55,"1 szt. L","bialko"],
+       ["Kalafior",300,"1/2 dużej główki","warzywa"],["Ryż basmati (suchy)",25,"2 łyżki","wegle"],
+       ["Masło klarowane",10,"2 łyżeczki","tluszcz"],["Skyr naturalny",100,"1/2 kubka","bialko"]],
+    h:"Mięso, jajko, sól, pieprz i czosnek — formujesz 4 kotlety, smażysz na maśle po 4 min z każdej strony. Kalafior na parze 8 min. Skyr wymieszany z czosnkiem, koperkiem i pieprzem jako sos. <strong>Najwięcej węgli z obiadów</strong> — nie łącz z owsianką."},
+
+  kw1:{n:"Sałatka z tuńczykiem, jajkiem i awokado",t:"8 min",k:869,b:67.1,f:59.8,c:12.7,fb:11.9,sav:1,
+    i:[["Tuńczyk w sosie własnym",180,"2 puszki","bialko"],["Jajka",110,"2 szt. L","bialko"],
+       ["Awokado",100,"1/2 dużego","tluszcz"],["Pomidor",150,"1 duży","warzywa"],
+       ["Ogórek",100,"1/2 dużego","warzywa"],["Rukola",50,"1 duża garść","warzywa"],
+       ["Oliwa z oliwek",20,"2 łyżki","tluszcz"],["Oliwki",30,"ok. 8 sztuk","tluszcz"],
+       ["Pestki dyni",15,"1 łyżka","tluszcz"]],
+    h:"Wszystko do miski, oliwa, ocet balsamiczny albo cytryna, sól, pieprz. Pestki <strong>na sam koniec</strong>, żeby zostały chrupiące. Tuńczyk odsącz z zalewy."},
+
+  kw2:{n:"Twaróg z warzywami i makrelą",t:"7 min",k:858,b:63.5,f:58.4,c:14.5,fb:6.9,sav:1,
+    i:[["Twaróg półtłusty",200,"4/5 kostki","bialko"],["Śmietana 30%",40,"2,5 łyżki","tluszcz"],
+       ["Makrela wędzona",100,"1/2 filetu","bialko"],["Rzodkiewka",100,"1 pęczek","warzywa"],
+       ["Ogórek",100,"1/2 dużego","warzywa"],["Cebula",30,"1/4 małej","warzywa"],
+       ["Oliwa z oliwek",15,"1,5 łyżki","tluszcz"],["Siemię lniane mielone",15,"1,5 łyżki","tluszcz"]],
+    h:"Twaróg rozgnieciony widelcem ze śmietaną, warzywa w kostkę, siemię wmieszane, oliwa na wierzch. Makrela obok. Sól, pieprz, szczypta chilli."},
+
+  ks1:{n:"Owsianka keto jaglana z białkiem wołowym",t:"7 min",k:804,b:53.4,f:49.0,c:29.2,fb:14.1,sw:1,
+    i:[["Płatki jaglane",20,"2 łyżki","wegle"],["Izolat białka wołowego",45,"1,5 miarki","bialko"],
+       ["Mleczko kokosowe",100,"1/4 puszki 400 ml","tluszcz"],["Masło orzechowe 100%",25,"1 czubata łyżka","tluszcz"],
+       ["Maliny",100,"1 duża garść","warzywa"],["Migdały",30,"ok. 25 sztuk","tluszcz"],
+       ["Kakao 100%",5,"1 łyżeczka","dodatki"]],
+    h:"Płatki zalewasz 100 ml wrzątku, 5 minut pod przykryciem. <strong>Odczekaj, aż przestanie parować</strong> — białko nie lubi wrzątku. Dopiero wtedy wsypujesz izolat, kakao, szczyptę soli i cynamon. Mleczko kokosowe, masło orzechowe, owoce i migdały na wierzch."},
+
+  ks2:{n:"Budyń chia-kakao z borówkami",t:"5 min + noc",k:856,b:49.8,f:59.2,c:23.2,fb:17.2,sw:1,
+    i:[["Nasiona chia",25,"2 łyżki","tluszcz"],["Izolat białka wołowego",45,"1,5 miarki","bialko"],
+       ["Mleczko kokosowe",120,"1/3 puszki 400 ml","tluszcz"],["Kakao 100%",10,"2 łyżeczki","dodatki"],
+       ["Borówki",100,"1 duża garść","warzywa"],["Orzechy makadamia",25,"ok. 12 sztuk","tluszcz"],
+       ["Masło orzechowe 100%",15,"1 płaska łyżka","tluszcz"]],
+    h:"<strong>Robisz wieczorem dzień wcześniej.</strong> Chia, mleczko, 150 ml wody, kakao, szczypta soli i cynamonu — mieszasz w słoiku, do lodówki na noc. Przed jedzeniem wmieszaj izolat, na wierzch borówki, makadamia i masło orzechowe. Najniższe węgle ze słodkich kolacji — pasuje pod najcięższe obiady."}
+};
+
+const DAYS = [
+  {d:"Pon",full:"Poniedziałek",s:["s1","s3"],o:["o1","o2"],k:["ks2","kw1"]},
+  {d:"Wt", full:"Wtorek",      s:["s2","s4"],o:["o3","o4"],k:["kw2","ks2"]},
+  {d:"Śr", full:"Środa",       s:["s1","s3"],o:["o2","o1"],k:["ks1","kw1"]},
+  {d:"Czw",full:"Czwartek",    s:["s4","s2"],o:["o4","o3"],k:["kw1","ks2"]},
+  {d:"Pt", full:"Piątek",      s:["s1","s4"],o:["o1","o2"],k:["ks1","kw2"]},
+  {d:"Sob",full:"Sobota",      s:["s3","s2"],o:["o2","o4"],k:["ks2","kw1"]},
+  {d:"Nd", full:"Niedziela",   s:["s4","s1"],o:["o3","o1"],k:["kw2","ks1"]}
+];
+
+const CATS = {bialko:"Białko",tluszcz:"Tłuszcze",warzywa:"Warzywa i owoce",wegle:"Węglowodany",dodatki:"Dodatki"};
+const SPICE = "Sól morska, pieprz czarny, papryka wędzona, cynamon, kurkuma, chilli, kardamon, oregano, tymianek, majeranek, liść laurowy, czosnek, cytryny, ocet balsamiczny, musztarda bez cukru, bulion w kostce.";
+
+/* ════════════════ STAN ════════════════ */
+const KEY="dieta-keto-v1";
+let ST={pick:{},check:{},day:0,target:2400};
+
+function load(){
+  try{
+    const r=localStorage.getItem(KEY);
+    if(r){const p=JSON.parse(r);ST={...ST,...p};ST.pick=p.pick||{};ST.check=p.check||{};}
+  }catch(e){}
+  for(let i=0;i<7;i++) if(!ST.pick[i]) ST.pick[i]={s:0,o:0,k:0};
+  const js=new Date().getDay();
+  ST.day=js===0?6:js-1;
+}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(ST))}catch(e){}}
+
+/* ════════════════ OBLICZENIA ════════════════ */
+function dayMeals(i){
+  const D=DAYS[i],P=ST.pick[i];
+  return [MEALS[D.s[P.s]],MEALS[D.o[P.o]],MEALS[D.k[P.k]]];
+}
+function dayTotals(i){
+  return dayMeals(i).reduce((a,m)=>({k:a.k+m.k,b:a.b+m.b,f:a.f+m.f,c:a.c+m.c,fb:a.fb+m.fb}),{k:0,b:0,f:0,c:0,fb:0});
+}
+const r1=n=>Math.round(n*10)/10;
+
+/* ════════════════ WIDOK: PLAN ════════════════ */
+const SLOTS=[
+  {key:"s",t:"Posiłek 1",hint:"bez zbóż i owoców"},
+  {key:"o",t:"Obiad",hint:"tu wchodzą węglowodany"},
+  {key:"k",t:"Kolacja",hint:"słodka albo wytrawna"}
+];
+
+function renderRail(){
+  rail.innerHTML=DAYS.map((d,i)=>{
+    const t=dayTotals(i);
+    return `<button class="day${i===ST.day?" on":""}" data-d="${i}">${d.d}
+      ${t.c>70?'<span class="dot" style="background:var(--iron)"></span>':''}</button>`;
+  }).join("");
+}
+
+function renderPlan(){
+  const t=dayTotals(ST.day);
+  carbN.innerHTML=`${r1(t.c).toString().replace(".",",")}<span>g</span>`;
+  const pct=Math.min(100,(t.c/80)*100);
+  gfill.style.width=pct+"%";
+  gfill.className="gfill"+(t.c>70?" over":(t.c<30?" low":""));
+  mK.textContent=Math.round(t.k);
+  mB.textContent=Math.round(t.b);
+  mT.textContent=Math.round(t.f);
+  mF.textContent=Math.round(t.fb);
+
+  // flagi
+  let f="";
+  if(t.c>70){
+    f+=`<div class="flag">${warnIcon()}<div><b>Ponad sufit o ${r1(t.c-70)} g.</b> Zamień obiad na łososia albo kurczaka, albo weź kolację wytrawną zamiast słodkiej.</div></div>`;
+  }else if(t.c<30){
+    f+=`<div class="flag">${warnIcon()}<div><b>Poniżej podłogi — ${r1(30-t.c)} g brakuje.</b> Bez wieczornych węgli sen siada, a organizm sięga po glukoneogenezę z mięśni.</div></div>`;
+  }
+  if(t.fb<22){
+    f+=`<div class="flag tip">${tipIcon()}<div>Błonnik dziś niski (${r1(t.fb)} g). Dorzuć 15 g siemienia lnianego albo dodatkową porcję brokułów.</div></div>`;
+  }
+  flags.innerHTML=f;
+
+  slots.innerHTML=SLOTS.map(S=>{
+    const ids=DAYS[ST.day][S.key],sel=ST.pick[ST.day][S.key];
+    return `<div class="slot">
+      <div class="slot-h"><h2>${S.t}</h2><span class="hint">${S.hint}</span></div>
+      <div class="opts">${ids.map((id,n)=>{
+        const m=MEALS[id];
+        return `<button class="opt${n===sel?" on":""}" data-slot="${S.key}" data-n="${n}">
+          ${m.sw?'<span class="sweet" title="słodka">◗</span>':''}${m.sav?'<span class="sweet" title="wytrawna">◖</span>':''}
+          <span class="opt-n">${m.n}</span>
+          <span class="opt-meta"><span class="kcal">${m.k}</span> kcal · ${m.t}</span>
+          <span class="opt-carb"><i></i>${r1(m.c).toString().replace(".",",")} g węgli</span>
+          <span class="opt-see" data-rec="${id}">przepis</span>
+        </button>`;
+      }).join("")}</div></div>`;
+  }).join("");
+}
+const warnIcon=()=>`<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 1.6L15 14H1L8 1.6z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M8 6v3.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="8" cy="11.6" r=".9" fill="currentColor"/></svg>`;
+const tipIcon=()=>`<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.6" stroke="currentColor" stroke-width="1.4"/><path d="M8 7.4v3.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="8" cy="5.1" r=".9" fill="currentColor"/></svg>`;
+
+/* ════════════════ WIDOK: ZAKUPY ════════════════ */
+function buildShop(){
+  const agg={};
+  for(let i=0;i<7;i++) dayMeals(i).forEach(m=>m.i.forEach(([n,g,u,c])=>{
+    if(!agg[n]) agg[n]={g:0,c:c,u:u};
+    agg[n].g+=g;
+  }));
+  return agg;
+}
+const PRACT={
+  "Jajka":g=>`${Math.round(g/55)} szt. (kup 30)`,
+  "Awokado":g=>`${Math.ceil(g/100)} szt.`,
+  "Pomidor":g=>`${Math.ceil(g/150)} szt.`,
+  "Ogórek":g=>`${Math.ceil(g/200)} szt.`,
+  "Cebula":g=>`${Math.ceil(g/80)} szt.`,
+  "Mleczko kokosowe":g=>`${(g/400).toFixed(1).replace(".",",")} puszki 400 ml`,
+  "Tuńczyk w sosie własnym":g=>`${Math.ceil(g/90)} puszki`
+};
+function renderShop(){
+  const agg=buildShop();
+  const byCat={};
+  Object.entries(agg).forEach(([n,d])=>{(byCat[d.c]=byCat[d.c]||[]).push([n,d])});
+  let done=0,all=0;
+  const html=Object.keys(CATS).filter(c=>byCat[c]).map(c=>{
+    const rows=byCat[c].sort((a,b)=>b[1].g-a[1].g).map(([n,d])=>{
+      all++;const on=!!ST.check[n];if(on)done++;
+      const p=PRACT[n]?PRACT[n](d.g):null;
+      return `<button class="item${on?" done":""}" data-item="${n}">
+        <span class="box"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.6L4 7.5 10 1.3" stroke="#0E1417" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="nm">${n}${p?`<small>${p}</small>`:""}</span>
+        <span class="qty">${Math.round(d.g)} g</span></button>`;
+    }).join("");
+    return `<div class="cat"><h3>${CATS[c]}</h3>${rows}</div>`;
+  }).join("");
+  shop.innerHTML=html+`<div class="cat"><h3>Przyprawy — zakup jednorazowy</h3><p style="font-size:13.5px;color:var(--mute);line-height:1.6;margin:11px 0 0">${SPICE}</p></div>`;
+  shopSub.textContent=`Z Twoich wyborów na cały tydzień. ${done} z ${all} odhaczone.`;
+}
+function shopText(){
+  const agg=buildShop();const byCat={};
+  Object.entries(agg).forEach(([n,d])=>{(byCat[d.c]=byCat[d.c]||[]).push([n,d])});
+  return "LISTA ZAKUPÓW — 7 dni\n\n"+Object.keys(CATS).filter(c=>byCat[c]).map(c=>
+    CATS[c].toUpperCase()+"\n"+byCat[c].sort((a,b)=>b[1].g-a[1].g)
+      .map(([n,d])=>`- ${n} — ${Math.round(d.g)} g`).join("\n")
+  ).join("\n\n")+"\n\nPRZYPRAWY\n"+SPICE;
+}
+
+/* ════════════════ WIDOK: PRZEPISY ════════════════ */
+function renderRecs(){
+  const G=[["Posiłek 1",["s1","s2","s3","s4"]],["Obiad",["o1","o2","o3","o4"]],
+           ["Kolacja wytrawna",["kw1","kw2"]],["Kolacja na słodko",["ks1","ks2"]]];
+  recs.innerHTML=G.map(([t,ids])=>`<div class="rgroup"><h3>${t}</h3>${
+    ids.map(id=>{const m=MEALS[id];return `<button class="rlink" data-rec="${id}">
+      <span class="rn">${m.n}</span>
+      <span class="rq">${m.k} kcal · ${r1(m.c).toString().replace(".",",")} g W</span>
+      <svg width="7" height="11" viewBox="0 0 7 11" fill="none"><path d="M1 1l5 4.5L1 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>`}).join("")
+  }</div>`).join("");
+}
+
+/* ════════════════ ARKUSZ PRZEPISU ════════════════ */
+function openRec(id){
+  const m=MEALS[id];
+  sheetIn.innerHTML=`<h2>${m.n}</h2>
+    <div class="sheet-meta"><span>${m.t}</span><span>${m.k} kcal</span>${m.sw?"<span>kolacja na słodko</span>":""}${m.sav?"<span>kolacja wytrawna</span>":""}</div>
+    <table><thead><tr><th>Składnik</th><th>Gramy</th><th></th></tr></thead><tbody>
+    ${m.i.map(([n,g,u])=>`<tr><td>${n}</td><td>${g} g</td><td>${u}</td></tr>`).join("")}
+    </tbody></table>
+    <p class="how">${m.h}</p>
+    <div class="mrow">
+      <div class="mcell"><span class="v">${m.k}</span><span class="k">kcal</span></div>
+      <div class="mcell"><span class="v">${r1(m.b)}</span><span class="k">białko</span></div>
+      <div class="mcell"><span class="v">${r1(m.f)}</span><span class="k">tłuszcz</span></div>
+      <div class="mcell c"><span class="v">${r1(m.c)}</span><span class="k">węgle</span></div>
+      <div class="mcell"><span class="v">${r1(m.fb)}</span><span class="k">błonnik</span></div>
+    </div>`;
+  scrim.classList.add("on");sheet.classList.add("on");
+  document.body.style.overflow="hidden";
+}
+function closeRec(){
+  scrim.classList.remove("on");sheet.classList.remove("on");
+  document.body.style.overflow="";
+}
+
+/* ════════════════ SKALOWANIE ════════════════ */
+function renderAdvice(){
+  const t=dayTotals(ST.day),diff=ST.target-t.k;
+  const fatG=Math.round(Math.abs(diff)/9);
+  const sp=(fatG/10).toFixed(1).replace(".",",");
+  let body;
+  if(Math.abs(diff)<60){
+    body=`<b>Pasuje.</b><p style="margin:7px 0 0;color:var(--mute)">Dzisiejszy zestaw daje ${Math.round(t.k)} kcal — różnica ${Math.abs(Math.round(diff))} kcal mieści się w błędzie ważenia. Nic nie zmieniaj.</p>`;
+  }else if(diff>0){
+    body=`<b>Dołóż ${fatG} g tłuszczu</b><p style="margin:7px 0 0;color:var(--mute)">Dzisiejszy zestaw: ${Math.round(t.k)} kcal, brakuje ${Math.round(diff)}. Białko i węgle zostaw bez zmian.</p>
+      <ul><li>${sp} łyżki oliwy albo masła klarowanego do obiadu</li><li>albo ${Math.round(fatG*1.5)} g orzechów do kolacji</li><li>albo ${Math.round(fatG*1.2)} g masła orzechowego</li></ul>`;
+  }else{
+    body=`<b>Zdejmij ${fatG} g tłuszczu</b><p style="margin:7px 0 0;color:var(--mute)">Dzisiejszy zestaw: ${Math.round(t.k)} kcal, nadwyżka ${Math.abs(Math.round(diff))}. Białko i węgle zostaw bez zmian.</p>
+      <ul><li>${sp} łyżki oliwy z pierwszego posiłku</li><li>albo ${Math.round(fatG*1.5)} g orzechów z kolacji</li><li>albo połowę awokado</li></ul>`;
+  }
+  advice.innerHTML=body;
+}
+
+/* ════════════════ ZAKŁADKI ════════════════ */
+const TABS=[["plan","Plan",'<path d="M3 4h14M3 10h14M3 16h9"/>'],
+            ["shop","Zakupy",'<path d="M3 4h2l2 9h9l2-6H6"/><circle cx="9" cy="16.5" r="1.3"/><circle cx="15" cy="16.5" r="1.3"/>'],
+            ["rec","Przepisy",'<path d="M5 3h10v14H5z"/><path d="M8 7h4M8 10h4"/>'],
+            ["rules","Zasady",'<circle cx="10" cy="10" r="7"/><path d="M10 6.5v4.5M10 13.4v.2"/>']];
+let view="plan";
+function renderTabs(){
+  tabs.innerHTML=TABS.map(([id,t,p])=>`<button class="tab${id===view?" on":""}" data-tab="${id}">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${p}</svg>
+    <span>${t}</span></button>`).join("");
+}
+function go(id){
+  view=id;
+  document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on",v.id==="v-"+id));
+  document.querySelector(".railwrap").style.display=(id==="plan")?"":"none";
+  if(id==="shop")renderShop();
+  if(id==="rules")renderAdvice();
+  renderTabs();
+  window.scrollTo(0,0);
+}
+
+/* ════════════════ ZDARZENIA ════════════════ */
+document.addEventListener("click",e=>{
+  const rec=e.target.closest("[data-rec]");
+  if(rec){e.stopPropagation();openRec(rec.dataset.rec);return;}
+
+  const d=e.target.closest("[data-d]");
+  if(d){ST.day=+d.dataset.d;save();renderRail();renderPlan();return;}
+
+  const o=e.target.closest(".opt");
+  if(o){ST.pick[ST.day][o.dataset.slot]=+o.dataset.n;save();renderRail();renderPlan();return;}
+
+  const it=e.target.closest("[data-item]");
+  if(it){const n=it.dataset.item;ST.check[n]=!ST.check[n];save();renderShop();return;}
+
+  const tb=e.target.closest("[data-tab]");
+  if(tb){go(tb.dataset.tab);return;}
+});
+scrim.onclick=closeRec;
+sheetX.onclick=closeRec;
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeRec()});
+
+btnCopy.onclick=async()=>{
+  try{await navigator.clipboard.writeText(shopText());btnCopy.textContent="Skopiowane";}
+  catch(e){btnCopy.textContent="Nie udało się skopiować";}
+  setTimeout(()=>btnCopy.textContent="Skopiuj listę",1800);
+};
+btnClear.onclick=()=>{ST.check={};save();renderShop()};
+target.oninput=()=>{const v=+target.value;if(v>=1200&&v<=5000){ST.target=v;save();renderAdvice()}};
+
+/* ════════════════ START ════════════════ */
+/* ════════════════ PWA ════════════════ */
+if("serviceWorker" in navigator){
+  addEventListener("load",()=>{
+    navigator.serviceWorker.register("./sw.js").then(reg=>{
+      reg.addEventListener("updatefound",()=>{
+        const nw=reg.installing; if(!nw)return;
+        nw.addEventListener("statechange",()=>{
+          if(nw.state==="installed" && navigator.serviceWorker.controller) showUpdate();
+        });
+      });
+    }).catch(()=>{});
+    let reloaded=false;
+    navigator.serviceWorker.addEventListener("controllerchange",()=>{
+      if(reloaded)return; reloaded=true; location.reload();
+    });
+  });
+}
+function showUpdate(){
+  if(document.getElementById("upd"))return;
+  const b=document.createElement("div"); b.id="upd";
+  b.style.cssText="position:fixed;left:12px;right:12px;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:70;max-width:616px;margin:0 auto;background:var(--fat);color:#15201F;padding:12px 14px;border-radius:10px;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;box-shadow:0 6px 24px rgba(0,0,0,.35)";
+  b.innerHTML='<span style="flex:1">Jest nowsza wersja planu.</span><button style="background:#15201F;color:#EDE8DF;padding:7px 13px;border-radius:7px;font-weight:600;font-size:13px">Odśwież</button>';
+  b.querySelector("button").onclick=()=>{
+    navigator.serviceWorker.getRegistration().then(r=>{
+      if(r&&r.waiting) r.waiting.postMessage("skip"); else location.reload();
+    });
+  };
+  document.body.appendChild(b);
+}
+
+load();
+target.value=ST.target;
+renderRail();renderPlan();renderRecs();renderTabs();
+</script>
+</body>
+</html>
