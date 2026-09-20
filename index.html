@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Dieta keto — plan Kamila</title>
+<title>Dieta keto — mój plan</title>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Dieta">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0E1417" media="(prefers-color-scheme: dark)">
 <meta name="theme-color" content="#F2EEE6" media="(prefers-color-scheme: light)">
-<meta name="description" content="Plan keto na 7 dni: wybór posiłków, licznik węglowodanów, lista zakupów.">
+<meta name="description" content="Plan keto na 7 dni przeliczany pod wagę i zapotrzebowanie.">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <link rel="icon" href="./favicon-32.png" sizes="32x32">
@@ -22,149 +22,172 @@
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
   padding-bottom:env(safe-area-inset-bottom,0px);
-
-  --ink:#0E1417;
-  --slab:#182126;
-  --slab-2:#202B31;
-  --line:#2C3A41;
-  --bone:#EDE8DF;
-  --mute:#8FA0A8;
-
-  --fat:#E8B84B;
-  --iron:#C4553A;
-  --moss:#88A97C;
-
-  --ok:#88A97C;
-  --hot:#C4553A;
-
-  --r-tile:10px;
-  --r-sheet:20px;
-
-  --d-fast:.14s;
-  --d-med:.32s;
+  --ink:#0E1417;--slab:#182126;--slab-2:#202B31;--line:#2C3A41;
+  --bone:#EDE8DF;--mute:#8FA0A8;
+  --fat:#E8B84B;--iron:#C4553A;--moss:#88A97C;
+  --r-tile:10px;--r-sheet:20px;--d-fast:.14s;--d-med:.32s;
 }
 :root:not([data-theme="light"]){color-scheme:dark}
 @media (prefers-color-scheme: light){
   :root:not([data-theme="dark"]){
     color-scheme:light;
-    --ink:#F2EEE6;
-    --slab:#FFFFFF;
-    --slab-2:#F7F3EB;
-    --line:#DFD7C8;
-    --bone:#15201F;
-    --mute:#6B7A72;
-    --fat:#B8851A;
-    --iron:#A83E26;
-    --moss:#4E6F45;
-    --ok:#4E6F45;
-    --hot:#A83E26;
+    --ink:#F2EEE6;--slab:#FFFFFF;--slab-2:#F7F3EB;--line:#DFD7C8;
+    --bone:#15201F;--mute:#6B7A72;--fat:#B8851A;--iron:#A83E26;--moss:#4E6F45;
   }
 }
 :root[data-theme="light"]{
   color-scheme:light;
   --ink:#F2EEE6;--slab:#FFFFFF;--slab-2:#F7F3EB;--line:#DFD7C8;
   --bone:#15201F;--mute:#6B7A72;--fat:#B8851A;--iron:#A83E26;--moss:#4E6F45;
-  --ok:#4E6F45;--hot:#A83E26;
 }
 *,*::before,*::after{box-sizing:inherit}
 html{scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
-body{
-  margin:0;background:var(--ink);color:var(--bone);
-  font-family:Archivo,"Helvetica Neue",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  font-size:15px;line-height:1.5;
-  -webkit-font-smoothing:antialiased;
-  padding-bottom:78px;
-}
-h1,h2,h3{font-family:"Bricolage Grotesque",Archivo,"Helvetica Neue",sans-serif;font-weight:700;margin:0;letter-spacing:-.02em;line-height:1.1}
+body{margin:0;background:var(--ink);color:var(--bone);
+  font-family:Archivo,"Helvetica Neue",-apple-system,BlinkMacSystemFont,sans-serif;
+  font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;padding-bottom:78px}
+h1,h2,h3{font-family:"Bricolage Grotesque",Archivo,"Helvetica Neue",sans-serif;
+  font-weight:700;margin:0;letter-spacing:-.02em;line-height:1.1}
 button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;padding:0}
+input{font:inherit}
 :focus-visible{outline:2px solid var(--fat);outline-offset:2px;border-radius:4px}
-@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
-
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 .wrap{max-width:640px;margin:0 auto;padding:0 16px}
+.note{font-size:12.5px;color:var(--mute);line-height:1.5;margin:7px 0 0}
+.note b{color:var(--bone);font-weight:600}
 
-/* ── day rail ───────────────────────────── */
-.railwrap{
-  position:sticky;top:0;z-index:30;
-  background:var(--ink);
-  padding-top:env(safe-area-inset-top,0px);
-  border-bottom:1px solid var(--line);
-}
+/* pasek dni */
+.railwrap{position:sticky;top:0;z-index:30;background:var(--ink);
+  padding-top:env(safe-area-inset-top,0px);border-bottom:1px solid var(--line)}
 .rail{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;padding:10px 16px 0}
 .rail::-webkit-scrollbar{display:none}
-.day{
-  flex:1 0 auto;min-width:44px;padding:7px 9px 10px;text-align:center;
-  border-bottom:2px solid transparent;color:var(--mute);
-  font-size:13px;font-weight:600;transition:color var(--d-fast);
-  white-space:nowrap;
-}
+.day{flex:1 0 auto;min-width:44px;padding:7px 9px 8px;text-align:center;
+  border-bottom:2px solid transparent;color:var(--mute);font-size:13px;font-weight:600;
+  transition:color var(--d-fast);white-space:nowrap}
 .day.on{color:var(--bone);border-bottom-color:var(--fat)}
-.day .dot{display:block;width:4px;height:4px;border-radius:50%;background:var(--moss);margin:3px auto -3px}
+.dots{display:flex;gap:3px;justify-content:center;margin-top:4px;height:4px}
+.dt{width:4px;height:4px;border-radius:50%;display:block}
+.dt.tr{background:var(--fat)} .dt.er{background:var(--iron)} .dt.sp{background:transparent}
 
-/* ── hero gauge ─────────────────────────── */
-.hero{padding:22px 0 18px}
-.hero-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:12px}
+/* licznik */
+.hero{padding:20px 0 16px}
 .hero-label{font-size:13px;color:var(--mute);font-weight:500}
-.carbnum{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(46px,15vw,68px);line-height:.85;letter-spacing:-.045em;font-variant-numeric:tabular-nums}
+.carbnum{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;
+  font-size:clamp(46px,15vw,68px);line-height:.85;letter-spacing:-.045em;
+  font-variant-numeric:tabular-nums;margin-bottom:14px}
 .carbnum span{font-size:.32em;font-weight:600;letter-spacing:0;margin-left:5px;color:var(--mute)}
-
 .gauge{position:relative;height:14px;background:var(--slab);border-radius:2px;overflow:hidden}
-.gfill{position:absolute;inset:0 auto 0 0;width:0;background:var(--moss);transition:width var(--d-med) cubic-bezier(.22,.7,.3,1),background var(--d-med)}
-.gfill.low{background:var(--fat)}
-.gfill.over{background:var(--iron)}
+.gfill{position:absolute;inset:0 auto 0 0;width:0;background:var(--moss);
+  transition:width var(--d-med) cubic-bezier(.22,.7,.3,1),background var(--d-med)}
+.gfill.low{background:var(--fat)} .gfill.over{background:var(--iron)}
 .gmark{position:absolute;top:0;bottom:0;width:1px;background:var(--ink);opacity:.85}
-.gscale{display:flex;justify-content:space-between;margin-top:6px;font-size:11px;color:var(--mute);font-variant-numeric:tabular-nums}
-.gscale b{font-weight:600;color:var(--mute)}
+.gscale{display:flex;justify-content:space-between;margin-top:6px;font-size:11px;
+  color:var(--mute);font-variant-numeric:tabular-nums}
+.gscale b{font-weight:600}
+.macros{display:flex;margin-top:18px;border-top:1px solid var(--line)}
+.macro{flex:1;padding:11px 0 2px;min-width:0}
+.macro+.macro{border-left:1px solid var(--line);padding-left:11px}
+.macro .v{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:20px;
+  letter-spacing:-.02em;font-variant-numeric:tabular-nums;display:block}
+.macro .k{font-size:11.5px;color:var(--mute);display:block}
+.macro .c{font-size:10.5px;color:var(--mute);opacity:.72;font-variant-numeric:tabular-nums}
 
-.macros{display:flex;gap:0;margin-top:18px;border-top:1px solid var(--line)}
-.macro{flex:1;padding:11px 0 2px}
-.macro+.macro{border-left:1px solid var(--line);padding-left:12px}
-.macro .v{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:20px;letter-spacing:-.02em;font-variant-numeric:tabular-nums;display:block}
-.macro .k{font-size:11.5px;color:var(--mute)}
+.trn{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:4px 10px;
+  margin-top:16px;padding:12px 14px;border-radius:var(--r-tile);border:1px solid var(--line);
+  background:var(--slab);transition:all var(--d-fast);width:100%;text-align:left}
+.trn.on{background:color-mix(in srgb,var(--fat) 16%,transparent);border-color:var(--fat)}
+.trn svg{grid-row:1/3;color:var(--mute)}
+.trn.on svg{color:var(--fat)}
+.trn .tl{font-size:14px;font-weight:700;color:var(--bone);
+  font-family:"Bricolage Grotesque",Archivo,sans-serif;letter-spacing:-.01em}
+.trn .tv{grid-column:2;font-size:12.5px;color:var(--mute)}
+.trn .tv b{color:var(--fat);font-weight:700;font-variant-numeric:tabular-nums}
+.trn.on .tv b{color:var(--bone)}
+.tsw{grid-row:1/3;grid-column:3;width:42px;height:24px;border-radius:999px;
+  background:var(--line);position:relative;transition:background var(--d-fast)}
+.trn.on .tsw{background:var(--fat)}
+.tsw i{position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;
+  background:var(--ink);transition:transform var(--d-med) cubic-bezier(.22,.7,.3,1)}
+.trn.on .tsw i{transform:translateX(18px)}
+.sur.nut .sn{font-size:12.5px}
+.big.m3{gap:6px}
+.big.m3 input{padding:12px 34px 12px 11px;font-size:16px}
+.big.m3 .u{top:12px;right:10px;font-size:12px}
+.big.m3 input::placeholder{color:var(--mute);font-weight:400;opacity:.7}
+.rec-m{color:var(--fat);font-weight:700}
+.calc-h .dif{font-size:12px;color:var(--iron);font-weight:600;font-variant-numeric:tabular-nums}
+.calc-h .dif.ok{color:var(--moss)}
 
-.flag{
-  display:flex;gap:9px;align-items:flex-start;
-  margin-top:16px;padding:11px 13px;border-radius:var(--r-tile);
-  background:color-mix(in srgb,var(--iron) 14%,transparent);
-  border-left:3px solid var(--iron);font-size:13.5px;line-height:1.45;
-}
+/* pomoc */
+.szuk{display:none;align-items:center;gap:9px;margin-top:18px;padding:0 13px;
+  background:var(--slab);border:1px solid var(--line);border-radius:10px;color:var(--mute)}
+.szuk input{flex:1;min-width:0;border:none;background:none;color:var(--bone);
+  padding:13px 0;font-size:15px;outline:none;-webkit-appearance:none}
+.szuk input::-webkit-search-cancel-button{display:none}
+.qx{font-size:22px;line-height:1;color:var(--mute);padding:0 2px}
+.pusto{margin-top:16px;padding:15px;border-radius:var(--r-tile);background:var(--slab);
+  border-left:3px solid var(--fat)}
+.pusto p{margin:0 0 10px;font-size:14px}
+.pusto .note{margin:10px 0 0}
+.wpis{border-bottom:1px solid var(--line)}
+.wgl{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;
+  text-align:left;padding:15px 2px;font-size:14.5px;font-weight:600;line-height:1.3}
+.wgl svg{flex:0 0 auto;color:var(--mute);transition:transform var(--d-med)}
+.wpis.on .wgl{color:var(--fat)}
+.wpis.on .wgl svg{transform:rotate(180deg)}
+.wtr{display:none;padding:0 2px 16px}
+.wpis.on .wtr{display:block;animation:fade var(--d-med) ease}
+.wtr p{margin:0 0 11px;font-size:14px;line-height:1.62;color:var(--mute)}
+.wtr p:last-child{margin-bottom:0}
+.wtr b{color:var(--bone);font-weight:600}
+.wfix{display:flex;gap:9px;align-items:flex-start;margin-top:13px;padding:11px 13px;
+  border-radius:var(--r-tile);background:color-mix(in srgb,var(--moss) 13%,transparent);
+  border-left:3px solid var(--moss);font-size:13.5px;line-height:1.45;color:var(--bone)}
+.wfix svg{flex:0 0 auto;margin-top:2px;color:var(--moss)}
+.aibox{margin-top:16px;border:1px solid var(--fat);border-radius:var(--r-tile);overflow:hidden}
+.aihdr{padding:9px 13px;background:color-mix(in srgb,var(--fat) 18%,transparent);
+  font-size:12px;font-weight:700;letter-spacing:.01em}
+.aitxt{padding:14px 13px;font-size:14px;line-height:1.62;white-space:pre-wrap}
+
+.flag{display:flex;gap:9px;align-items:flex-start;margin-top:12px;padding:11px 13px;
+  border-radius:var(--r-tile);background:color-mix(in srgb,var(--iron) 14%,transparent);
+  border-left:3px solid var(--iron);font-size:13.5px;line-height:1.45}
 .flag.tip{background:color-mix(in srgb,var(--moss) 13%,transparent);border-left-color:var(--moss)}
 .flag svg{flex:0 0 auto;margin-top:2px}
 
-/* ── slots ──────────────────────────────── */
-.slot{margin-top:26px}
+/* sloty */
+.slot{margin-top:24px}
 .slot-h{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:9px}
 .slot-h h2{font-size:17px}
 .slot-h .hint{font-size:12px;color:var(--mute)}
 .opts{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.opt{
-  position:relative;text-align:left;padding:13px 13px 12px 15px;
-  background:var(--slab);border-radius:var(--r-tile);
-  border:1px solid transparent;
-  transition:background var(--d-fast),border-color var(--d-fast);
-  min-height:118px;display:flex;flex-direction:column;
-}
-.opt::before{
-  content:"";position:absolute;left:0;top:10px;bottom:10px;width:3px;
-  border-radius:0 3px 3px 0;background:transparent;transition:background var(--d-fast);
-}
+.opt{position:relative;text-align:left;padding:13px 13px 12px 15px;background:var(--slab);
+  border-radius:var(--r-tile);border:1px solid transparent;min-height:118px;
+  display:flex;flex-direction:column;transition:background var(--d-fast),border-color var(--d-fast)}
+.opt::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:3px;
+  border-radius:0 3px 3px 0;background:transparent;transition:background var(--d-fast)}
 .opt.on{background:var(--slab-2);border-color:var(--line)}
 .opt.on::before{background:var(--fat)}
 .opt-n{font-weight:600;font-size:14px;line-height:1.28;margin-bottom:auto;padding-bottom:9px}
-.opt-meta{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--mute);font-variant-numeric:tabular-nums}
+.opt-meta{display:flex;gap:6px;font-size:12px;color:var(--mute);font-variant-numeric:tabular-nums}
 .opt-meta .kcal{color:var(--bone);font-weight:600}
-.opt-carb{
-  display:inline-flex;align-items:center;gap:3px;margin-top:6px;
-  font-size:12px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--iron);
-}
-.opt-carb i{width:5px;height:5px;border-radius:50%;background:var(--iron);font-style:normal}
-.opt-see{
-  margin-top:9px;font-size:12px;color:var(--mute);font-weight:500;
-  text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--line);
-  align-self:flex-start;
-}
-.sweet{position:absolute;top:11px;right:11px;font-size:14px;line-height:1;opacity:.75}
+.opt-carb{display:inline-flex;align-items:center;gap:4px;margin-top:6px;font-size:12px;
+  font-weight:600;font-variant-numeric:tabular-nums;color:var(--iron)}
+.opt-carb i{width:5px;height:5px;border-radius:50%;background:var(--iron)}
+.opt-see{margin-top:9px;font-size:12px;color:var(--mute);font-weight:500;align-self:flex-start;
+  text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--line)}
+.mk{position:absolute;top:11px;right:11px;font-size:14px;line-height:1;opacity:.75}
+.surrow{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.surrow::-webkit-scrollbar{display:none}
+.sur{flex:0 0 auto;padding:9px 12px;border-radius:999px;background:var(--slab);
+  border:1px solid var(--line);display:grid;gap:1px;justify-items:start;
+  transition:all var(--d-fast);text-align:left}
+.sur.on{background:var(--moss);border-color:var(--moss);color:var(--ink)}
+.sn{font-size:13px;font-weight:600;white-space:nowrap}
+.sw{font-size:10.5px;opacity:.72;font-variant-numeric:tabular-nums}
+.surlink{margin-top:9px;font-size:12.5px;color:var(--mute);font-weight:500;
+  text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--line)}
 
-/* ── views ──────────────────────────────── */
+/* widoki */
 .view{display:none;animation:fade var(--d-med) ease}
 .view.on{display:block}
 @keyframes fade{from{opacity:0}to{opacity:1}}
@@ -172,12 +195,13 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;pad
 .vhead h1{font-size:26px;margin-bottom:5px}
 .vhead p{margin:0;color:var(--mute);font-size:13.5px;max-width:52ch}
 
-/* ── shopping ───────────────────────────── */
+/* zakupy */
 .cat{margin-top:24px}
 .cat h3{font-size:14px;color:var(--fat);padding-bottom:7px;border-bottom:1px solid var(--line);margin-bottom:2px}
 .item{display:flex;align-items:center;gap:11px;padding:11px 2px;border-bottom:1px solid var(--line);width:100%;text-align:left}
 .item:last-child{border-bottom:none}
-.box{flex:0 0 19px;height:19px;border:1.5px solid var(--mute);border-radius:4px;display:grid;place-items:center;transition:all var(--d-fast)}
+.box{flex:0 0 19px;height:19px;border:1.5px solid var(--mute);border-radius:4px;
+  display:grid;place-items:center;transition:all var(--d-fast);color:var(--ink)}
 .item.done .box{background:var(--moss);border-color:var(--moss)}
 .item.done .box svg{opacity:1}
 .box svg{opacity:0;transition:opacity var(--d-fast)}
@@ -186,199 +210,245 @@ button{font:inherit;color:inherit;background:none;border:none;cursor:pointer;pad
 .nm small{display:block;color:var(--mute);font-size:12px;margin-top:1px}
 .qty{font-size:13.5px;color:var(--mute);font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:500}
 .item.done .qty{opacity:.5}
-
 .bar{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap}
-.btn{
-  padding:10px 15px;border-radius:8px;background:var(--slab);
-  font-size:13.5px;font-weight:600;transition:background var(--d-fast);
-  border:1px solid var(--line);
-}
+.btn{padding:10px 15px;border-radius:8px;background:var(--slab);font-size:13.5px;
+  font-weight:600;border:1px solid var(--line);transition:background var(--d-fast)}
 .btn:active{background:var(--slab-2)}
-.btn.pri{background:var(--fat);color:#15201F;border-color:var(--fat)}
 
-/* ── recipe sheet ───────────────────────── */
-.scrim{
-  position:fixed;inset:0;z-index:60;background:rgba(6,10,12,.66);
-  opacity:0;pointer-events:none;transition:opacity var(--d-med);
-  backdrop-filter:blur(3px);
-}
+/* arkusz */
+.scrim{position:fixed;inset:0;z-index:60;background:rgba(6,10,12,.66);opacity:0;
+  pointer-events:none;transition:opacity var(--d-med);backdrop-filter:blur(3px)}
 .scrim.on{opacity:1;pointer-events:auto}
-.sheet{
-  position:fixed;left:0;right:0;bottom:0;z-index:61;
-  max-height:88vh;max-width:640px;margin:0 auto;
-  background:var(--ink);border-radius:var(--r-sheet) var(--r-sheet) 0 0;
-  border-top:1px solid var(--line);
-  transform:translateY(101%);transition:transform var(--d-med) cubic-bezier(.22,.7,.3,1);
-  display:flex;flex-direction:column;
-  padding-bottom:env(safe-area-inset-bottom,0px);
-}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:61;max-height:88vh;max-width:640px;
+  margin:0 auto;background:var(--ink);border-radius:var(--r-sheet) var(--r-sheet) 0 0;
+  border-top:1px solid var(--line);transform:translateY(101%);
+  transition:transform var(--d-med) cubic-bezier(.22,.7,.3,1);display:flex;flex-direction:column;
+  padding-bottom:env(safe-area-inset-bottom,0px)}
 .sheet.on{transform:translateY(0)}
 .grip{width:34px;height:4px;border-radius:2px;background:var(--line);margin:9px auto 0;flex:0 0 auto}
 .sheet-in{overflow-y:auto;padding:14px 18px 26px;-webkit-overflow-scrolling:touch}
 .sheet h2{font-size:21px;margin-bottom:6px;padding-right:34px}
-.sheet-meta{display:flex;gap:14px;font-size:12.5px;color:var(--mute);margin-bottom:16px;flex-wrap:wrap;font-variant-numeric:tabular-nums}
-.x{position:absolute;top:16px;right:16px;width:30px;height:30px;border-radius:50%;background:var(--slab);display:grid;place-items:center}
+.sheet-meta{display:flex;gap:14px;font-size:12.5px;color:var(--mute);margin-bottom:16px;
+  flex-wrap:wrap;font-variant-numeric:tabular-nums}
+.x{position:absolute;top:16px;right:16px;width:30px;height:30px;border-radius:50%;
+  background:var(--slab);display:grid;place-items:center}
 table{width:100%;border-collapse:collapse;font-size:13.5px}
 th{text-align:left;font-weight:600;color:var(--mute);font-size:11.5px;padding:0 0 6px;border-bottom:1px solid var(--line)}
 th:nth-child(2){text-align:right}
 td{padding:8px 0;border-bottom:1px solid var(--line);vertical-align:top}
-td:nth-child(2){text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:600;width:62px}
+td:nth-child(2){text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;font-weight:600;width:66px}
 td:nth-child(3){color:var(--mute);text-align:right;white-space:nowrap;padding-left:10px;font-size:12.5px}
+tr.xtra td{color:var(--fat)} tr.xtra td:nth-child(3){color:var(--fat);opacity:.7}
+tr.xtra small{display:block;font-size:11px;opacity:.75;font-weight:400;margin-top:1px}
 .how{margin:17px 0 0;font-size:14px;line-height:1.6}
 .how strong{color:var(--fat);font-weight:600}
-.mrow{display:flex;gap:0;margin-top:17px;border:1px solid var(--line);border-radius:var(--r-tile);overflow:hidden}
-.mcell{flex:1;padding:10px 4px;text-align:center}
+.mrow{display:flex;margin-top:17px;border:1px solid var(--line);border-radius:var(--r-tile);overflow:hidden}
+.mcell{flex:1;padding:10px 3px;text-align:center;min-width:0}
 .mcell+.mcell{border-left:1px solid var(--line)}
-.mcell .v{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:17px;display:block;font-variant-numeric:tabular-nums}
+.mcell .v{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:16px;
+  display:block;font-variant-numeric:tabular-nums}
 .mcell .k{font-size:10.5px;color:var(--mute)}
 .mcell.c .v{color:var(--iron)}
 
-/* ── scale + rules ──────────────────────── */
-.tgt{display:flex;align-items:center;gap:10px;margin-top:14px}
-.tgt input{
-  flex:1;min-width:0;padding:11px 13px;border-radius:8px;background:var(--slab);
-  border:1px solid var(--line);color:var(--bone);font:600 16px Archivo,sans-serif;
-  font-variant-numeric:tabular-nums;
-}
-.advice{margin-top:14px;padding:15px;border-radius:var(--r-tile);background:var(--slab);font-size:14px;line-height:1.55}
-.advice b{font-family:"Bricolage Grotesque",sans-serif;font-size:19px;letter-spacing:-.02em}
-.advice ul{margin:9px 0 0;padding-left:17px}
-.advice li{margin:4px 0}
-
+/* ja */
+.fld{margin-top:22px}
+.fld label{display:block;font-size:13.5px;font-weight:600;margin-bottom:9px}
+.big{display:flex;gap:10px;margin-top:22px}
+.big .f{flex:1;min-width:0}
+.big label{display:block;font-size:13.5px;font-weight:600;margin-bottom:9px}
+.big input{width:100%;padding:13px;border-radius:9px;background:var(--slab);
+  border:1px solid var(--line);color:var(--bone);font-weight:700;font-size:19px;
+  font-variant-numeric:tabular-nums;font-family:"Bricolage Grotesque",Archivo,sans-serif}
+.big .u{position:absolute;right:13px;top:41px;font-size:13px;color:var(--mute);pointer-events:none}
+.big .f{position:relative}
+.seg{display:flex;gap:4px;flex-wrap:wrap}
+.sg{flex:1 0 auto;min-width:52px;padding:9px 6px;border-radius:8px;background:var(--slab);
+  border:1px solid var(--line);font-size:13px;font-weight:600;color:var(--mute);
+  transition:all var(--d-fast);text-align:center}
+.sg.on{background:var(--fat);border-color:var(--fat);color:#15201F}
+.sg.rec{position:relative}
+.sg.rec::after{content:"";position:absolute;top:5px;right:5px;width:4px;height:4px;
+  border-radius:50%;background:var(--moss)}
+.sg.rec.on::after{background:#15201F;opacity:.45}
+.link{font-size:13px;font-weight:600;color:var(--fat);text-decoration:underline;
+  text-underline-offset:3px;text-decoration-color:color-mix(in srgb,var(--fat) 45%,transparent)}
+.calc{margin-top:16px;padding:14px;border:1px solid var(--line);border-radius:var(--r-tile);
+  background:var(--slab)}
+.calc .big{margin-top:0}
+.calc .big .u{top:38px}
+.calc .big input{background:var(--ink);font-size:17px;padding:11px}
+.calc-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px}
+.calc-h b{font-family:"Bricolage Grotesque",sans-serif;font-size:15px;letter-spacing:-.02em}
+.calc .sg{background:var(--ink);font-size:12px;min-width:44px;padding:8px 5px}
+#kalk>.link{display:block;margin-top:16px}
+.btn.pri{background:var(--fat);border-color:var(--fat);color:#15201F;width:100%;margin-top:14px;padding:12px}
+.celbox{margin-top:24px;border:1px solid var(--line);border-radius:var(--r-tile);overflow:hidden}
+.celrow{display:flex;justify-content:space-between;align-items:center;gap:12px;
+  padding:12px 14px;font-size:13.5px;color:var(--mute)}
+.celrow+.celrow{border-top:1px solid var(--line)}
+.celrow b{font-family:"Bricolage Grotesque",sans-serif;font-size:17px;color:var(--bone);
+  letter-spacing:-.02em;font-variant-numeric:tabular-nums;white-space:nowrap}
+.tyg{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:10px}
+.tw{padding:9px 2px;border-radius:8px;background:var(--slab);border:1px solid var(--line);
+  display:grid;gap:2px;justify-items:center;transition:all var(--d-fast)}
+.tw.tr{background:color-mix(in srgb,var(--fat) 16%,transparent);border-color:var(--fat)}
+.twd{font-size:12px;font-weight:700}
+.twk{font-size:11px;color:var(--mute);font-variant-numeric:tabular-nums}
+.twc{font-size:10px;color:var(--mute);font-variant-numeric:tabular-nums}
+.twc.bad{color:var(--iron);font-weight:600}
 .rule{padding:15px 0;border-bottom:1px solid var(--line)}
 .rule:last-child{border-bottom:none}
 .rule h3{font-size:15px;margin-bottom:5px}
 .rule p{margin:0;font-size:13.5px;color:var(--mute);line-height:1.55}
 .rule p b{color:var(--bone);font-weight:600}
-
-.rgroup{margin-top:22px}
-.rgroup>h3{font-size:13.5px;color:var(--fat);padding-bottom:7px;border-bottom:1px solid var(--line);margin-bottom:0}
+.rgroup{margin-top:26px}
+.rgroup>h3{font-size:13.5px;color:var(--fat);padding-bottom:7px;border-bottom:1px solid var(--line)}
 .rlink{display:flex;align-items:center;gap:11px;width:100%;text-align:left;padding:12px 2px;border-bottom:1px solid var(--line)}
 .rlink:last-child{border-bottom:none}
 .rlink .rn{flex:1;font-size:14.5px;font-weight:500}
 .rlink .rq{font-size:12.5px;color:var(--mute);font-variant-numeric:tabular-nums;white-space:nowrap}
 
-/* ── tabs ───────────────────────────────── */
-.tabs{
-  position:fixed;left:0;right:0;bottom:0;z-index:40;
-  display:flex;background:var(--slab);border-top:1px solid var(--line);
-  padding-bottom:env(safe-area-inset-bottom,0px);
-}
-.tab{flex:1;padding:9px 2px 8px;display:grid;justify-items:center;gap:2px;color:var(--mute);transition:color var(--d-fast)}
+/* zakładki */
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;background:var(--slab);
+  border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+.tab{flex:1;padding:9px 2px 8px;display:grid;justify-items:center;gap:2px;color:var(--mute);
+  transition:color var(--d-fast)}
 .tab.on{color:var(--fat)}
 .tab span{font-size:10.5px;font-weight:600}
+.upd{position:fixed;left:12px;right:12px;bottom:calc(84px + env(safe-area-inset-bottom,0px));
+  z-index:70;max-width:616px;margin:0 auto;background:var(--fat);color:#15201F;padding:12px 14px;
+  border-radius:10px;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;
+  box-shadow:0 6px 24px rgba(0,0,0,.35)}
+.upd span{flex:1}
+.upd button{background:#15201F;color:#EDE8DF;padding:7px 13px;border-radius:7px;font-weight:600;font-size:13px}
 .foot{margin:30px 0 8px;font-size:12px;color:var(--mute);line-height:1.55}
 </style>
 </head>
 <body>
 
-<div class="railwrap">
-  <div class="rail" id="rail"></div>
-</div>
+<div class="railwrap"><div class="rail" id="rail"></div></div>
 
 <main class="wrap">
 
-  <!-- ══ PLAN ══ -->
-  <section class="view on" id="v-plan">
-    <div class="hero">
-      <div class="hero-top">
-        <div>
-          <div class="hero-label">Węglowodany dziś</div>
-          <div class="carbnum" id="carbN">0<span>g</span></div>
-        </div>
-      </div>
-      <div class="gauge">
-        <div class="gfill" id="gfill"></div>
-        <div class="gmark" style="left:37.5%"></div>
-        <div class="gmark" style="left:87.5%"></div>
-      </div>
-      <div class="gscale"><span>0</span><span><b>30</b> minimum</span><span><b>70</b> sufit</span></div>
+<section class="view on" id="v-plan">
+  <div class="hero">
+    <div class="hero-label">Węglowodany dziś</div>
+    <div class="carbnum" id="carbN">0<span>g</span></div>
+    <div class="gauge">
+      <div class="gfill" id="gfill"></div>
+      <div class="gmark" id="gFloor"></div>
+      <div class="gmark" id="gCeil"></div>
+    </div>
+    <div class="gscale"><span>0</span><span id="gsFloor"></span><span id="gsCeil"></span></div>
+    <div class="macros">
+      <div class="macro"><span class="v" id="mK">0</span><span class="k">kcal</span><span class="c" id="mKc"></span></div>
+      <div class="macro"><span class="v" id="mB">0</span><span class="k">białko g</span><span class="c" id="mBc"></span></div>
+      <div class="macro"><span class="v" id="mT">0</span><span class="k">tłuszcz g</span></div>
+      <div class="macro"><span class="v" id="mF">0</span><span class="k">błonnik g</span></div>
+    </div>
+    <button class="trn" id="trnBtn"></button>
+    <div id="flags"></div>
+  </div>
+  <div id="slots"></div>
+  <p class="foot">Wybierasz jeden posiłek z pary — gramatury przeliczają się pod Twoją wagę i zapotrzebowanie z zakładki Ja.</p>
+</section>
 
-      <div class="macros">
-        <div class="macro"><span class="v" id="mK">0</span><span class="k">kcal</span></div>
-        <div class="macro"><span class="v" id="mB">0</span><span class="k">białko g</span></div>
-        <div class="macro"><span class="v" id="mT">0</span><span class="k">tłuszcz g</span></div>
-        <div class="macro"><span class="v" id="mF">0</span><span class="k">błonnik g</span></div>
-      </div>
-      <div id="flags"></div>
-    </div>
-    <div id="slots"></div>
-    <p class="foot">Wybierasz jeden posiłek z pary. Licznik przelicza się od razu, wybory zostają w telefonie.</p>
-  </section>
+<section class="view" id="v-pomoc">
+  <div class="vhead"><h1>Pomoc</h1><p>Zachcianki, objawy, sytuacje w trasie. Odpowiedzi działają bez zasięgu.</p></div>
+  <div class="szuk" style="display:none">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6">
+      <circle cx="7" cy="7" r="5"/><path d="M11 11l3.5 3.5" stroke-linecap="round"/></svg>
+    <input id="qInp" type="search" placeholder="Opisz problem albo zachciankę" autocomplete="off">
+    <button class="qx" id="qClear" aria-label="Wyczyść" hidden>&times;</button>
+  </div>
+  <div id="pomoc"></div>
+</section>
 
-  <!-- ══ ZAKUPY ══ -->
-  <section class="view" id="v-shop">
-    <div class="vhead">
-      <h1>Zakupy</h1>
-      <p id="shopSub"></p>
-    </div>
-    <div class="bar">
-      <button class="btn" id="btnCopy">Skopiuj listę</button>
-      <button class="btn" id="btnClear">Odznacz wszystko</button>
-    </div>
-    <div id="shop"></div>
-    <p class="foot">Warzywa i owoce bierz na 3–4 dni, nie na cały tydzień. Pomidory i ogórki się nie doczekają.</p>
-  </section>
+<section class="view" id="v-shop">
+  <div class="vhead"><h1>Zakupy</h1><p id="shopSub"></p></div>
+  <div class="bar">
+    <button class="btn" id="btnCopy">Skopiuj listę</button>
+    <button class="btn" id="btnClear">Odznacz wszystko</button>
+  </div>
+  <div id="shop"></div>
+  <p class="foot">Warzywa i owoce bierz na 3–4 dni, nie na cały tydzień. Pomidory i ogórki się nie doczekają.</p>
+</section>
 
-  <!-- ══ PRZEPISY ══ -->
-  <section class="view" id="v-rec">
-    <div class="vhead">
-      <h1>Przepisy</h1>
-      <p>Dwanaście dań, z których złożony jest cały tydzień. Gramatury na jedną porcję.</p>
-    </div>
-    <div id="recs"></div>
-  </section>
+<section class="view" id="v-rec">
+  <div class="vhead"><h1>Przepisy</h1><p id="recSub"></p></div>
+  <div id="recs"></div>
+</section>
 
-  <!-- ══ ZASADY ══ -->
-  <section class="view" id="v-rules">
-    <div class="vhead">
-      <h1>Zasady</h1>
-      <p>Dlaczego plan wygląda tak, jak wygląda, i jak go przestawić pod inną kaloryczność.</p>
-    </div>
+<section class="view" id="v-ja">
+  <div class="vhead"><h1>Ja</h1><p>Waga wyznacza białko, zapotrzebowanie wyznacza tłuszcz, pula węglowodanów zostaje pod Twoją kontrolą. Wszystkie gramatury i lista zakupów przeliczają się od razu.</p></div>
 
-    <div class="rgroup">
-      <h3>Twoja kaloryczność</h3>
-      <div class="tgt">
-        <input type="number" id="target" inputmode="numeric" step="50" min="1200" max="5000">
-        <span style="color:var(--mute);font-size:13px">kcal / dzień</span>
-      </div>
-      <div class="advice" id="advice"></div>
-    </div>
+  <div id="plecBox"></div>
 
-    <div class="rgroup">
-      <h3>Rozkład węglowodanów w dobie</h3>
-      <div class="rule"><h3>Rano: 4–11 g</h3><p>Same warzywa. Zero skoku insuliny, kortyzol pracuje po swojemu.</p></div>
-      <div class="rule"><h3>Obiad: 26–31 g</h3><p>Ryż, batat albo ziemniaki. Glikogen wraca <b>z zewnątrz</b>, więc organizm nie rozbiera mięśni na glukoneogenezę.</p></div>
-      <div class="rule"><h3>Kolacja: 13–29 g</h3><p>Płatki albo owoce jagodowe. Serotonina przechodzi w melatoninę — stąd lepszy sen.</p></div>
-    </div>
+  <div class="big">
+    <div class="f"><label>Wiek</label><input id="aInp" type="number" inputmode="numeric" step="1" min="14" max="99"><span class="u">lat</span></div>
+    <div class="f"><label>Wzrost</label><input id="hInp" type="number" inputmode="numeric" step="1" min="130" max="220"><span class="u">cm</span></div>
+  </div>
+  <div class="big">
+    <div class="f"><label>Masa ciała</label><input id="wInp" type="number" inputmode="decimal" step="0.5" min="35" max="250"><span class="u">kg</span></div>
+    <div class="f"><label>Zapotrzebowanie</label><input id="kInp" type="number" inputmode="numeric" step="50" min="1000" max="6000"><span class="u">kcal</span></div>
+  </div>
+  <div id="kalk"></div>
 
-    <div class="rgroup">
-      <h3>Na co uważać przy keto</h3>
-      <div class="rule"><h3>Sód 3–5 g dziennie</h3><p>Czyli <b>8–12 g soli</b>. Na keto nerki wyrzucają go szybciej. Bez tego przychodzą skurcze, ból głowy i spadek siły na treningu.</p></div>
-      <div class="rule"><h3>Magnez i potas</h3><p>Warzywa liściaste i awokado masz codziennie, ale suplement magnezu ma sens.</p></div>
-      <div class="rule"><h3>Błonnik 21–33 g</h3><p>W dni z kolacją wytrawną schodzi najniżej. Dorzuć wtedy <b>15 g siemienia lnianego</b> albo dodatkową porcję brokułów.</p></div>
-      <div class="rule"><h3>Woda 3–3,5 l</h3><p>Przy większej utracie sodu tym bardziej.</p></div>
-      <div class="rule"><h3>Badania raz na pół roku</h3><p>Lipidogram, morfologia, ALT, glukoza na czczo, ferrytyna.</p></div>
+  <div class="fld"><label>Makroskładniki — wpisz ręcznie albo zostaw puste</label>
+    <div class="big m3">
+      <div class="f"><input id="mbInp" type="number" inputmode="numeric" step="5" min="40" max="400" placeholder="auto"><span class="u">g B</span></div>
+      <div class="f"><input id="mtInp" type="number" inputmode="numeric" step="5" min="20" max="400" placeholder="auto"><span class="u">g T</span></div>
+      <div class="f"><input id="mwInp" type="number" inputmode="numeric" step="5" min="0" max="400" placeholder="auto"><span class="u">g W</span></div>
     </div>
+    <div id="mInfo"></div>
+  </div>
 
-    <div class="rgroup">
-      <h3>Dwie rzeczy, które zmieniłem</h3>
-      <div class="rule">
-        <h3>Słodkie kolacje są mniejsze niż w Twoim dokumencie</h3>
-        <p>Oryginał daje 75–100 g płatków na porcję męską, czyli <b>46–97 g węglowodanów w samej kolacji</b>. Przy sufcie 70 g na dobę to się nie mieści. Zszedłem do 20 g płatków, a słodycz dobrałem z owoców jagodowych, mleczka kokosowego i kakao.</p>
-      </div>
-      <div class="rule">
-        <h3>Plan jest poniżej polskiej normy węglowodanowej</h3>
-        <p>Normy żywienia dla populacji Polski podają <b>130 g</b> jako wartość referencyjną. Ten plan świadomie idzie niżej. Przy adaptacji ketonowej to działa, ale warto trzymać to pod okiem lekarza.</p>
-      </div>
-    </div>
-    <p class="foot">Kaloryczność w planie to wartość robocza 2400 kcal. Wpisz swoją wyżej, a aplikacja policzy różnicę.</p>
-  </section>
+  <div id="segs"></div>
+
+  <div class="fld"><label>Które dni są treningowe</label>
+    <div class="tyg" id="tyg"></div>
+    <p class="note">Stuknij dzień, żeby przełączyć. Liczby pod skrótem to kalorie i węglowodany po przeliczeniu.</p>
+  </div>
+
+  <div class="celbox" id="celBox"></div>
+
+  <div class="rgroup"><h3>Co w tej diecie zmienia płeć</h3>
+    <div class="rule"><h3>Wielkość porcji — nic</h3><p>Porcje wynikają z <b>masy ciała i zapotrzebowania</b>, a te podajesz wprost. Dwie osoby o tej samej wadze i tym samym zapotrzebowaniu dostaną identyczny talerz.</p></div>
+    <div class="rule"><h3>Wzór na zapotrzebowanie — 166 kcal</h3><p>W równaniu Mifflina–St Jeora płeć to osobna stała: <b>+5</b> dla mężczyzn, <b>−161</b> dla kobiet. Przy tej samej wadze, wzroście i wieku kobiecie wychodzi o 166 kcal mniej. To jedyne miejsce, gdzie płeć wchodzi do rachunku liczbowo.</p></div>
+    <div class="rule"><h3>Białko — norma ta sama</h3><p>1,6–2,2 g na kilogram, <b>bez różnicy płciowej</b>. Różnica bierze się tylko z tego, że liczymy na masę całkowitą, a nie beztłuszczową.</p></div>
+    <div class="rule"><h3>Żelazo — dwukrotna różnica</h3><p>Norma dla kobiet miesiączkujących to <b>18 mg</b> dziennie, dla mężczyzn <b>10 mg</b>. Ten plan pokrywa ją czerwonym mięsem, jajkami, pestkami dyni i kakao. Papryka i pomidory obok posiłku zwiększają wchłanianie, kawa i herbata do posiłku je blokują — odczekaj godzinę.</p></div>
+    <div class="rule"><h3>Węglowodany — kobiety wyżej</h3><p>Bardzo niska podaż węglowodanów razem z treningiem wyraźniej uderza w oś hormonalną u kobiet: spada T3, potrafi zaniknąć miesiączka. Stąd zalecenie <b>70 g zamiast 55 g</b> i większa pula okołotreningowa.</p></div>
+    <div class="rule"><h3>Dolny próg kalorii</h3><p>Poniżej <b>1500 kcal</b> u mężczyzn i <b>1200 kcal</b> u kobiet trudno pokryć mikroskładniki z samego jedzenia. Aplikacja ostrzeże.</p></div>
+  </div>
+
+  <div class="rgroup"><h3>Jak liczy się ten plan</h3>
+    <div class="rule"><h3>Białko trzyma się wagi</h3><p>Cel to <b>waga × g/kg</b>, niezależnie od kaloryczności. Przy budowie masy białko jest nietykalne — to ono decyduje, czy nadwyżka idzie w mięśnie.</p></div>
+    <div class="rule"><h3>Węglowodany trzymają się puli</h3><p>Ryż, batat i ziemniaki skalują się tak, żeby trafić w Twoją pulę. Warzywa i owoce zostają bez zmian, bo to z nich bierze się błonnik.</p></div>
+    <div class="rule"><h3>Tłuszcz domyka kalorie</h3><p>Oliwa, masło, orzechy i awokado dopychają resztę energii. Dlatego przy większym zapotrzebowaniu rosną głównie one.</p></div>
+    <div class="rule"><h3>Gdy cele się nie spinają</h3><p>Aplikacja <b>nie udaje</b>, że wszystko gra. Jeśli zestaw nie dociągnie do celu, powie o ile i dlaczego.</p></div>
+  </div>
+
+  <div class="rgroup"><h3>Rozkład węglowodanów w dobie</h3>
+    <div class="rule"><h3>Rano: tylko warzywa</h3><p>Zero skoku insuliny, kortyzol pracuje po swojemu.</p></div>
+    <div class="rule"><h3>Obiad: ryż, batat, ziemniaki</h3><p>Glikogen wraca <b>z zewnątrz</b>, więc organizm nie rozbiera mięśni na glukoneogenezę.</p></div>
+    <div class="rule"><h3>Kolacja: płatki albo owoce</h3><p>Serotonina przechodzi w melatoninę — stąd lepszy sen.</p></div>
+    <div class="rule"><h3>Wokół treningu: dodatkowa pula</h3><p>Ten dzień wychodzi z ketozy i tak ma być. Glikogen odbudowuje się najszybciej w oknie po wysiłku.</p></div>
+  </div>
+
+  <div class="rgroup"><h3>Na co uważać przy keto</h3>
+    <div class="rule"><h3>Sód 3–5 g dziennie</h3><p>Czyli <b>8–12 g soli</b>. Na keto nerki wyrzucają go szybciej. Bez tego przychodzą skurcze, ból głowy i spadek siły na treningu.</p></div>
+    <div class="rule"><h3>Magnez i potas</h3><p>Warzywa liściaste i awokado masz codziennie, ale suplement magnezu ma sens.</p></div>
+    <div class="rule"><h3>Woda 3–3,5 l</h3><p>Przy większej utracie sodu tym bardziej.</p></div>
+    <div class="rule"><h3>Badania raz na pół roku</h3><p>Lipidogram, morfologia, ALT, glukoza na czczo, ferrytyna.</p></div>
+    <div class="rule"><h3>Plan idzie poniżej polskiej normy</h3><p>Normy żywienia dla populacji Polski podają <b>130 g</b> węglowodanów jako wartość referencyjną. Ten plan świadomie idzie niżej. Przy adaptacji ketonowej to działa, ale warto trzymać to pod okiem lekarza.</p></div>
+  </div>
+  <p class="foot">Wartości odżywcze liczone ze składników, nie wpisane z ręki. Zmiana gramatury natychmiast zmienia makro.<br>
+  <span id="wer"></span></p>
+</section>
 
 </main>
 
 <nav class="tabs" id="tabs"></nav>
-
 <div class="scrim" id="scrim"></div>
 <div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Przepis">
   <div class="grip"></div>
@@ -389,290 +459,1003 @@ td:nth-child(3){color:var(--mute);text-align:right;white-space:nowrap;padding-le
 </div>
 
 <script>
-/* ════════════════ DANE ════════════════ */
-const MEALS = {
-  s1:{n:"Jajecznica z łososiem wędzonym",t:"7 min",k:734,b:51.6,f:54.7,c:8.6,fb:2.5,
-    i:[["Jajka",220,"4 szt. L","bialko"],["Łosoś wędzony",100,"1 małe opakowanie","bialko"],
-       ["Masło klarowane",15,"1 czubata łyżka","tluszcz"],["Oliwa z oliwek",10,"1 łyżka","tluszcz"],
-       ["Pomidor",150,"1 duży","warzywa"],["Ogórek",100,"1/2 dużego","warzywa"]],
-    h:"Masło na patelnię, jajka roztrzepane, mieszasz na małym ogniu do kremowej konsystencji. Łosoś wrzucasz na <strong>20 sekund na koniec</strong> — nie smażysz go. Pomidor i ogórek pokrojone, skropione oliwą, sól, pieprz."},
-
-  s2:{n:"Patelnia wołowa z papryką i awokado",t:"12 min",k:753,b:49.5,f:53.4,c:11.3,fb:8.5,
-    i:[["Wołowina mielona 15%",200,"1 duża porcja","bialko"],["Jajka",55,"1 szt. L","bialko"],
-       ["Masło klarowane",10,"2 łyżeczki","tluszcz"],["Cebula",50,"1/2 małej","warzywa"],
-       ["Papryka czerwona",100,"1/2 sztuki","warzywa"],["Szpinak",100,"2 duże garście","warzywa"],
-       ["Awokado",50,"1/4 dużego","tluszcz"]],
-    h:"Wszystko na <strong>jednej patelni</strong> — odpowiednik jajecznicy, tylko na wołowinie. Cebula na maśle 2 min, wołowina, rozbijasz łopatką, 6 min. Papryka 2 min, szpinak 1 min. Na koniec wbijasz jajko i mieszasz, aż się zetnie. Awokado w plastrach na wierzch. Sól, pieprz, papryka wędzona."},
-
-  s3:{n:"Omlet z serem i pieczarkami",t:"10 min",k:775,b:50.9,f:61.1,c:4.2,fb:2.8,
-    i:[["Jajka",275,"5 szt. L","bialko"],["Ser gouda",50,"2 plastry","bialko"],
-       ["Pieczarki",100,"4–5 sztuk","warzywa"],["Masło klarowane",12,"1 łyżka","tluszcz"],
-       ["Rukola",50,"1 duża garść","warzywa"],["Oliwa z oliwek",8,"1 mała łyżka","tluszcz"]],
-    h:"Pieczarki na maśle do zrumienienia, zalewasz jajkami, ser na wierzch, przykrywasz na 3 min. Rukola obok, skropiona oliwą. <strong>Najniższe węgle ze wszystkich pierwszych posiłków</strong> — dobry wybór pod ciężki obiad."},
-
-  s4:{n:"Makrela z jajkami na twardo i awokado",t:"5 min",k:699,b:48.5,f:51.1,c:9.3,fb:7.9,
-    i:[["Makrela wędzona",150,"1 mała sztuka (filet)","bialko"],["Jajka",110,"2 szt. L","bialko"],
-       ["Awokado",80,"1/2 sztuki","tluszcz"],["Pomidor",150,"1 duży","warzywa"],
-       ["Ogórek",100,"1/2 dużego","warzywa"],["Oliwa z oliwek",5,"1/2 łyżki","tluszcz"]],
-    h:"<strong>Zero gotowania.</strong> Jajka gotujesz z zapasem raz na kilka dni. Wszystko kroisz, składasz na talerzu, oliwa, sól, pieprz, cytryna."},
-
-  o1:{n:"Łosoś pieczony z brokułami i ryżem",t:"25 min",k:855,b:59.2,f:55.2,c:25.8,fb:7.8,
-    i:[["Łosoś, filet",250,"1 duży filet","bialko"],["Brokuły",250,"1/2 dużej różyczki","warzywa"],
-       ["Ryż basmati (suchy)",25,"2 łyżki","wegle"],["Olej z awokado",15,"1,5 łyżki","tluszcz"],
-       ["Masło klarowane",5,"1 łyżeczka","tluszcz"]],
-    h:"Piekarnik 200°C. Łosoś na blachę, sól, pieprz, cytryna, 15 min. Brokuły na parze 6 min, potem masło klarowane. Ryż gotujesz równolegle. Olej z awokado wlewasz <strong>na zimno po upieczeniu</strong> — nie grzejesz go."},
-
-  o2:{n:"Kurczak w śmietanie z cukinią i batatem",t:"30 min",k:858,b:62.5,f:53.3,c:28.8,fb:7.3,
-    i:[["Pierś z kurczaka",250,"1 duża pierś","bialko"],["Śmietana 30%",80,"5 łyżek","tluszcz"],
-       ["Cukinia",200,"1 mała","warzywa"],["Pieczarki",100,"4–5 sztuk","warzywa"],
-       ["Batat",110,"1 mały","wegle"],["Masło klarowane",15,"1 czubata łyżka","tluszcz"],
-       ["Oliwa z oliwek",10,"1 łyżka","tluszcz"]],
-    h:"Batat w kostkę, na blachę z oliwą, 200°C, 25 min. W tym czasie kurczak w paskach na maśle 6 min, pieczarki 3 min, cukinia 3 min, zalewasz śmietaną, 4 min na małym ogniu. Czosnek, tymianek, pieprz."},
-
-  o3:{n:"Gulasz wołowy z ziemniakami",t:"45 min",k:871,b:61.0,f:54.2,c:30.7,fb:6.6,
-    i:[["Wołowina gulaszowa",280,"1 duża porcja","bialko"],["Cebula",50,"1/2 małej","warzywa"],
-       ["Papryka czerwona",100,"1/2 sztuki","warzywa"],["Passata pomidorowa",80,"4 łyżki","wegle"],
-       ["Ziemniaki",110,"1 średni","wegle"],["Masło klarowane",10,"2 łyżeczki","tluszcz"],
-       ["Oliwa z oliwek",10,"1 łyżka","tluszcz"]],
-    h:"<strong>Rób podwójną porcję</strong> — drugiego dnia jest lepszy. Cebula na maśle, mięso obsmażone ze wszystkich stron, passata, papryka, woda do przykrycia, dusisz 35 min pod przykryciem. Ziemniaki gotowane osobno. Oliwa na talerzu, na zimno. Papryka wędzona, majeranek, liść laurowy."},
-
-  o4:{n:"Kotlety mielone z kalafiorem i ryżem",t:"25 min",k:872,b:66.5,f:49.7,c:31.3,fb:6.3,
-    i:[["Wołowina mielona 15%",220,"1 duża porcja","bialko"],["Jajka",55,"1 szt. L","bialko"],
-       ["Kalafior",300,"1/2 dużej główki","warzywa"],["Ryż basmati (suchy)",25,"2 łyżki","wegle"],
-       ["Masło klarowane",10,"2 łyżeczki","tluszcz"],["Skyr naturalny",100,"1/2 kubka","bialko"]],
-    h:"Mięso, jajko, sól, pieprz i czosnek — formujesz 4 kotlety, smażysz na maśle po 4 min z każdej strony. Kalafior na parze 8 min. Skyr wymieszany z czosnkiem, koperkiem i pieprzem jako sos. <strong>Najwięcej węgli z obiadów</strong> — nie łącz z owsianką."},
-
-  kw1:{n:"Sałatka z tuńczykiem, jajkiem i awokado",t:"8 min",k:869,b:67.1,f:59.8,c:12.7,fb:11.9,sav:1,
-    i:[["Tuńczyk w sosie własnym",180,"2 puszki","bialko"],["Jajka",110,"2 szt. L","bialko"],
-       ["Awokado",100,"1/2 dużego","tluszcz"],["Pomidor",150,"1 duży","warzywa"],
-       ["Ogórek",100,"1/2 dużego","warzywa"],["Rukola",50,"1 duża garść","warzywa"],
-       ["Oliwa z oliwek",20,"2 łyżki","tluszcz"],["Oliwki",30,"ok. 8 sztuk","tluszcz"],
-       ["Pestki dyni",15,"1 łyżka","tluszcz"]],
-    h:"Wszystko do miski, oliwa, ocet balsamiczny albo cytryna, sól, pieprz. Pestki <strong>na sam koniec</strong>, żeby zostały chrupiące. Tuńczyk odsącz z zalewy."},
-
-  kw2:{n:"Twaróg z warzywami i makrelą",t:"7 min",k:858,b:63.5,f:58.4,c:14.5,fb:6.9,sav:1,
-    i:[["Twaróg półtłusty",200,"4/5 kostki","bialko"],["Śmietana 30%",40,"2,5 łyżki","tluszcz"],
-       ["Makrela wędzona",100,"1/2 filetu","bialko"],["Rzodkiewka",100,"1 pęczek","warzywa"],
-       ["Ogórek",100,"1/2 dużego","warzywa"],["Cebula",30,"1/4 małej","warzywa"],
-       ["Oliwa z oliwek",15,"1,5 łyżki","tluszcz"],["Siemię lniane mielone",15,"1,5 łyżki","tluszcz"]],
-    h:"Twaróg rozgnieciony widelcem ze śmietaną, warzywa w kostkę, siemię wmieszane, oliwa na wierzch. Makrela obok. Sól, pieprz, szczypta chilli."},
-
-  ks1:{n:"Owsianka keto jaglana z białkiem wołowym",t:"7 min",k:804,b:53.4,f:49.0,c:29.2,fb:14.1,sw:1,
-    i:[["Płatki jaglane",20,"2 łyżki","wegle"],["Izolat białka wołowego",45,"1,5 miarki","bialko"],
-       ["Mleczko kokosowe",100,"1/4 puszki 400 ml","tluszcz"],["Masło orzechowe 100%",25,"1 czubata łyżka","tluszcz"],
-       ["Maliny",100,"1 duża garść","warzywa"],["Migdały",30,"ok. 25 sztuk","tluszcz"],
-       ["Kakao 100%",5,"1 łyżeczka","dodatki"]],
-    h:"Płatki zalewasz 100 ml wrzątku, 5 minut pod przykryciem. <strong>Odczekaj, aż przestanie parować</strong> — białko nie lubi wrzątku. Dopiero wtedy wsypujesz izolat, kakao, szczyptę soli i cynamon. Mleczko kokosowe, masło orzechowe, owoce i migdały na wierzch."},
-
-  ks2:{n:"Budyń chia-kakao z borówkami",t:"5 min + noc",k:856,b:49.8,f:59.2,c:23.2,fb:17.2,sw:1,
-    i:[["Nasiona chia",25,"2 łyżki","tluszcz"],["Izolat białka wołowego",45,"1,5 miarki","bialko"],
-       ["Mleczko kokosowe",120,"1/3 puszki 400 ml","tluszcz"],["Kakao 100%",10,"2 łyżeczki","dodatki"],
-       ["Borówki",100,"1 duża garść","warzywa"],["Orzechy makadamia",25,"ok. 12 sztuk","tluszcz"],
-       ["Masło orzechowe 100%",15,"1 płaska łyżka","tluszcz"]],
-    h:"<strong>Robisz wieczorem dzień wcześniej.</strong> Chia, mleczko, 150 ml wody, kakao, szczypta soli i cynamonu — mieszasz w słoiku, do lodówki na noc. Przed jedzeniem wmieszaj izolat, na wierzch borówki, makadamia i masło orzechowe. Najniższe węgle ze słodkich kolacji — pasuje pod najcięższe obiady."}
+/* ══ rdzeń: baza wartości odżywczych + silnik przeliczania ══ */
+/* wartości na 100 g: [kcal, białko, tłuszcz, węgle przyswajalne, błonnik] */
+const NUTR = {
+"Jajka":[139,12.5,9.7,0.6,0],
+"Łosoś wędzony":[162,22,8,0,0],
+"Łosoś, filet":[201,19.9,13.6,0,0],
+"Makrela wędzona":[221,20.7,15.5,0,0],
+"Tuńczyk w sosie własnym":[108,24,1,0,0],
+"Pierś z kurczaka":[99,21.5,1.3,0,0],
+"Wołowina mielona 15%":[218,18.6,15,0,0],
+"Wołowina gulaszowa":[190,20,12,0,0],
+"Twaróg półtłusty":[133,18.7,4.7,3.5,0],
+"Skyr naturalny":[63,11,0.2,4,0],
+"Ser gouda":[356,25,27.5,1,0],
+"Izolat białka wołowego":[350,77,1,5,0],
+"Masło klarowane":[900,0,100,0,0],
+"Oliwa z oliwek":[900,0,100,0,0],
+"Olej z awokado":[900,0,100,0,0],
+"Śmietana 30%":[293,2.4,30,3.5,0],
+"Mleczko kokosowe":[190,2,19,2.8,0],
+"Awokado":[160,2,14.7,1.8,6.7],
+"Masło orzechowe 100%":[600,25,50,10,6],
+"Migdały":[579,21,50,9,12.5],
+"Orzechy makadamia":[718,8,76,5,8.6],
+"Pestki dyni":[559,30,49,11,6],
+"Nasiona chia":[486,17,31,8,34],
+"Siemię lniane mielone":[534,18,42,1.6,27],
+"Oliwki":[145,1,15,1,3.2],
+"Pomidor":[19,0.9,0.2,3.5,1.2],
+"Ogórek":[13,0.7,0.1,2,0.7],
+"Cebula":[33,1.1,0.1,6.5,1.7],
+"Papryka czerwona":[31,1,0.3,6,2.1],
+"Szpinak":[23,2.9,0.4,0.8,2.2],
+"Rukola":[25,2.6,0.7,2,1.6],
+"Pieczarki":[22,2.7,0.3,1,2],
+"Brokuły":[34,3,0.4,2.5,3],
+"Kalafior":[25,1.9,0.3,2.5,2],
+"Cukinia":[17,1.2,0.3,2.3,1],
+"Rzodkiewka":[16,0.7,0.1,1.9,1.6],
+"Maliny":[52,1.2,0.7,5.4,6.5],
+"Borówki":[57,0.7,0.3,12,2.4],
+"Ryż basmati (suchy)":[350,8,1,78,1.4],
+"Batat":[86,1.6,0.1,18.5,3],
+"Ziemniaki":[77,2,0.1,15.5,2.2],
+"Płatki jaglane":[346,10,3,66,3.5],
+"Passata pomidorowa":[34,1.5,0.2,5.5,1.5],
+"Kakao 100%":[228,20,14,8,33],
+"Feta":[264,14,21,4,0],
+"Mozzarella":[253,18,19,1.5,0],
+"Parmezan":[392,35.8,25.8,3.2,0],
+"Camembert":[300,20,24,0.5,0],
+"Mascarpone":[430,4.5,44,4.5,0],
+"Jogurt grecki 10%":[133,5.7,10,4.7,0],
+"Majonez":[680,1,75,1.5,0],
+"Dorsz, filet":[78,17.7,0.7,0,0],
+"Pierś z indyka":[84,19,0.7,0,0],
+"Orzechy włoskie":[654,15,65,7,6.7],
+"Olej lniany":[900,0,100,0,0],
+"Kapusta kiszona":[19,1,0.1,2.5,2.5],
+"Kapusta biała":[25,1.3,0.2,3.3,2.5],
+"Seler korzeniowy":[32,1.5,0.3,4.4,1.8],
+"Marchew":[41,0.9,0.2,6.9,2.8],
+"Sałata rzymska":[17,1.2,0.3,1.2,2.1],
+"Szczypiorek":[30,3.3,0.7,1.8,2.5],
+"Koperek":[43,3.5,1.1,2,2.1],
+"Truskawki":[32,0.7,0.3,5.7,2],
+"Jeżyny":[43,1.4,0.5,4.3,5.3],
+"Orzechy laskowe":[628,15,61,7,9.7],
+"Orzechy brazylijskie":[659,14.3,67,4.8,7.5],
+"Orzechy pekan":[691,9.2,72,4.3,9.6],
+"Pestki słonecznika":[584,21,51,11,8.6],
+"Pistacje":[562,20,45,16,10]
 };
 
-const DAYS = [
-  {d:"Pon",full:"Poniedziałek",s:["s1","s3"],o:["o1","o2"],k:["ks2","kw1"]},
-  {d:"Wt", full:"Wtorek",      s:["s2","s4"],o:["o3","o4"],k:["kw2","ks2"]},
-  {d:"Śr", full:"Środa",       s:["s1","s3"],o:["o2","o1"],k:["ks1","kw1"]},
-  {d:"Czw",full:"Czwartek",    s:["s4","s2"],o:["o4","o3"],k:["kw1","ks2"]},
-  {d:"Pt", full:"Piątek",      s:["s1","s4"],o:["o1","o2"],k:["ks1","kw2"]},
-  {d:"Sob",full:"Sobota",      s:["s3","s2"],o:["o2","o4"],k:["ks2","kw1"]},
-  {d:"Nd", full:"Niedziela",   s:["s4","s1"],o:["o3","o1"],k:["kw2","ks1"]}
+/* jednostka kuchenna: [gramów na jednostkę, rodzaj] */
+const UNIT = {
+"Jajka":[55,"szt"],"Awokado":[200,"whole"],"Pomidor":[150,"whole"],"Ogórek":[200,"whole"],
+"Cebula":[80,"whole"],"Papryka czerwona":[180,"whole"],"Batat":[200,"whole"],"Ziemniaki":[110,"szt"],
+"Pieczarki":[20,"szt"],"Ser gouda":[25,"plaster"],"Twaróg półtłusty":[250,"kostka"],
+"Skyr naturalny":[150,"kubek"],"Tuńczyk w sosie własnym":[90,"puszka"],
+"Oliwa z oliwek":[10,"lyzka"],"Olej z awokado":[10,"lyzka"],"Masło klarowane":[12,"lyzka"],
+"Śmietana 30%":[16,"lyzka"],"Mleczko kokosowe":[15,"lyzka"],"Masło orzechowe 100%":[20,"lyzka"],
+"Nasiona chia":[12,"lyzka"],"Siemię lniane mielone":[10,"lyzka"],"Pestki dyni":[15,"lyzka"],
+"Płatki jaglane":[10,"lyzka"],"Ryż basmati (suchy)":[12.5,"lyzka"],"Passata pomidorowa":[20,"lyzka"],
+"Kakao 100%":[5,"lyzeczka"],"Izolat białka wołowego":[30,"miarka"],
+"Migdały":[1.2,"szt"],"Orzechy makadamia":[2,"szt"],"Oliwki":[4,"szt"],
+"Maliny":[100,"garsc"],"Borówki":[100,"garsc"],"Szpinak":[50,"garsc"],"Rukola":[50,"garsc"]
+};
+
+/* odmiana polska: 1 / 2-4 / 5+ */
+const PL = {
+ lyzka:["łyżka","łyżki","łyżek"], lyzeczka:["łyżeczka","łyżeczki","łyżeczek"],
+ szt:["szt.","szt.","szt."], plaster:["plaster","plastry","plastrów"],
+ kostka:["kostka","kostki","kostek"], kubek:["kubek","kubki","kubków"],
+ puszka:["puszka","puszki","puszek"], miarka:["miarka","miarki","miarek"],
+ garsc:["garść","garście","garści"], whole:["sztuka","sztuki","sztuk"]
+};
+function odmien(n,kind){
+  const f=PL[kind]; if(!f) return "";
+  const i=Math.round(n);
+  if(i===1) return f[0];
+  const d=i%10, s=i%100;
+  if(d>=2&&d<=4&&!(s>=12&&s<=14)) return f[1];
+  return f[2];
+}
+const UL=[[0.25,"1/4"],[0.33,"1/3"],[0.5,"1/2"],[0.67,"2/3"],[0.75,"3/4"]];
+function jednostka(name,g){
+  const u=UNIT[name]; if(!u) return "";
+  const [per,kind]=u, n=g/per;
+  if(kind==="whole"||kind==="kostka"||kind==="kubek"||kind==="puszka"){
+    if(n<0.92){ let best=UL[0],bd=9;
+      for(const [v,t] of UL){const d=Math.abs(n-v); if(d<bd){bd=d;best=[v,t];}}
+      return `${best[1]} ${odmien(1,kind)}`; }
+  }
+  if(kind==="szt"&&per<=4) return `ok. ${Math.round(n)} ${odmien(Math.round(n),kind)}`;
+  const r=n<3?Math.round(n*2)/2:Math.round(n);
+  if(r<=0) return "";
+  const txt=(r%1?String(r).replace(".",","):String(r));
+  return `${txt} ${odmien(r,kind)}`;
+}
+
+/* ══ posiłki: tylko składniki, makro liczone z bazy ══ */
+/* kategoria: B białko · T tłuszcz · W węgle · X warzywa/dodatki (nieskalowane) */
+const MEALS = {
+ s1:{n:"Jajecznica z łososiem wędzonym",t:"7 min",
+   i:[["Jajka",220,"B"],["Łosoś wędzony",100,"B"],["Masło klarowane",15,"T"],
+      ["Oliwa z oliwek",10,"T"],["Pomidor",150,"X"],["Ogórek",100,"X"]],
+   h:"Masło na patelnię, jajka roztrzepane, mieszasz na małym ogniu do kremowej konsystencji. Łosoś wrzucasz na <strong>20 sekund na koniec</strong> — nie smażysz go. Pomidor i ogórek pokrojone, skropione oliwą, sól, pieprz."},
+ s2:{n:"Patelnia wołowa z papryką i awokado",t:"12 min",
+   i:[["Wołowina mielona 15%",200,"B"],["Jajka",55,"B"],["Masło klarowane",10,"T"],
+      ["Cebula",50,"X"],["Papryka czerwona",100,"X"],["Szpinak",100,"X"],["Awokado",50,"T"]],
+   h:"Wszystko na <strong>jednej patelni</strong> — odpowiednik jajecznicy, tylko na wołowinie. Cebula na maśle 2 min, wołowina, rozbijasz łopatką, 6 min. Papryka 2 min, szpinak 1 min. Na koniec wbijasz jajko i mieszasz, aż się zetnie. Awokado w plastrach na wierzch. Sól, pieprz, papryka wędzona."},
+ s3:{n:"Omlet z serem i pieczarkami",t:"10 min",
+   i:[["Jajka",275,"B"],["Ser gouda",50,"B"],["Pieczarki",100,"X"],["Masło klarowane",12,"T"],
+      ["Rukola",50,"X"],["Oliwa z oliwek",8,"T"]],
+   h:"Pieczarki na maśle do zrumienienia, zalewasz jajkami, ser na wierzch, przykrywasz na 3 min. Rukola obok, skropiona oliwą. <strong>Najniższe węgle ze wszystkich pierwszych posiłków</strong> — dobry wybór pod ciężki obiad."},
+ s4:{n:"Makrela z jajkami na twardo i awokado",t:"5 min",
+   i:[["Makrela wędzona",150,"B"],["Jajka",110,"B"],["Awokado",80,"T"],
+      ["Pomidor",150,"X"],["Ogórek",100,"X"],["Oliwa z oliwek",5,"T"]],
+   h:"<strong>Zero gotowania.</strong> Jajka gotujesz z zapasem raz na kilka dni. Wszystko kroisz, składasz na talerzu, oliwa, sól, pieprz, cytryna."},
+
+ o1:{n:"Łosoś pieczony z brokułami i ryżem",t:"25 min",
+   i:[["Łosoś, filet",250,"B"],["Brokuły",250,"X"],["Ryż basmati (suchy)",25,"W"],
+      ["Olej z awokado",15,"T"],["Masło klarowane",5,"T"]],
+   h:"Piekarnik 200°C. Łosoś na blachę, sól, pieprz, cytryna, 15 min. Brokuły na parze 6 min, potem masło klarowane. Ryż gotujesz równolegle. Olej z awokado wlewasz <strong>na zimno po upieczeniu</strong> — nie grzejesz go."},
+ o2:{n:"Kurczak w śmietanie z cukinią i batatem",t:"30 min",
+   i:[["Pierś z kurczaka",250,"B"],["Śmietana 30%",80,"T"],["Cukinia",200,"X"],
+      ["Pieczarki",100,"X"],["Batat",110,"W"],["Masło klarowane",15,"T"],["Oliwa z oliwek",10,"T"]],
+   h:"Batat w kostkę, na blachę z oliwą, 200°C, 25 min. W tym czasie kurczak w paskach na maśle 6 min, pieczarki 3 min, cukinia 3 min, zalewasz śmietaną, 4 min na małym ogniu. Czosnek, tymianek, pieprz."},
+ o3:{n:"Gulasz wołowy z ziemniakami",t:"45 min",
+   i:[["Wołowina gulaszowa",280,"B"],["Cebula",50,"X"],["Papryka czerwona",100,"X"],
+      ["Passata pomidorowa",80,"X"],["Ziemniaki",110,"W"],["Masło klarowane",10,"T"],["Oliwa z oliwek",10,"T"]],
+   h:"<strong>Rób podwójną porcję</strong> — drugiego dnia jest lepszy. Cebula na maśle, mięso obsmażone ze wszystkich stron, passata, papryka, woda do przykrycia, dusisz 35 min pod przykryciem. Ziemniaki gotowane osobno. Oliwa na talerzu, na zimno. Papryka wędzona, majeranek, liść laurowy."},
+ o4:{n:"Kotlety mielone z kalafiorem i ryżem",t:"25 min",
+   i:[["Wołowina mielona 15%",220,"B"],["Jajka",55,"B"],["Kalafior",300,"X"],
+      ["Ryż basmati (suchy)",25,"W"],["Masło klarowane",10,"T"],["Skyr naturalny",100,"B"]],
+   h:"Mięso, jajko, sól, pieprz i czosnek — formujesz kotlety, smażysz na maśle po 4 min z każdej strony. Kalafior na parze 8 min. Skyr wymieszany z czosnkiem, koperkiem i pieprzem jako sos."},
+
+ kw1:{n:"Sałatka z tuńczykiem, jajkiem i awokado",t:"8 min",sav:1,
+   i:[["Tuńczyk w sosie własnym",180,"B"],["Jajka",110,"B"],["Awokado",100,"T"],
+      ["Pomidor",150,"X"],["Ogórek",100,"X"],["Rukola",50,"X"],["Oliwa z oliwek",20,"T"],
+      ["Oliwki",30,"T"],["Pestki dyni",15,"T"]],
+   h:"Wszystko do miski, oliwa, ocet balsamiczny albo cytryna, sól, pieprz. Pestki <strong>na sam koniec</strong>, żeby zostały chrupiące. Tuńczyk odsącz z zalewy."},
+ kw2:{n:"Twaróg z warzywami i makrelą",t:"7 min",sav:1,
+   i:[["Twaróg półtłusty",200,"B"],["Śmietana 30%",40,"T"],["Makrela wędzona",100,"B"],
+      ["Rzodkiewka",100,"X"],["Ogórek",100,"X"],["Cebula",30,"X"],["Oliwa z oliwek",15,"T"],
+      ["Siemię lniane mielone",15,"T"]],
+   h:"Twaróg rozgnieciony widelcem ze śmietaną, warzywa w kostkę, siemię wmieszane, oliwa na wierzch. Makrela obok. Sól, pieprz, szczypta chilli."},
+ ks1:{n:"Owsianka keto jaglana z białkiem wołowym",t:"7 min",sw:1,
+   i:[["Płatki jaglane",20,"W"],["Izolat białka wołowego",45,"B"],["Mleczko kokosowe",100,"T"],
+      ["Masło orzechowe 100%",25,"T"],["Maliny",100,"X"],["Migdały",30,"T"],["Kakao 100%",5,"X"]],
+   h:"Płatki zalewasz 100 ml wrzątku, 5 minut pod przykryciem. <strong>Odczekaj, aż przestanie parować</strong> — białko nie lubi wrzątku. Dopiero wtedy wsypujesz izolat, kakao, szczyptę soli i cynamon. Mleczko kokosowe, masło orzechowe, owoce i migdały na wierzch."},
+ s5:{n:"Szakszuka z fetą i szpinakiem",t:"12 min",
+   i:[["Jajka",220,"B"],["Feta",60,"B"],["Pomidor",180,"X"],["Papryka czerwona",60,"X"],
+      ["Szpinak",80,"X"],["Cebula",30,"X"],["Oliwa z oliwek",12,"T"]],
+   h:"Cebula i papryka na oliwie 3 min, pokrojone pomidory, dusisz 5 min aż puszczą sok. Szpinak, sól, pieprz, papryka wędzona i szczypta kuminu. Robisz <strong>łyżką dołki w sosie</strong> i wbijasz w nie jajka, przykrywasz na 5 min — białka mają się ściąć, żółtka zostać płynne. Feta pokruszona na wierzch po zdjęciu z ognia."},
+ s6:{n:"Omlet caprese z mozzarellą",t:"8 min",
+   i:[["Jajka",220,"B"],["Mozzarella",80,"B"],["Pomidor",120,"X"],["Rukola",40,"X"],
+      ["Masło klarowane",10,"T"],["Oliwa z oliwek",12,"T"]],
+   h:"Mozzarellę <strong>odsącz i osusz papierowym ręcznikiem</strong>, inaczej omlet będzie wodnisty. Jajka na maśle na małym ogniu, gdy spód się zetnie kładziesz plastry mozzarelli i pomidora, składasz na pół, 2 min pod przykryciem. Rukola i oliwa na wierzch, świeża bazylia jeśli masz."},
+ s7:{n:"Deska śniadaniowa — sery, jajka i warzywa",t:"4 min",
+   i:[["Camembert",60,"B"],["Ser gouda",50,"B"],["Jajka",110,"B"],["Awokado",80,"T"],
+      ["Pomidor",150,"X"],["Ogórek",100,"X"],["Orzechy włoskie",20,"T"],["Oliwa z oliwek",8,"T"]],
+   h:"<strong>Zero gotowania, wszystko z lodówki.</strong> Jajka gotujesz z zapasem raz na kilka dni. Sery w grubsze plastry, warzywa w słupki, orzechy obok. Oliwa, sól gruboziarnista, pieprz. Najszybsze, co jest w tym planie."},
+ o5:{n:"Dorsz z masłem czosnkowym i surówką z selera",t:"25 min",
+   i:[["Dorsz, filet",280,"B"],["Masło klarowane",25,"T"],["Seler korzeniowy",120,"X"],
+      ["Majonez",20,"T"],["Jogurt grecki 10%",40,"T"],["Ziemniaki",120,"W"],["Oliwa z oliwek",10,"T"]],
+   h:"Dorsz <strong>osusz i posól 10 minut wcześniej</strong> — inaczej puści wodę i będzie się dusił zamiast piec. 200°C, 12 min. Masło rozpuszczone z przeciśniętym czosnkiem i cytryną, polewasz po upieczeniu. Seler na tarce o grubych oczkach, majonez z jogurtem, sól, pieprz, kropla cytryny żeby nie sciemniał."},
+ o6:{n:"Zapiekanka z indyka, cukinii i sera",t:"35 min",
+   i:[["Pierś z indyka",250,"B"],["Ser gouda",60,"B"],["Cukinia",250,"X"],["Pomidor",150,"X"],
+      ["Cebula",40,"X"],["Śmietana 30%",60,"T"],["Ryż basmati (suchy)",15,"W"],["Oliwa z oliwek",15,"T"]],
+   h:"Cukinię w plastry, <strong>posól i odstaw na 10 minut, potem odciśnij</strong> — bez tego zapiekanka pływa. Indyk w kostkę obsmażony z cebulą, warstwami z cukinią i pomidorem, zalane śmietaną, ser na wierzch. 190°C, 25 min. Ryż gotujesz osobno."},
+ kw3:{n:"Sałatka grecka z fetą i jajkami",t:"8 min",sav:1,
+   i:[["Feta",150,"B"],["Jajka",165,"B"],["Pomidor",200,"X"],["Ogórek",150,"X"],
+      ["Papryka czerwona",80,"X"],["Cebula",30,"X"],["Oliwki",40,"T"],["Oliwa z oliwek",20,"T"]],
+   h:"Warzywa w <strong>grube kawałki, nie w kostkę</strong> — tak się je robi w Grecji i tak lepiej smakuje. Feta w jednym plastrze na wierzch, nie kruszona. Oliwa, oregano, pieprz. Soli zwykle nie trzeba, feta i oliwki wystarczą."},
+ kw4:{n:"Sałatka cezar z kurczakiem i parmezanem",t:"12 min",sav:1,
+   i:[["Pierś z kurczaka",200,"B"],["Parmezan",40,"B"],["Jajka",110,"B"],["Sałata rzymska",120,"X"],
+      ["Majonez",20,"T"],["Jogurt grecki 10%",40,"T"],["Oliwa z oliwek",10,"T"],["Pestki dyni",15,"T"]],
+   h:"Kurczak w paskach na patelni, 6 min. Sos: majonez, jogurt, przeciśnięty czosnek, cytryna, sporo pieprzu i połowa parmezanu. Sałata <strong>rwana ręką, nie krojona</strong>. Pestki dyni zamiast grzanek — chrupią tak samo, a węgli nie wnoszą."},
+ kw5:{n:"Deska serów z surówką z kiszonej kapusty",t:"5 min",sav:1,
+   i:[["Camembert",60,"B"],["Ser gouda",50,"B"],["Jajka",110,"B"],["Kapusta kiszona",180,"X"],
+      ["Marchew",40,"X"],["Cebula",30,"X"],["Olej lniany",15,"T"],["Orzechy włoskie",25,"T"]],
+   h:"<strong>Zero gotowania.</strong> Kapustę odciśnij z soku, jeśli bardzo kwaśna — przepłucz. Marchew na tarce, cebula w piórka, olej lniany, szczypta pieprzu i kminku. Sery i jajka obok. Kiszona kapusta to najtańsze źródło probiotyków i witaminy C, a węgli ma tyle co nic."},
+ ks3:{n:"Krem z mascarpone z truskawkami",t:"5 min",sw:1,
+   i:[["Mascarpone",100,"T"],["Izolat białka wołowego",40,"B"],["Śmietana 30%",30,"T"],
+      ["Truskawki",150,"X"],["Migdały",25,"T"],["Kakao 100%",5,"X"]],
+   h:"Mascarpone <strong>wyjmij z lodówki 10 minut wcześniej</strong>, zimne się zwarzy. Ubij ze śmietaną na gładko, dopiero potem wsyp izolat i wanilię albo kakao. Truskawki pokrojone, migdały prażone na suchej patelni 2 min. Najbardziej deserowa rzecz w tym planie."},
+ ks4:{n:"Twarożek z jeżynami i orzechami",t:"5 min",sw:1,
+   i:[["Twaróg półtłusty",200,"B"],["Izolat białka wołowego",25,"B"],["Jogurt grecki 10%",100,"T"],
+      ["Jeżyny",150,"X"],["Orzechy włoskie",30,"T"],["Masło orzechowe 100%",15,"T"]],
+   h:"Twaróg rozrób jogurtem na gładko — <strong>widelcem, nie blenderem</strong>, blender robi z niego klej. Izolat, cynamon, szczypta soli. Jeżyny i orzechy na wierzch. Jeżyny mają najwięcej błonnika ze wszystkich owoców w tym planie."},
+ ks2:{n:"Budyń chia-kakao z borówkami",t:"5 min + noc",sw:1,
+   i:[["Nasiona chia",25,"T"],["Izolat białka wołowego",45,"B"],["Mleczko kokosowe",120,"T"],
+      ["Kakao 100%",10,"X"],["Borówki",100,"X"],["Orzechy makadamia",25,"T"],["Masło orzechowe 100%",15,"T"]],
+   h:"<strong>Robisz wieczorem dzień wcześniej.</strong> Chia, mleczko, 150 ml wody, kakao, szczypta soli i cynamonu — mieszasz w słoiku, do lodówki na noc. Przed jedzeniem wmieszaj izolat, na wierzch borówki, makadamia i masło orzechowe."}
+};
+
+
+/* ══ surówki: dodatek do dowolnego dnia, liczony razem z posiłkami ══ */
+const SUROWKI={
+ su1:{n:"Surówka z kiszonej kapusty",t:"3 min",
+   i:[["Kapusta kiszona",150,"X"],["Marchew",30,"X"],["Cebula",25,"X"],["Olej lniany",10,"T"]],
+   h:"Kapustę odciśnij z soku. Marchew na tarce o grubych oczkach, cebula w drobną kostkę, olej lniany, pieprz i kminek. <strong>Nie dosładzaj</strong> — cukier w surówce to czysta strata puli węglowodanowej."},
+ su2:{n:"Surówka z białej kapusty z koperkiem",t:"5 min",
+   i:[["Kapusta biała",150,"X"],["Ogórek",60,"X"],["Śmietana 30%",30,"T"],["Koperek",8,"X"]],
+   h:"Kapustę poszatkuj cienko i <strong>rozetrzyj ręką z solą</strong> przez minutę — zmięknie i przestanie być gumowata. Ogórek w słupki, śmietana, koperek, pieprz, kropla octu."},
+ su3:{n:"Mizeria",t:"4 min",
+   i:[["Ogórek",200,"X"],["Śmietana 30%",40,"T"],["Koperek",8,"X"]],
+   h:"Ogórki w cienkie plastry, <strong>posól i odstaw na 10 minut</strong>, potem odciśnij wodę — inaczej mizeria będzie zupą. Śmietana, koperek, pieprz, odrobina cytryny."},
+ su4:{n:"Surówka z selera",t:"6 min",
+   i:[["Seler korzeniowy",120,"X"],["Majonez",20,"T"],["Jogurt grecki 10%",30,"T"],["Szczypiorek",8,"X"]],
+   h:"Seler na tarce o grubych oczkach, <strong>od razu skrop cytryną</strong> żeby nie sciemniał. Majonez z jogurtem, szczypiorek, sól, dużo pieprzu."},
+ su5:{n:"Surówka z rzodkiewki ze szczypiorkiem",t:"3 min",
+   i:[["Rzodkiewka",150,"X"],["Szczypiorek",10,"X"],["Śmietana 30%",20,"T"],["Oliwa z oliwek",12,"T"]],
+   h:"Rzodkiewki w plastry, szczypiorek posiekany, śmietana z oliwą, sól, pieprz. Najniższe węgle ze wszystkich surówek — <strong>3,7 g</strong> na porcję."}
+};
+
+/* ══ orzechy: druga pozycja dodatkowa, też liczona w układzie równań ══ */
+const ORZECHY={
+ p1:{n:"Migdały",t:"0 min",orz:1,i:[["Migdały",30,"T"]],
+   h:"Najwięcej błonnika ze wszystkich orzechów — <strong>12,5 g na 100 g</strong> — i solidna porcja magnezu, którego na keto zawsze brakuje. Prażone 2 minuty na suchej patelni smakują dwa razy lepiej niż z torebki."},
+ p2:{n:"Orzechy włoskie",t:"0 min",orz:1,i:[["Orzechy włoskie",30,"T"]],
+   h:"Jedyne orzechy z realną ilością <strong>kwasów omega-3</strong>. Szybko jełczeją, więc trzymaj w lodówce i kupuj w łupinach, jeśli możesz. Gorzki posmak to znak, że są stare."},
+ p3:{n:"Makadamia",t:"0 min",orz:1,i:[["Orzechy makadamia",25,"T"]],
+   h:"<strong>Najniższe węglowodany</strong> i najwyższy tłuszcz ze wszystkich orzechów — 5 g węgli i 76 g tłuszczu na 100 g. Jeśli masz ciasno z pulą węglowodanową, to jest ten wybór."},
+ p4:{n:"Orzechy laskowe",t:"0 min",orz:1,i:[["Orzechy laskowe",30,"T"]],
+   h:"Dużo witaminy E i kwasu oleinowego, tego samego, który jest w oliwie. Dobrze znoszą upał w kabinie — nie jełczeją tak szybko jak włoskie."},
+ p5:{n:"Orzechy pekan",t:"0 min",orz:1,i:[["Orzechy pekan",25,"T"]],
+   h:"Najbardziej maślane i najbardziej kaloryczne — 691 kcal na 100 g. Świetne, gdy trzeba dobić kalorie bez ruszania węglowodanów."},
+ p6:{n:"Pestki dyni",t:"0 min",orz:1,i:[["Pestki dyni",30,"T"]],
+   h:"<strong>30 g białka na 100 g</strong> i bardzo dużo cynku oraz magnezu. Technicznie nie orzechy, ale w kabinie robią dokładnie tę samą robotę."},
+ p7:{n:"Mix orzechowy",t:"1 min",orz:1,
+   i:[["Migdały",15,"T"],["Orzechy włoskie",10,"T"],["Orzechy makadamia",10,"T"],["Orzechy brazylijskie",5,"T"]],
+   h:"Najszerszy profil mikroskładników. <strong>Brazylijskie tylko 5 g, czyli jeden orzech</strong> — mają tyle selenu, że trzy dziennie to już górna granica bezpieczeństwa. Jeden dziennie pokrywa całe zapotrzebowanie."}
+};
+const DANIE={...MEALS,...SUROWKI,...ORZECHY};
+
+const DAYS=[
+ {d:"Pon",full:"Poniedziałek",s:["s1","s5"],o:["o1","o2"],k:["ks2","kw1"]},
+ {d:"Wt", full:"Wtorek",      s:["s2","s6"],o:["o3","o4"],k:["kw2","ks3"]},
+ {d:"Śr", full:"Środa",       s:["s3","s7"],o:["o5","o6"],k:["ks1","kw3"]},
+ {d:"Czw",full:"Czwartek",    s:["s4","s1"],o:["o4","o1"],k:["kw4","ks4"]},
+ {d:"Pt", full:"Piątek",      s:["s5","s2"],o:["o2","o5"],k:["ks3","kw5"]},
+ {d:"Sob",full:"Sobota",      s:["s6","s3"],o:["o6","o3"],k:["ks4","kw2"]},
+ {d:"Nd", full:"Niedziela",   s:["s7","s4"],o:["o1","o5"],k:["ks1","kw3"]}
 ];
 
-const CATS = {bialko:"Białko",tluszcz:"Tłuszcze",warzywa:"Warzywa i owoce",wegle:"Węglowodany",dodatki:"Dodatki"};
-const SPICE = "Sól morska, pieprz czarny, papryka wędzona, cynamon, kurkuma, chilli, kardamon, oregano, tymianek, majeranek, liść laurowy, czosnek, cytryny, ocet balsamiczny, musztarda bez cukru, bulion w kostce.";
+/* ══ silnik ══ */
+function nutr(name,g){const n=NUTR[name];if(!n)return[0,0,0,0,0];return n.map(v=>v*g/100);}
 
-/* ════════════════ STAN ════════════════ */
-const KEY="dieta-keto-v1";
-let ST={pick:{},check:{},day:0,target:2400};
+/* sumy w koszykach B / T / W / X dla zestawu posiłków (przy współczynniku 1) */
+function buckets(ids){
+  const B={k:0,b:0,f:0,c:0,fb:0},T={...B},W={...B},X={...B};
+  const map={B,T,W,X};
+  ids.forEach(id=>DANIE[id].i.forEach(([n,g,cat])=>{
+    const [k,b,f,c,fb]=nutr(n,g), t=map[cat];
+    t.k+=k;t.b+=b;t.f+=f;t.c+=c;t.fb+=fb;
+  }));
+  return {B,T,W,X};
+}
 
+/* układ 3 równań: białko / węgle / kalorie → współczynniki fB, fT, fW */
+function solve3(ids,tK,tB,tC){
+  const {B,T,W,X}=buckets(ids);
+  const A=[[B.b,T.b,W.b],[B.c,T.c,W.c],[B.k,T.k,W.k]];
+  const r=[tB-X.b, tC-X.c, tK-X.k];
+  const det=m=>
+     m[0][0]*(m[1][1]*m[2][2]-m[1][2]*m[2][1])
+    -m[0][1]*(m[1][0]*m[2][2]-m[1][2]*m[2][0])
+    +m[0][2]*(m[1][0]*m[2][1]-m[1][1]*m[2][0]);
+  const D=det(A);
+  const sub=(col)=>A.map((row,i)=>row.map((v,j)=>j===col?r[i]:v));
+  let f=[1,1,1];
+  if(Math.abs(D)>1e-6){ f=[0,1,2].map(c=>det(sub(c))/D); }
+  const CL=[[0.45,2.2],[0.30,2.6],[0.0,4.0]];   // limity: B, T, W
+  const clamped=f.map((v,i)=>!isFinite(v)?1:Math.min(CL[i][1],Math.max(CL[i][0],v)));
+  return {f:clamped, hit:clamped.map((v,i)=>Math.abs(v-f[i])>0.001)};
+}
+
+/* zaokrąglenie gramatury do sensownych wartości */
+function okragle(g,name){
+  if(g<4) return 0;                                    // ponizej tego nie ma co wazyc
+  if(g<12) return Math.round(g);
+  if(g<40) return Math.round(g/2.5)*2.5;
+  if(name==="Jajka") return Math.round(g/27.5)*27.5;   // pół jajka
+  return Math.round(g/5)*5;
+}
+
+/* źródło dodatkowych węgli na trening — dobrane do tego, co już jest w posiłku */
+const CARBSRC=["Ryż basmati (suchy)","Batat","Ziemniaki","Płatki jaglane"];
+function bonusSkladnik(mealId,gramyWegli){
+  const m=MEALS[mealId];
+  let src=m.i.find(([n,,c])=>c==="W"&&CARBSRC.includes(n));
+  const name=src?src[0]:"Ryż basmati (suchy)";
+  const per=NUTR[name][3]/100;
+  return [name, Math.round(gramyWegli/per/5)*5];
+}
+
+/* cele dnia: puste pole = z formuły, wypełnione = wprost od użytkownika */
+function cele(prof,trening){
+  const bonusC=trening?prof.bonus:0;
+  const mB=+prof.mB||0, mT=+prof.mT||0, mW=+prof.mW||0;
+  const B = mB || Math.round(prof.weight*prof.gkg);
+  const W = (mW || prof.carb) + bonusC;
+  const K = mT ? Math.round(B*4 + mT*9 + W*4)
+              : prof.kcal + Math.round(bonusC*4);
+  return {B,W,K,Tfix:mT||null,
+          reczne:{B:!!mB,T:!!mT,W:!!mW}};
+}
+
+/* ile węgli zostaje, gdy zupełnie wyzerować ryż/batat/ziemniaki */
+function podlogaW(ids,f){
+  const {B,T,W,X}=buckets(ids);
+  return X.c + B.c*f[0] + T.c*f[1];
+}
+
+/* pełne przeliczenie dnia */
+function przelicz(dayIdx,pick,prof){
+  const D=DAYS[dayIdx];
+  const ids=[D.s[pick.s],D.o[pick.o],D.k[pick.k]];
+  if(pick.su&&SUROWKI[pick.su]) ids.push(pick.su);   // surówka wchodzi do układu równań
+  if(pick.or&&ORZECHY[pick.or]) ids.push(pick.or);   // orzechy tak samo
+  const trening=!!prof.train[dayIdx];
+  const bonusC=trening?prof.bonus:0;
+  const C=cele(prof,trening);
+  const tB=C.B, tK=C.K;
+
+  // dodatkowa porcja okołotreningowa liczona PRZED układem równań,
+  // żeby jej własne białko i kalorie nie rozjechały reszty dnia
+  let extra=null, slot=-1;
+  if(trening&&bonusC>0){
+    slot=prof.pora==="rano"?1:2;
+    const [nm,gr]=bonusSkladnik(ids[slot],bonusC);
+    extra={n:nm,g:gr,u:jednostka(nm,gr),m:nutr(nm,gr)};
+  }
+  const eK=extra?extra.m[0]:0, eB=extra?extra.m[1]:0, eC=extra?extra.m[3]:0;
+
+  const {f,hit}=solve3(ids, tK-eK, tB-eB, C.W-eC);
+
+  const posilki=ids.map((id,i)=>{
+    const m=DANIE[id];
+    const skl=m.i.map(([n,g,cat])=>{
+      const fx={B:f[0],T:f[1],W:f[2],X:1}[cat];
+      const gg=okragle(g*fx,n);
+      return {n,g:gg,cat,u:jednostka(n,gg),m:nutr(n,gg)};
+    });
+    return {id,...m,skl,side:!!SUROWKI[id],extra:i===slot?extra:null};
+  });
+
+  const sum=posilki.reduce((a,p)=>{
+    (p.extra?[...p.skl,p.extra]:p.skl).forEach(s=>{
+      a.k+=s.m[0];a.b+=s.m[1];a.f+=s.m[2];a.c+=s.m[3];a.fb+=s.m[4];});
+    return a;
+  },{k:0,b:0,f:0,c:0,fb:0});
+
+  // uczciwe raportowanie rozjazdu zamiast cichego przycięcia
+  const cel={k:tK,b:tB,c:C.W};
+  const bledy=[];
+  if(Math.abs(sum.k-cel.k)>70)
+    bledy.push({co:"kcal",jest:sum.k,cel:cel.k});
+  if(Math.abs(sum.b-cel.b)>10)
+    bledy.push({co:"białko",jest:sum.b,cel:cel.b});
+  if(Math.abs(sum.c-cel.c)>8)
+    bledy.push({co:"węglowodany",jest:sum.c,cel:cel.c});
+
+  const udzT=sum.k?sum.f*9/sum.k:0, udzB=sum.k?sum.b*4/sum.k:0;
+  // tłuszcz "związany" — ten, który przychodzi razem z białkiem (sery, tłuste ryby)
+  const zTluszcz=posilki.map(p=>{
+    const t=(p.extra?[...p.skl,p.extra]:p.skl).filter(s=>s.cat==="B")
+      .reduce((a,s)=>a+s.m[2],0);
+    return {n:p.n,t};
+  }).sort((a,b)=>b.t-a.t);
+  return {posilki,sum,f,hit,trening,bonusC,slot,sufit:C.W,cel,bledy,reczne:C.reczne,
+          udzT,udzB,zTluszcz,podloga:podlogaW(ids,f)};
+}
+
+
+/* ══════════ STAN ══════════ */
+const WER="6";
+const KEY="dieta-keto-v2";
+let ST={
+  pick:{}, check:{}, day:0,
+  prof:{plec:"m",weight:85,kcal:2400,gkg:2.0,carb:55,bonus:40,pora:"po",train:[0,0,0,0,0,0,0],
+        wiek:35,wzrost:178,akt:1.375,cel:1.0,kalk:false,
+        mB:"",mT:"",mW:""}
+};
 function load(){
-  try{
-    const r=localStorage.getItem(KEY);
-    if(r){const p=JSON.parse(r);ST={...ST,...p};ST.pick=p.pick||{};ST.check=p.check||{};}
-  }catch(e){}
-  for(let i=0;i<7;i++) if(!ST.pick[i]) ST.pick[i]={s:0,o:0,k:0};
-  const js=new Date().getDay();
-  ST.day=js===0?6:js-1;
+  try{const r=localStorage.getItem(KEY);
+    if(r){const p=JSON.parse(r);
+      ST.pick=p.pick||{}; ST.check=p.check||{};
+      ST.prof={...ST.prof,...(p.prof||{})};
+      if(!Array.isArray(ST.prof.train)||ST.prof.train.length!==7) ST.prof.train=[0,0,0,0,0,0,0];
+    }}catch(e){}
+  for(let i=0;i<7;i++){ if(!ST.pick[i]) ST.pick[i]={s:0,o:0,k:0};
+    if(ST.pick[i].su===undefined) ST.pick[i].su="";
+    if(ST.pick[i].or===undefined) ST.pick[i].or=""; }
+  const js=new Date().getDay(); ST.day=js===0?6:js-1;
 }
 function save(){try{localStorage.setItem(KEY,JSON.stringify(ST))}catch(e){}}
+const dzien=i=>przelicz(i,ST.pick[i],ST.prof);
+const r1=n=>(Math.round(n*10)/10).toString().replace(".",",");
+const r0=n=>Math.round(n);
 
-/* ════════════════ OBLICZENIA ════════════════ */
-function dayMeals(i){
-  const D=DAYS[i],P=ST.pick[i];
-  return [MEALS[D.s[P.s]],MEALS[D.o[P.o]],MEALS[D.k[P.k]]];
+/* ══════════ CO ZMIENIA PŁEĆ ══════════ */
+/* Płeć nie skaluje porcji — to robi waga. Wchodzi w trzech realnych miejscach:
+   wzór na zapotrzebowanie, zalecane ustawienia wyjściowe i progi ostrzeżeń. */
+const ZAL={
+  m:{gkg:2.0, carb:55, bonus:40, kcalMin:1500, zelazo:10},
+  k:{gkg:1.8, carb:70, bonus:60, kcalMin:1200, zelazo:18}
+};
+const zal=()=>ZAL[ST.prof.plec];
+
+/* Mifflin-St Jeor — jedyny wzór, w którym płeć jest osobnym składnikiem */
+function szacuj(p){
+  const bmr=10*p.weight + 6.25*p.wzrost - 5*p.wiek + (p.plec==="m"?5:-161);
+  return Math.round(bmr*p.akt*p.cel/10)*10;
 }
-function dayTotals(i){
-  return dayMeals(i).reduce((a,m)=>({k:a.k+m.k,b:a.b+m.b,f:a.f+m.f,c:a.c+m.c,fb:a.fb+m.fb}),{k:0,b:0,f:0,c:0,fb:0});
-}
-const r1=n=>Math.round(n*10)/10;
 
-/* ════════════════ WIDOK: PLAN ════════════════ */
-const SLOTS=[
-  {key:"s",t:"Posiłek 1",hint:"bez zbóż i owoców"},
-  {key:"o",t:"Obiad",hint:"tu wchodzą węglowodany"},
-  {key:"k",t:"Kolacja",hint:"słodka albo wytrawna"}
-];
-
+/* ══════════ PASEK DNI ══════════ */
 function renderRail(){
   rail.innerHTML=DAYS.map((d,i)=>{
-    const t=dayTotals(i);
+    const r=dzien(i);
+    const kropki=[
+      r.trening?'<i class="dt tr"></i>':"",
+      r.bledy.length?'<i class="dt er"></i>':""
+    ].join("");
     return `<button class="day${i===ST.day?" on":""}" data-d="${i}">${d.d}
-      ${t.c>70?'<span class="dot" style="background:var(--iron)"></span>':''}</button>`;
+      <span class="dots">${kropki||'<i class="dt sp"></i>'}</span></button>`;
   }).join("");
 }
 
-function renderPlan(){
-  const t=dayTotals(ST.day);
-  carbN.innerHTML=`${r1(t.c).toString().replace(".",",")}<span>g</span>`;
-  const pct=Math.min(100,(t.c/80)*100);
-  gfill.style.width=pct+"%";
-  gfill.className="gfill"+(t.c>70?" over":(t.c<30?" low":""));
-  mK.textContent=Math.round(t.k);
-  mB.textContent=Math.round(t.b);
-  mT.textContent=Math.round(t.f);
-  mF.textContent=Math.round(t.fb);
+/* ══════════ PLAN ══════════ */
+const SLOTS=[{key:"s",t:"Posiłek 1",hint:"bez zbóż i owoców"},
+             {key:"o",t:"Obiad",hint:"tu wchodzą węglowodany"},
+             {key:"k",t:"Kolacja",hint:"słodka albo wytrawna"}];
 
-  // flagi
+function renderPlan(){
+  const r=dzien(ST.day), s=r.sum, P=ST.prof;
+
+  carbN.innerHTML=`${r1(s.c)}<span>g</span>`;
+  const max=r.sufit*1.25;
+  gfill.style.width=Math.min(100,(s.c/max)*100)+"%";
+  const nad=s.c>r.sufit+4, pod=s.c<30&&!r.trening;
+  gfill.className="gfill"+(nad?" over":(pod?" low":""));
+  gCeil.style.left=(r.sufit/max*100)+"%";
+  gFloor.style.left=Math.min(78,(30/max*100))+"%";
+  gsFloor.textContent="30 minimum";
+  gsCeil.innerHTML=`<b>${r.sufit}</b> sufit${r.trening?" (trening)":""}`;
+
+  mK.textContent=r0(s.k); mB.textContent=r0(s.b);
+  mT.textContent=r0(s.f); mF.textContent=r0(s.fb);
+  mKc.textContent=`cel ${r.cel.k}`; mBc.textContent=`cel ${r.cel.b}`;
+
+  const baza=r.sufit-(r.trening?r.bonusC:0), zTren=baza+ST.prof.bonus;
+  trnBtn.classList.toggle("on",r.trening);
+  trnBtn.innerHTML=`${r.trening?ikoTrenOn():ikoTren()}
+    <span class="tl">${r.trening?"Dzień treningowy":"Dzień bez treningu"}</span>
+    <span class="tv">${r.trening
+      ? `węgle ${baza} → <b>${r.sufit} g</b>`
+      : (ST.prof.bonus?`włącz, a węgle wzrosną ${baza} → <b>${zTren} g</b>`:"dodatek wyłączony w zakładce Ja")}</span>
+    <span class="tsw"><i></i></span>`;
+
+  /* ostrzeżenia */
   let f="";
-  if(t.c>70){
-    f+=`<div class="flag">${warnIcon()}<div><b>Ponad sufit o ${r1(t.c-70)} g.</b> Zamień obiad na łososia albo kurczaka, albo weź kolację wytrawną zamiast słodkiej.</div></div>`;
-  }else if(t.c<30){
-    f+=`<div class="flag">${warnIcon()}<div><b>Poniżej podłogi — ${r1(30-t.c)} g brakuje.</b> Bez wieczornych węgli sen siada, a organizm sięga po glukoneogenezę z mięśni.</div></div>`;
-  }
-  if(t.fb<22){
-    f+=`<div class="flag tip">${tipIcon()}<div>Błonnik dziś niski (${r1(t.fb)} g). Dorzuć 15 g siemienia lnianego albo dodatkową porcję brokułów.</div></div>`;
+  r.bledy.forEach(b=>{
+    let tekst;
+    if(b.co==="kcal"){
+      const zaDuzo=b.jest>b.cel;
+      const zwiazany=r.hit[1]&&r.f[1]<0.5;
+      const winny=r.zTluszcz[0];
+      if(zaDuzo&&zwiazany&&winny&&winny.t>25){
+        tekst=`<b>Ten zestaw nie zejdzie poniżej ${r0(b.jest)} kcal.</b> Oliwa i masło są już praktycznie wyzerowane — reszta tłuszczu siedzi <b>w samym białku</b>, najwięcej w daniu „${winny.n}" (${r0(winny.t)} g tłuszczu z sera lub tłustej ryby). Tego nie da się odjąć, nie zmieniając dania.<br>Zamień na chudsze białko: dorsz, pierś z kurczaka, indyk, tuńczyk albo twaróg.`;
+      }else if(zaDuzo){
+        tekst=`<b>Kaloryczność nie schodzi do celu.</b> Ten zestaw daje ${r0(b.jest)} kcal zamiast ${r0(b.cel)}. Przy ${P.weight} kg i ${r1(P.gkg)} g białka/kg samo białko to ${r0(cele(P,false).B*4)} kcal — na ${r0(b.cel)} kcal nie zostaje miejsca na tłuszcz potrzebny do keto. Podnieś zapotrzebowanie albo zejdź do 1,6 g/kg.`;
+      }else{
+        tekst=`<b>Ten zestaw nie dobije do ${r0(b.cel)} kcal.</b> Daje ${r0(b.jest)} — dania są za lekkie, żeby rozciągnąć je dalej samym tłuszczem. Wybierz cięższe pozycje albo dodaj orzechy.`;
+      }
+    }else if(b.co==="białko"){
+      tekst=`<b>Białko wychodzi ${r0(b.jest)} g zamiast ${r0(b.cel)} g.</b> Ten zestaw dań nie rozciąga się dalej. Wybierz inne posiłki albo zmień g/kg.`;
+    }else{
+      const gora=b.jest>b.cel;
+      tekst=gora
+        ? `<b>Węgle nie zejdą poniżej ${r1(r.podloga)} g przy tym zestawie.</b> To warzywa, owoce i orzechy — ryż i ziemniaki są już wyzerowane. Zamień kolację słodką na wytrawną albo podnieś pulę.`
+        : `<b>Brakuje ${r1(b.cel-b.jest)} g węgli do puli.</b> Ten zestaw nie ma z czego ich dołożyć. Weź obiad z ryżem albo słodką kolację.`;
+    }
+    f+=`<div class="flag">${ikoWarn()}<div>${tekst}</div></div>`;
+  });
+  if(!r.bledy.length&&s.c<30&&!r.trening)
+    f+=`<div class="flag">${ikoWarn()}<div><b>Poniżej podłogi — brakuje ${r1(30-s.c)} g.</b> Bez wieczornych węgli sen siada, a organizm sięga po glukoneogenezę z mięśni.</div></div>`;
+  const Z=zal(), kgKcal=P.kcal/P.weight;
+  if(P.kcal<Z.kcalMin)
+    f+=`<div class="flag">${ikoWarn()}<div><b>${P.kcal} kcal to za mało.</b> Poniżej ${Z.kcalMin} kcal ${P.plec==="m"?"mężczyźnie":"kobiecie"} trudno pokryć witaminy i składniki mineralne z samego jedzenia, nawet przy dobrze ułożonym menu.</div></div>`;
+  else if(kgKcal<25)
+    f+=`<div class="flag">${ikoWarn()}<div><b>${r1(kgKcal)} kcal na kilogram masy ciała — to strefa niedoboru energii.</b> ${P.plec==="k"?"U kobiet to najczęstsza przyczyna zaniku miesiączki i spadku hormonów tarczycy. Przy treningu siłowym mięśnie i tak nie urosną.":"Przy treningu siłowym organizm zacznie oszczędzać: spadnie testosteron, tarczyca i siła."} Podnieś zapotrzebowanie albo odpuść deficyt.</div></div>`;
+  if(P.plec==="k"&&P.carb<40&&P.train.some(Boolean))
+    f+=`<div class="flag">${ikoWarn()}<div><b>${P.carb} g węglowodanów przy treningach to u kobiet ryzykowne połączenie.</b> Bardzo niska podaż węglowodanów razem z wysiłkiem zaburza oś podwzgórze–przysadka–jajnik. Zostań przy 60–70 g i korzystaj z puli okołotreningowej.</div></div>`;
+  if(!r.bledy.length&&r.udzT<0.50)
+    f+=`<div class="flag">${ikoWarn()}<div><b>Tłuszcz to tylko ${r0(r.udzT*100)}% kalorii — to już nie jest keto.</b> Przy ${P.weight} kg i ${r1(P.gkg)} g/kg samo białko zjada ${r0(r.udzB*100)}% energii. Podnieś zapotrzebowanie albo zejdź do 1,6 g/kg.</div></div>`;
+  if(s.fb<22)
+    f+=`<div class="flag tip">${ikoTip()}<div>Błonnik dziś niski (${r1(s.fb)} g). Dorzuć 15 g siemienia lnianego albo dodatkową porcję brokułów.</div></div>`;
+  if(r.trening&&r.slot>=0){
+    const e=r.posilki[r.slot].extra;
+    f+=`<div class="flag tip">${ikoTip()}<div>Dodatkowa pula okołotreningowa: <b>+${e.g} g ${e.n.toLowerCase()}</b> do ${["pierwszego posiłku","obiadu","kolacji"][r.slot]}. Ten dzień wychodzi z ketozy — o to chodzi, glikogen odbudowuje się z zewnątrz.</div></div>`;
   }
   flags.innerHTML=f;
 
-  slots.innerHTML=SLOTS.map(S=>{
-    const ids=DAYS[ST.day][S.key],sel=ST.pick[ST.day][S.key];
+  /* sloty */
+  slots.innerHTML=SLOTS.map((S,si)=>{
+    const ids=DAYS[ST.day][S.key], sel=ST.pick[ST.day][S.key];
     return `<div class="slot">
       <div class="slot-h"><h2>${S.t}</h2><span class="hint">${S.hint}</span></div>
       <div class="opts">${ids.map((id,n)=>{
         const m=MEALS[id];
+        const v=n===sel?r.posilki[si]:podglad(id,r.f);
         return `<button class="opt${n===sel?" on":""}" data-slot="${S.key}" data-n="${n}">
-          ${m.sw?'<span class="sweet" title="słodka">◗</span>':''}${m.sav?'<span class="sweet" title="wytrawna">◖</span>':''}
+          ${m.sw?'<span class="mk" title="na słodko">◗</span>':""}${m.sav?'<span class="mk" title="wytrawna">◖</span>':""}
           <span class="opt-n">${m.n}</span>
-          <span class="opt-meta"><span class="kcal">${m.k}</span> kcal · ${m.t}</span>
-          <span class="opt-carb"><i></i>${r1(m.c).toString().replace(".",",")} g węgli</span>
+          <span class="opt-meta"><span class="kcal">${r0(v.k)}</span> kcal · ${m.t}</span>
+          <span class="opt-carb"><i></i>${r1(v.c)} g węgli</span>
           <span class="opt-see" data-rec="${id}">przepis</span>
-        </button>`;
-      }).join("")}</div></div>`;
-  }).join("");
+        </button>`;}).join("")}</div></div>`;
+  }).join("")+renderSur(r)+renderOrz(r);
 }
-const warnIcon=()=>`<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 1.6L15 14H1L8 1.6z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M8 6v3.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="8" cy="11.6" r=".9" fill="currentColor"/></svg>`;
-const tipIcon=()=>`<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.6" stroke="currentColor" stroke-width="1.4"/><path d="M8 7.4v3.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="8" cy="5.1" r=".9" fill="currentColor"/></svg>`;
 
-/* ════════════════ WIDOK: ZAKUPY ════════════════ */
-function buildShop(){
+function renderOrz(r){
+  const cur=ST.pick[ST.day].or;
+  const opcje=["",...Object.keys(ORZECHY)];
+  return `<div class="slot">
+    <div class="slot-h"><h2>Orzechy</h2><span class="hint">garść do posiłku albo na drogę</span></div>
+    <div class="surrow">${opcje.map(id=>{
+      const o=id?ORZECHY[id]:null;
+      if(!o) return `<button class="sur${id===cur?" on":""}" data-or="">
+        <span class="sn">Bez orzechów</span></button>`;
+      const v=podglad(id,r.f);
+      return `<button class="sur nut${id===cur?" on":""}" data-or="${id}">
+        <span class="sn">${o.n}</span>
+        <span class="sw">${r0(v.k)} kcal · ${r1(v.c)} g W</span></button>`;
+    }).join("")}</div>
+    ${cur?`<button class="surlink" data-rec="${cur}">O tych orzechach: ${ORZECHY[cur].n.toLowerCase()}</button>`:""}
+  </div>`;
+}
+
+function renderSur(r){
+  const cur=ST.pick[ST.day].su;
+  const opcje=["",...Object.keys(SUROWKI)];
+  return `<div class="slot">
+    <div class="slot-h"><h2>Surówka</h2><span class="hint">dodatek do obiadu lub kolacji</span></div>
+    <div class="surrow">${opcje.map(id=>{
+      const s=id?SUROWKI[id]:null;
+      const w=s?podglad(id,r.f).c:0;
+      return `<button class="sur${id===cur?" on":""}" data-su="${id}">
+        <span class="sn">${s?s.n.replace(/^Surówka (z |ze )?/,"").replace(/^./,c=>c.toUpperCase()):"Bez surówki"}</span>
+        ${s?`<span class="sw">${r1(w)} g W</span>`:""}</button>`;
+    }).join("")}</div>
+    ${cur?`<button class="surlink" data-rec="${cur}">Jak zrobić: ${SUROWKI[cur].n.toLowerCase()} · ${SUROWKI[cur].t}</button>`:""}
+  </div>`;
+}
+/* szybkie makro alternatywy przy tych samych współczynnikach */
+function podglad(id,f){
+  return DANIE[id].i.reduce((a,[n,g,cat])=>{
+    const v=nutr(n,okragle(g*{B:f[0],T:f[1],W:f[2],X:1}[cat],n));
+    return {k:a.k+v[0],b:a.b+v[1],f:a.f+v[2],c:a.c+v[3],fb:a.fb+v[4]};
+  },{k:0,b:0,f:0,c:0,fb:0});
+}
+
+/* ══════════ ZAKUPY ══════════ */
+function zbierz(){
   const agg={};
-  for(let i=0;i<7;i++) dayMeals(i).forEach(m=>m.i.forEach(([n,g,u,c])=>{
-    if(!agg[n]) agg[n]={g:0,c:c,u:u};
-    agg[n].g+=g;
-  }));
+  for(let i=0;i<7;i++){
+    const r=dzien(i);
+    r.posilki.forEach(p=>(p.extra?[...p.skl,p.extra]:p.skl).forEach(s=>{
+      if(!s.g)return;
+      const cat=s.cat||(NUTR[s.n][3]>15?"W":"X");
+      if(!agg[s.n]) agg[s.n]={g:0,cat};
+      agg[s.n].g+=s.g;
+    }));
+  }
   return agg;
 }
-const PRACT={
-  "Jajka":g=>`${Math.round(g/55)} szt. (kup 30)`,
-  "Awokado":g=>`${Math.ceil(g/100)} szt.`,
-  "Pomidor":g=>`${Math.ceil(g/150)} szt.`,
-  "Ogórek":g=>`${Math.ceil(g/200)} szt.`,
-  "Cebula":g=>`${Math.ceil(g/80)} szt.`,
-  "Mleczko kokosowe":g=>`${(g/400).toFixed(1).replace(".",",")} puszki 400 ml`,
-  "Tuńczyk w sosie własnym":g=>`${Math.ceil(g/90)} puszki`
-};
+const KOSZ={B:"Białko",T:"Tłuszcze",X:"Warzywa, owoce i dodatki",W:"Węglowodany"};
+const PRZYPRAWY="Sól morska, pieprz czarny, papryka wędzona, cynamon, kurkuma, chilli, kardamon, oregano, tymianek, majeranek, liść laurowy, czosnek, cytryny, ocet balsamiczny, musztarda bez cukru, bulion w kostce.";
+const OPAK={"Jajka":g=>`${Math.ceil(g/55)} szt.`,"Awokado":g=>`${Math.ceil(g/200)} szt.`,
+ "Mleczko kokosowe":g=>`${(g/400).toFixed(1).replace(".",",")} puszki 400 ml`,
+ "Tuńczyk w sosie własnym":g=>`${Math.ceil(g/90)} puszki`,"Twaróg półtłusty":g=>`${Math.ceil(g/250)} kostki`};
+
 function renderShop(){
-  const agg=buildShop();
-  const byCat={};
-  Object.entries(agg).forEach(([n,d])=>{(byCat[d.c]=byCat[d.c]||[]).push([n,d])});
+  const agg=zbierz(), byCat={};
+  Object.entries(agg).forEach(([n,d])=>(byCat[d.cat]=byCat[d.cat]||[]).push([n,d]));
   let done=0,all=0;
-  const html=Object.keys(CATS).filter(c=>byCat[c]).map(c=>{
+  shop.innerHTML=Object.keys(KOSZ).filter(c=>byCat[c]).map(c=>{
     const rows=byCat[c].sort((a,b)=>b[1].g-a[1].g).map(([n,d])=>{
-      all++;const on=!!ST.check[n];if(on)done++;
-      const p=PRACT[n]?PRACT[n](d.g):null;
+      all++; const on=!!ST.check[n]; if(on)done++;
+      const o=OPAK[n]?OPAK[n](d.g):null;
       return `<button class="item${on?" done":""}" data-item="${n}">
-        <span class="box"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.6L4 7.5 10 1.3" stroke="#0E1417" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
-        <span class="nm">${n}${p?`<small>${p}</small>`:""}</span>
-        <span class="qty">${Math.round(d.g)} g</span></button>`;
+        <span class="box"><svg width="11" height="9" viewBox="0 0 11 9" fill="none"><path d="M1 4.6L4 7.5 10 1.3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        <span class="nm">${n}${o?`<small>${o}</small>`:""}</span>
+        <span class="qty">${r0(d.g)} g</span></button>`;
     }).join("");
-    return `<div class="cat"><h3>${CATS[c]}</h3>${rows}</div>`;
-  }).join("");
-  shop.innerHTML=html+`<div class="cat"><h3>Przyprawy — zakup jednorazowy</h3><p style="font-size:13.5px;color:var(--mute);line-height:1.6;margin:11px 0 0">${SPICE}</p></div>`;
-  shopSub.textContent=`Z Twoich wyborów na cały tydzień. ${done} z ${all} odhaczone.`;
+    return `<div class="cat"><h3>${KOSZ[c]}</h3>${rows}</div>`;
+  }).join("")+`<div class="cat"><h3>Przyprawy — zakup jednorazowy</h3><p class="note">${PRZYPRAWY}</p></div>`;
+  const tr=ST.prof.train.filter(Boolean).length;
+  shopSub.textContent=`Przeliczone pod ${ST.prof.weight} kg i ${ST.prof.kcal} kcal, z Twoich wyborów na 7 dni${tr?` (w tym ${tr} treningowe)`:""}. ${done} z ${all} odhaczone.`;
 }
 function shopText(){
-  const agg=buildShop();const byCat={};
-  Object.entries(agg).forEach(([n,d])=>{(byCat[d.c]=byCat[d.c]||[]).push([n,d])});
-  return "LISTA ZAKUPÓW — 7 dni\n\n"+Object.keys(CATS).filter(c=>byCat[c]).map(c=>
-    CATS[c].toUpperCase()+"\n"+byCat[c].sort((a,b)=>b[1].g-a[1].g)
-      .map(([n,d])=>`- ${n} — ${Math.round(d.g)} g`).join("\n")
-  ).join("\n\n")+"\n\nPRZYPRAWY\n"+SPICE;
+  const agg=zbierz(),byCat={};
+  Object.entries(agg).forEach(([n,d])=>(byCat[d.cat]=byCat[d.cat]||[]).push([n,d]));
+  return `LISTA ZAKUPÓW — 7 dni (${ST.prof.weight} kg, ${ST.prof.kcal} kcal)\n\n`+
+    Object.keys(KOSZ).filter(c=>byCat[c]).map(c=>
+      KOSZ[c].toUpperCase()+"\n"+byCat[c].sort((a,b)=>b[1].g-a[1].g)
+        .map(([n,d])=>`- ${n} — ${r0(d.g)} g`).join("\n")).join("\n\n")+
+    "\n\nPRZYPRAWY\n"+PRZYPRAWY;
 }
 
-/* ════════════════ WIDOK: PRZEPISY ════════════════ */
+/* ══════════ PRZEPISY ══════════ */
 function renderRecs(){
-  const G=[["Posiłek 1",["s1","s2","s3","s4"]],["Obiad",["o1","o2","o3","o4"]],
-           ["Kolacja wytrawna",["kw1","kw2"]],["Kolacja na słodko",["ks1","ks2"]]];
+  const r=dzien(ST.day);
+  const G=[["Posiłek 1",["s1","s2","s3","s4","s5","s6","s7"]],
+           ["Obiad",["o1","o2","o3","o4","o5","o6"]],
+           ["Kolacja wytrawna",["kw1","kw2","kw3","kw4","kw5"]],
+           ["Kolacja na słodko",["ks1","ks2","ks3","ks4"]],
+           ["Surówki",Object.keys(SUROWKI)],
+           ["Orzechy",Object.keys(ORZECHY)]];
+  recSub.textContent=`Gramatury przeliczone pod ${ST.prof.weight} kg i ${ST.prof.kcal} kcal, w proporcjach z ${DAYS[ST.day].full.toLowerCase()}.`;
   recs.innerHTML=G.map(([t,ids])=>`<div class="rgroup"><h3>${t}</h3>${
-    ids.map(id=>{const m=MEALS[id];return `<button class="rlink" data-rec="${id}">
-      <span class="rn">${m.n}</span>
-      <span class="rq">${m.k} kcal · ${r1(m.c).toString().replace(".",",")} g W</span>
+    ids.map(id=>{const v=podglad(id,r.f);return `<button class="rlink" data-rec="${id}">
+      <span class="rn">${DANIE[id].n}</span>
+      <span class="rq">${r0(v.k)} kcal · ${r1(v.c)} g W</span>
       <svg width="7" height="11" viewBox="0 0 7 11" fill="none"><path d="M1 1l5 4.5L1 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </button>`}).join("")
-  }</div>`).join("");
+    </button>`}).join("")}</div>`).join("");
 }
 
-/* ════════════════ ARKUSZ PRZEPISU ════════════════ */
+/* ══════════ ARKUSZ PRZEPISU ══════════ */
 function openRec(id){
-  const m=MEALS[id];
+  const r=dzien(ST.day);
+  const wybrany=r.posilki.find(p=>p.id===id);
+  const m=DANIE[id];
+  const skl=wybrany?wybrany.skl:m.i.map(([n,g,cat])=>{
+    const gg=okragle(g*{B:r.f[0],T:r.f[1],W:r.f[2],X:1}[cat],n);
+    return {n,g:gg,cat,u:jednostka(n,gg),m:nutr(n,gg)};
+  });
+  const extra=wybrany?wybrany.extra:null;
+  const all=extra?[...skl,extra]:skl;
+  const t=all.reduce((a,s)=>a.map((x,i)=>x+s.m[i]),[0,0,0,0,0]);
+
   sheetIn.innerHTML=`<h2>${m.n}</h2>
-    <div class="sheet-meta"><span>${m.t}</span><span>${m.k} kcal</span>${m.sw?"<span>kolacja na słodko</span>":""}${m.sav?"<span>kolacja wytrawna</span>":""}</div>
+    <div class="sheet-meta"><span>${m.t}</span><span>${r0(t[0])} kcal</span>
+      <span>gramatura pod ${ST.prof.weight} kg</span></div>
     <table><thead><tr><th>Składnik</th><th>Gramy</th><th></th></tr></thead><tbody>
-    ${m.i.map(([n,g,u])=>`<tr><td>${n}</td><td>${g} g</td><td>${u}</td></tr>`).join("")}
+    ${skl.filter(s=>s.g>0).map(s=>`<tr><td>${s.n}</td><td>${r1(s.g)} g</td><td>${s.u}</td></tr>`).join("")}
+    ${extra?`<tr class="xtra"><td>${extra.n}<small>dodatek okołotreningowy</small></td><td>${r0(extra.g)} g</td><td>${extra.u}</td></tr>`:""}
     </tbody></table>
     <p class="how">${m.h}</p>
     <div class="mrow">
-      <div class="mcell"><span class="v">${m.k}</span><span class="k">kcal</span></div>
-      <div class="mcell"><span class="v">${r1(m.b)}</span><span class="k">białko</span></div>
-      <div class="mcell"><span class="v">${r1(m.f)}</span><span class="k">tłuszcz</span></div>
-      <div class="mcell c"><span class="v">${r1(m.c)}</span><span class="k">węgle</span></div>
-      <div class="mcell"><span class="v">${r1(m.fb)}</span><span class="k">błonnik</span></div>
+      <div class="mcell"><span class="v">${r0(t[0])}</span><span class="k">kcal</span></div>
+      <div class="mcell"><span class="v">${r1(t[1])}</span><span class="k">białko</span></div>
+      <div class="mcell"><span class="v">${r1(t[2])}</span><span class="k">tłuszcz</span></div>
+      <div class="mcell c"><span class="v">${r1(t[3])}</span><span class="k">węgle</span></div>
+      <div class="mcell"><span class="v">${r1(t[4])}</span><span class="k">błonnik</span></div>
     </div>`;
-  scrim.classList.add("on");sheet.classList.add("on");
+  scrim.classList.add("on"); sheet.classList.add("on");
   document.body.style.overflow="hidden";
 }
-function closeRec(){
-  scrim.classList.remove("on");sheet.classList.remove("on");
-  document.body.style.overflow="";
+const closeRec=()=>{scrim.classList.remove("on");sheet.classList.remove("on");document.body.style.overflow="";};
+
+/* ══════════ JA ══════════ */
+const SEG=(id,val,opts,fmt)=>`<div class="seg" data-seg="${id}">${
+  opts.map(o=>`<button class="sg${o===val?" on":""}" data-v="${o}">${fmt?fmt(o):o}</button>`).join("")}</div>`;
+
+function renderJa(){
+  const P=ST.prof;
+  wInp.value=P.weight; kInp.value=P.kcal; aInp.value=P.wiek; hInp.value=P.wzrost;
+  renderSegs(); renderKalk(); renderMakro();
 }
 
-/* ════════════════ SKALOWANIE ════════════════ */
-function renderAdvice(){
-  const t=dayTotals(ST.day),diff=ST.target-t.k;
-  const fatG=Math.round(Math.abs(diff)/9);
-  const sp=(fatG/10).toFixed(1).replace(".",",");
-  let body;
-  if(Math.abs(diff)<60){
-    body=`<b>Pasuje.</b><p style="margin:7px 0 0;color:var(--mute)">Dzisiejszy zestaw daje ${Math.round(t.k)} kcal — różnica ${Math.abs(Math.round(diff))} kcal mieści się w błędzie ważenia. Nic nie zmieniaj.</p>`;
-  }else if(diff>0){
-    body=`<b>Dołóż ${fatG} g tłuszczu</b><p style="margin:7px 0 0;color:var(--mute)">Dzisiejszy zestaw: ${Math.round(t.k)} kcal, brakuje ${Math.round(diff)}. Białko i węgle zostaw bez zmian.</p>
-      <ul><li>${sp} łyżki oliwy albo masła klarowanego do obiadu</li><li>albo ${Math.round(fatG*1.5)} g orzechów do kolacji</li><li>albo ${Math.round(fatG*1.2)} g masła orzechowego</li></ul>`;
-  }else{
-    body=`<b>Zdejmij ${fatG} g tłuszczu</b><p style="margin:7px 0 0;color:var(--mute)">Dzisiejszy zestaw: ${Math.round(t.k)} kcal, nadwyżka ${Math.abs(Math.round(diff))}. Białko i węgle zostaw bez zmian.</p>
-      <ul><li>${sp} łyżki oliwy z pierwszego posiłku</li><li>albo ${Math.round(fatG*1.5)} g orzechów z kolacji</li><li>albo połowę awokado</li></ul>`;
+const SEG2=(id,val,opts,fmt,rec)=>`<div class="seg" data-seg="${id}">${
+  opts.map(o=>`<button class="sg${o===val?" on":""}${o===rec?" rec":""}" data-v="${o}">${fmt?fmt(o):o}</button>`).join("")}</div>`;
+
+function renderKalk(){
+  const P=ST.prof, wynik=szacuj(P);
+  const rozn=wynik-P.kcal;
+  kalk.innerHTML=`<div class="calc">
+    <div class="calc-h"><b>Z formuły wychodzi ${wynik} kcal</b>
+      ${Math.abs(rozn)>60?`<span class="dif">${rozn>0?"+":""}${rozn} wobec wpisanego</span>`:`<span class="dif ok">zgodne z wpisanym</span>`}</div>
+    <div class="fld"><label>Jak się ruszasz</label>
+      ${SEG2("akt",P.akt,[1.2,1.375,1.55,1.725],v=>({1.2:"Siedząco",1.375:"1–3 treningi",1.55:"3–5 treningów",1.725:"6–7 treningów"})[v])}</div>
+    <div class="fld"><label>Cel</label>
+      ${SEG2("cel",P.cel,[0.85,1.0,1.1],v=>({0.85:"Redukcja",1:"Utrzymanie",1.1:"Budowa masy"})[v])}</div>
+    <p class="note">Wzór Mifflina–St Jeora z Twojego wieku, wzrostu, wagi i płci. Dla ${P.plec==="m"?"mężczyzn":"kobiet"} stała to ${P.plec==="m"?"+5":"−161"}. Szacunek ma przedział błędu około ±10% — punkt wyjścia, nie wyrocznia.</p>
+    <button class="btn pri" id="kalkUse">Wpisz ${wynik} kcal do zapotrzebowania</button>
+  </div>`;
+}
+
+function renderMakro(){
+  const P=ST.prof, C=cele(P,false);
+  mbInp.value=P.mB||""; mtInp.value=P.mT||""; mwInp.value=P.mW||"";
+  const src=k=>C.reczne[k]?'<b class="rec-m">ręcznie</b>':"z formuły";
+  const kcalZrodlo=C.reczne.T
+    ? `Kaloryczność <b>wyliczona z makro: ${C.K} kcal</b> — pole „zapotrzebowanie" jest wtedy ignorowane.`
+    : `Kaloryczność z pola wyżej: <b>${P.kcal} kcal</b>, tłuszcz dobierany tak, żeby ją domknąć.`;
+  mInfo.innerHTML=`<p class="note">
+    Białko <b>${C.B} g</b> (${src("B")}) · tłuszcz <b>${C.Tfix?C.Tfix+" g":"~"+Math.round((P.kcal-C.B*4-C.W*4)/9)+" g"}</b> (${src("T")}) · węgle <b>${C.W} g</b> (${src("W")}).<br>
+    ${kcalZrodlo}</p>`;
+}
+
+function renderSegs(){
+  const P=ST.prof, Z=zal();
+  plecBox.innerHTML=
+    `<div class="fld"><label>Płeć</label>
+       ${SEG("plec",P.plec,["m","k"],v=>v==="m"?"Mężczyzna":"Kobieta")}
+       <p class="note">Nie zmienia wielkości porcji — to robi waga. Wpływa na wzór szacowania zapotrzebowania, na wartości zalecane poniżej i na progi ostrzeżeń.</p></div>`;
+
+  segs.innerHTML=
+    `     <div class="fld"><label>Białko na kilogram masy ciała</label>
+       ${SEG2("gkg",P.gkg,[1.6,1.8,2.0,2.2],v=>r1(v),Z.gkg)}
+       <p class="note">Wychodzi <b>${r0(P.weight*P.gkg)} g białka</b> dziennie. Normy dla treningu siłowego to 1,6–2,2 g/kg i <b>nie różnią się między płciami</b>. Zalecenie ${r1(Z.gkg)} g/kg dla ${P.plec==="k"?"kobiet":"mężczyzn"} bierze się stąd, że liczymy na kilogram masy całkowitej, a ${P.plec==="k"?"kobiety mają przeciętnie wyższy udział tkanki tłuszczowej — 1,8 g/kg u kobiety to mniej więcej tyle samo białka na kilogram mięśni, co 2,0 u mężczyzny":"mężczyźni mają przeciętnie niższy udział tkanki tłuszczowej"}.</p></div>
+
+     <div class="fld"><label>Pula węglowodanów w dzień bez treningu</label>
+       ${SEG2("carb",P.carb,[30,40,50,55,60,70],v=>v+" g",Z.carb)}
+       <p class="note">${P.plec==="k"
+         ? "U kobiet trzymaj się <b>górnej granicy</b>. Bardzo niska podaż węglowodanów przy regularnym treningu obniża T3 i potrafi zaburzyć cykl — to jedna z najlepiej udokumentowanych różnic płciowych w tej diecie."
+         : "Twój zakres to 30–70 g. Poniżej 30 g wieczorem cierpi sen."}</p></div>
+
+     <div class="fld"><label>Dzień treningowy — dodatkowo</label>
+       ${SEG2("bonus",P.bonus,[0,20,40,60,80],v=>v?"+"+v+" g":"bez",Z.bonus)}
+       <p class="note">Doliczane ponad pulę bazową, razem <b>${P.carb+P.bonus} g</b>. Te węgle idą w jedną porcję ryżu, batata albo ziemniaków — glikogen odbudowuje się z jedzenia, nie z rozbierania mięśni.</p></div>
+
+     <div class="fld"><label>Kiedy trenujesz</label>
+       ${SEG("pora",P.pora,["rano","po"],v=>v==="rano"?"Rano":"Po południu")}
+       <p class="note">Dodatkowa porcja ląduje w posiłku <b>po</b> treningu — ${P.pora==="rano"?"w obiedzie":"w kolacji"}.</p></div>`;
+
+  renderCele(); renderTyg();
+}
+
+function renderCele(){
+  const P=ST.prof;
+  const tr=P.train.filter(Boolean).length;
+  const trening=P.kcal+P.bonus*4;
+  celBox.innerHTML=`
+    <div class="celrow"><span>Dzień bez treningu</span><b>${P.kcal} kcal</b></div>
+    <div class="celrow"><span>Dzień treningowy</span><b>${trening} kcal</b></div>
+    <div class="celrow"><span>Białko codziennie</span><b>${r0(P.weight*P.gkg)} g</b></div>
+    <div class="celrow"><span>Węglowodany</span><b>${P.carb} g / ${P.carb+P.bonus} g</b></div>
+    <div class="celrow"><span>Treningi w tygodniu</span><b>${tr||"—"}</b></div>
+    <div class="celrow"><span>Żelazo — norma dla Ciebie</span><b>${zal().zelazo} mg</b></div>`;
+}
+
+function renderTyg(){
+  tyg.innerHTML=DAYS.map((d,i)=>{
+    const r=dzien(i);
+    const zle=r.bledy.length;
+    return `<button class="tw${r.trening?" tr":""}" data-tw="${i}">
+      <span class="twd">${d.d}</span>
+      <span class="twk">${r0(r.sum.k)}</span>
+      <span class="twc${zle?" bad":""}">${r1(r.sum.c)} g W</span>
+    </button>`;
+  }).join("");
+}
+
+/* ══════════ ASYSTENT: baza wiedzy działająca bez zasięgu ══════════ */
+const WIEDZA=[
+{id:"slodkie",t:"Mam ochotę na słodkie",
+ s:"słodycze cukier czekolada ciastka batonik deser ochota zachcianka łakomstwo",
+ a:`<p>Ochota na słodkie w pierwszych tygodniach to najczęściej <b>nawyk, nie głód</b>. Przychodzi o stałej porze — po obiedzie, wieczorem przed telewizorem, po zatankowaniu. Sprawdź, czy Twoja też ma swoją godzinę.</p>
+ <p><b>Co zrobić teraz:</b> szklanka wody z solą i cytryną, potem 15 minut zwłoki. Ochota na cukier ma falę, która opada. Jeśli po kwadransie dalej jest — zjedz coś tłustego, nie słodkiego: garść makadamia, łyżkę masła orzechowego, kawałek sera.</p>
+ <p><b>Jeśli wraca codziennie:</b> najczęstsza przyczyna to za mało tłuszczu w posiłkach. Organizm domaga się energii, a ma zablokowaną drogę węglowodanową. Sprawdź, czy tłuszcz daje co najmniej 60% kalorii.</p>
+ <p><b>Wyjście awaryjne:</b> kostka gorzkiej czekolady 90% to około 1,4 g węgli. Mieści się w budżecie i nie wybija z ketozy.</p>`,
+ fix:"Weź na kolację słodką wersję — budyń chia albo krem z mascarpone. To ten sam smak, tylko liczony."},
+
+{id:"chleb",t:"Tęsknię za chlebem i ziemniakami",
+ s:"chleb pieczywo bułka makaron ziemniaki ryż kluski pierogi węglowodany skrobia",
+ a:`<p>To nie jest zachcianka cukrowa, tylko tęsknota za <b>sytością i objętością</b>. Chleb daje uczucie pełnego brzucha, którego tłuszcz nie daje w ten sam sposób.</p>
+ <p><b>Co realnie pomaga:</b> zwiększ objętość warzyw, nie kalorie. Podwójna porcja kalafiora, brokułów albo surówki wypełnia żołądek tak samo, a węgli wnosi kilka gramów.</p>
+ <p><b>Pamiętaj, że masz je w planie.</b> Obiad ma ryż, batata albo ziemniaki — to nie jest dieta bez węglowodanów, tylko z węglowodanami w jednym miejscu doby. Jeśli czujesz ich brak, prawdopodobnie ustawiłeś pulę za nisko.</p>`,
+ fix:"Podnieś pulę węglowodanów w zakładce Ja. 55 → 70 g to wciąż keto, a obiad robi się dużo bardziej sycący."},
+
+{id:"glod-wieczor",t:"Wieczorem jestem głodny",
+ s:"głód wieczór noc podjadanie przed snem wilczy apetyt nie mogę wytrzymać",
+ a:`<p>Przy trzech posiłkach ostatni musi być <b>duży</b>. Jeśli kolacja to 800 kcal, a Ty jesteś głodny o 22, najczęściej znaczy to, że zjadłeś ją za wcześnie albo za mało.</p>
+ <p><b>Sprawdź kolejność:</b> czy pierwszy posiłek nie jest przypadkiem największy? Na budowie masy lepiej działa odwrotny rozkład — mniejszy rano, największy wieczorem. Wtedy idziesz spać syty.</p>
+ <p><b>Węgle wieczorem nie są błędem.</b> W tym planie kolacja ma ich 13–29 g właśnie po to: serotonina przechodzi w melatoninę i śpisz lepiej. Jeśli zjadłeś kolację bez węgli, głód i płytki sen to typowy skutek.</p>`,
+ fix:"Wybierz słodką kolację zamiast wytrawnej — mają więcej węglowodanów i lepiej trzymają do rana."},
+
+{id:"ketogrypa",t:"Pierwsze dni — czuję się fatalnie",
+ s:"keto grypa osłabienie mdłości rozbicie zmęczenie pierwszy tydzień adaptacja przestawianie",
+ a:`<p>To nie choroba, tylko <b>utrata wody i elektrolitów</b>. Gdy spada insulina, nerki wyrzucają sód, a razem z nim wodę. Stąd osłabienie, ból głowy i uczucie rozbicia.</p>
+ <p><b>Lekarstwo jest jedno i działa w kilka godzin:</b> sól. 8–12 g dziennie, czyli 1,5–2 płaskie łyżeczki. Najprościej: szklanka ciepłej wody z pół łyżeczki soli rano i drugą po południu. Smakuje jak bulion i tak samo stawia na nogi.</p>
+ <p>Do tego magnez 300–400 mg wieczorem i potas z warzyw liściastych oraz awokado.</p>
+ <p><b>Ile to trwa:</b> zwykle 3–7 dni. Jeśli po dwóch tygodniach dalej masz rozbicie, to nie jest keto grypa — sprawdź morfologię i tarczycę.</p>`},
+
+{id:"skurcze",t:"Łapią mnie skurcze łydek",
+ s:"skurcze łydki nogi noc mięśnie magnez potas elektrolity",
+ a:`<p>Skurcze na keto to prawie zawsze <b>magnez i potas</b>, rzadziej wapń. Przyczyna jest ta sama co przy keto grypie: elektrolity wypłukują się z moczem szybciej niż zwykle.</p>
+ <p><b>Co zrobić:</b> magnez 300–400 mg wieczorem, najlepiej w formie cytrynianu albo malanianu — tlenek wchłania się źle i przeczyszcza. Do tego sól i awokado, szpinak, pestki dyni.</p>
+ <p><b>Jeśli skurcze przychodzą po treningu</b>, dołóż sól przed sesją, nie po. Prowadzisz dużo, więc odwodnienie w kabinie to dodatkowy czynnik — klimatyzacja suszy mocniej, niż się wydaje.</p>`,
+ fix:"Wybierz pestki dyni albo migdały jako orzechy dnia — obie pozycje to solidna porcja magnezu."},
+
+{id:"zaparcia",t:"Mam zaparcia",
+ s:"zaparcia wypróżnienie jelita stolec trawienie błonnik twardy",
+ a:`<p>Trzy przyczyny, w tej kolejności: <b>za mało wody, za mało soli, za mało błonnika</b>.</p>
+ <p>Woda jest pierwsza, bo na keto trzymasz jej mniej w organizmie. 3–3,5 litra dziennie to nie przesada, tylko warunek.</p>
+ <p><b>Błonnik:</b> aplikacja pilnuje minimum 22 g i ostrzega, gdy dzień schodzi niżej. Najszybsze uzupełnienie to 15 g siemienia lnianego mielonego — wsyp do kolacji, popij szklanką wody. Bez wody siemię zadziała odwrotnie.</p>
+ <p><b>Magnez cytrynianowy</b> wieczorem rozwiązuje to przy okazji skurczów — działa lekko przeczyszczająco.</p>`,
+ fix:"Dodaj surówkę do dnia. Kiszona kapusta daje błonnik i probiotyki naraz, a węgli ma 7,4 g."},
+
+{id:"biegunka",t:"Mam luźny stolec",
+ s:"biegunka luźny stolec rozwolnienie jelita tłuszcz brzuch",
+ a:`<p>Najczęściej to <b>za szybki skok tłuszczu</b>. Trzustka i woreczek potrzebują 1–2 tygodni, żeby podnieść produkcję lipazy i żółci.</p>
+ <p><b>Co zrobić:</b> rozłóż tłuszcz równomiernie na trzy posiłki zamiast wrzucać większość w jeden. Jeśli używasz oleju MCT — zejdź do łyżeczki i buduj powoli, MCT w większych dawkach przeczyszcza niemal każdego.</p>
+ <p><b>Drugi podejrzany to słodziki:</b> erytrytol, ksylitol i maltitol w większych ilościach działają osmotycznie. Sprawdź etykietę odżywki białkowej.</p>
+ <p>Jeśli trwa dłużej niż tydzień albo pojawia się ból, to nie jest adaptacja — idź do lekarza.</p>`},
+
+{id:"trening-slabo",t:"Nie mam siły na treningu",
+ s:"trening siła słabość wydolność serie ciężar spadek formy siłownia",
+ a:`<p>Przy wysiłku siłowym mięsień sięga po <b>glikogen</b>, a tego na keto jest po prostu mniej. Spadek siły w pierwszych 2–4 tygodniach jest normalny i przejściowy.</p>
+ <p><b>Najważniejsze narzędzie masz w aplikacji:</b> przełącznik dnia treningowego. Dokłada 40–80 g węglowodanów w jednej porcji ryżu albo batata, w posiłku po sesji. To nie jest odstępstwo od planu, tylko jego część — glikogen odbudowuje się z jedzenia, a nie z rozbierania mięśni.</p>
+ <p><b>Sprawdź też sól.</b> Spadek siły przy niedoborze sodu jest gwałtowny i mylony ze słabą formą. Pół łyżeczki soli 30 minut przed treningiem potrafi zmienić całą sesję.</p>
+ <p><b>Kreatyna</b> działa na keto tak samo dobrze jak na każdej innej diecie — 5 g dziennie, o dowolnej porze.</p>`,
+ fix:"Włącz dzień treningowy w Planie. Przełącznik jest pod licznikiem węglowodanów."},
+
+{id:"sen",t:"Źle śpię",
+ s:"sen bezsenność budzę się w nocy nie mogę zasnąć płytki sen wybudzenia",
+ a:`<p>Na keto bezsenność ma zwykle dwie przyczyny: <b>za mało węglowodanów wieczorem</b> albo <b>za mało magnezu</b>.</p>
+ <p>Węglowodany wieczorem podnoszą dostępność tryptofanu w mózgu, a z niego powstaje serotonina i dalej melatonina. Dlatego w tym planie kolacja ma 13–29 g węgli — to nie przypadek ani niedopatrzenie.</p>
+ <p><b>Jeśli budzisz się o 3 nad ranem</b>, to klasyczny objaw spadku cukru i wyrzutu kortyzolu. Zjedz większą kolację, z węglami, bliżej snu.</p>
+ <p><b>Magnez</b> 300–400 mg na godzinę przed snem. Glicynian działa najłagodniej na sen.</p>`,
+ fix:"Wybierz słodką kolację — owsianka keto albo budyń chia mają najwięcej węglowodanów wieczorem."},
+
+{id:"oddech",t:"Mam nieświeży oddech albo metaliczny smak",
+ s:"oddech zapach aceton metaliczny smak w ustach keto oddech",
+ a:`<p>To <b>aceton</b> — jeden z ciał ketonowych, usuwany przez płuca. Paradoksalnie to dowód, że dieta działa.</p>
+ <p><b>Zwykle mija po 2–4 tygodniach</b>, gdy organizm nauczy się wykorzystywać ketony zamiast je wydychać.</p>
+ <p><b>Co pomaga w międzyczasie:</b> więcej wody, mycie języka skrobaczką, guma bez cukru, natka pietruszki. Płyn do płukania z alkoholem raczej pogarsza, bo wysusza.</p>`},
+
+{id:"waga-stoi",t:"Waga stoi w miejscu",
+ s:"waga stoi plateau nie chudnę nie spada zastój nie ma efektów",
+ a:`<p><b>Najpierw sprawdź, czy waga to właściwy miernik.</b> Przy treningu siłowym i wysokim białku rośnie mięsień, a tłuszcz schodzi. Waga może stać tygodniami, a lustro i obwód pasa pokazują ruch. Mierz pas, nie tylko masę.</p>
+ <p><b>Jeśli naprawdę stoi:</b> najczęstszy powód to niedoszacowane kalorie. Orzechy, oliwa, masło i ser są bardzo gęste — łyżka oliwy to 90 kcal, garść orzechów 200. Przez tydzień waż wszystko dokładnie.</p>
+ <p><b>Drugi powód to za mały deficyt.</b> Sprawdź w zakładce Ja, ile kcal na kilogram masy dostajesz. Poniżej 25 organizm zaczyna oszczędzać i efekt się zatrzymuje mimo deficytu.</p>`,
+ fix:"Przelicz zapotrzebowanie kalkulatorem w zakładce Ja i porównaj z tym, co masz wpisane."},
+
+{id:"waga-rosnie",t:"Waga rośnie",
+ s:"tyję waga rośnie przybieram masa przyrost",
+ a:`<p><b>Pierwszy tydzień:</b> jeśli wracasz po przerwie z węglowodanami, to woda. Każdy gram glikogenu wiąże 3 g wody. Dwa kilo w trzy dni to glikogen, nie tłuszcz.</p>
+ <p><b>Na nadwyżce kalorycznej wzrost jest celem</b> — pytanie tylko, w jakich proporcjach. Jeśli budujesz masę, licz na 0,25–0,5 kg tygodniowo. Więcej to już głównie tłuszcz.</p>
+ <p><b>Jeśli rośnie szybciej niż pół kilo na tydzień,</b> zdejmij 200–300 kcal z tłuszczu. Białko i węgle zostaw nietknięte — to one trzymają plan.</p>`,
+ fix:"W zakładce Ja zejdź z zapotrzebowaniem o 200 kcal. Aplikacja sama skoryguje gramatury tłuszczu."},
+
+{id:"stacja",t:"Jestem w trasie, co zjeść na stacji",
+ s:"stacja benzynowa trasa droga fast food sklep co kupić poza domem awaryjnie",
+ a:`<p><b>Co brać bez wahania:</b> jajka na twardo, sery żółte i pleśniowe w plastrach, twarożek, wędzona makrela lub śledź w oleju, tuńczyk w puszce, orzechy niesolone, oliwki, awokado jeśli jest, gorzka czekolada 85–90%.</p>
+ <p><b>Czego unikać, mimo że wygląda niewinnie:</b> parówki i kabanosy z wypełniaczami, jogurty smakowe, batony proteinowe (zwykle 20–30 g węgli), soki, „zdrowe" musli.</p>
+ <p><b>Zestaw ratunkowy do schowka:</b> puszka tuńczyka, paczka orzechów, saszetka soli, tabliczka czekolady 90%. Zajmuje tyle co nic i ratuje dzień, w którym nic nie wyszło.</p>`,
+ fix:"Dodaj orzechy do dnia — masz siedem wariantów i wszystkie nadają się do schowka."},
+
+{id:"alkohol",t:"Alkohol na keto",
+ s:"alkohol piwo wino wódka whisky impreza drink",
+ a:`<p><b>Najmniej węglowodanów mają czyste destylaty:</b> wódka, whisky, gin, koniak — zero węgli. Wytrawne wino to 2–4 g na kieliszek. Piwo jest najgorsze: 10–15 g na butelkę.</p>
+ <p><b>Ale węgle to nie główny problem.</b> Wątroba zajmuje się alkoholem priorytetowo i wstrzymuje na ten czas spalanie tłuszczu oraz produkcję ketonów. Efekt dietetyczny stoi, dopóki alkohol nie zostanie rozłożony.</p>
+ <p><b>Drugi efekt jest ważniejszy przy budowie masy:</b> alkohol obniża syntezę białek mięśniowych i jakość snu. Wieczór po treningu to najgorszy możliwy moment.</p>
+ <p><b>Uwaga praktyczna:</b> na keto upija się dużo szybciej — mniej glikogenu, mniej wody, szybsze wchłanianie. Jeśli prowadzisz następnego dnia, licz z dużym zapasem.</p>`},
+
+{id:"wypadlem",t:"Wypadłem z diety",
+ s:"złamałem dietę zjadłem pizzę wypadłem cheat day obżarstwo co teraz poddałem się",
+ a:`<p><b>Nic się nie stało.</b> Jeden posiłek nie kasuje tygodni pracy — kasuje ketozę na dzień lub dwa, i tyle.</p>
+ <p><b>Czego nie robić:</b> nie nadrabiaj głodówką następnego dnia. To najprostsza droga do wahadła: obżarstwo, wyrzuty, restrykcja, znowu obżarstwo. Zdecydowanie gorsze niż sam odstępny posiłek.</p>
+ <p><b>Co zrobić:</b> następny posiłek zjedz normalnie, zgodnie z planem. Dużo wody i soli, bo wróci zatrzymana woda. Ketoza wraca zwykle w 24–48 godzin, szybciej jeśli w międzyczasie trenujesz.</p>
+ <p>Jeśli wypadasz co tydzień, to nie kwestia silnej woli — plan jest za restrykcyjny. Podnieś kalorie albo pulę węglowodanów, żeby dało się przy nim zostać.</p>`},
+
+{id:"wlosy",t:"Wypadają mi włosy",
+ s:"włosy wypadanie łysienie skóra paznokcie",
+ a:`<p>Wypadanie po 3–4 miesiącach od zmiany diety to zwykle <b>telogen effluvium</b> — reakcja na gwałtowną zmianę energetyczną, nie na samo keto. Mija samo w 2–3 miesiące.</p>
+ <p><b>Co sprawdzić:</b> czy deficyt nie jest za ostry, czy białko wystarcza (przy Twojej wadze to minimum 1,6 g/kg) i czy nie brakuje żelaza, cynku, biotyny oraz witaminy D.</p>
+ <p><b>U kobiet</b> dochodzi ferrytyna — przy wypadaniu włosów warto ją zbadać, bo norma żelaza jest prawie dwukrotnie wyższa niż u mężczyzn.</p>
+ <p>Jeśli trwa dłużej niż pół roku, zbadaj tarczycę.</p>`},
+
+{id:"kawa",t:"Co mogę pić",
+ s:"kawa herbata napoje woda cola zero mleko picie płyny słodziki",
+ a:`<p><b>Bez ograniczeń:</b> woda, woda gazowana, kawa czarna, herbata, napary ziołowe, rosół i bulion.</p>
+ <p><b>Z ograniczeniem:</b> kawa ze śmietanką — licz tłuszcz, bo łyżka śmietany 30% to 47 kcal. Napoje zero są technicznie w porządku, ale u części osób podtrzymują ochotę na słodkie.</p>
+ <p><b>Odpada:</b> soki, mleko (12 g cukru na szklankę), napoje izotoniczne, słodzone kawy z automatu.</p>
+ <p><b>Ważne przy żelazie:</b> kawa i herbata do posiłku blokują wchłanianie żelaza nawet o połowę. Odczekaj godzinę po jedzeniu — szczególnie istotne u kobiet.</p>`},
+
+{id:"zimno",t:"Ciągle marznę",
+ s:"zimno marznę zimne dłonie stopy tarczyca metabolizm",
+ a:`<p>Marznięcie to najczęściej sygnał, że <b>deficyt jest za głęboki albo trwa za długo</b>. Organizm oszczędza energię, obniżając termogenezę — zimne dłonie i stopy są pierwszym objawem.</p>
+ <p><b>Sprawdź kcal na kilogram masy ciała</b> w zakładce Ja. Poniżej 25 to strefa, w której tarczyca zwalnia. Przy długim keto z niskimi kaloriami spada konwersja T4 do T3.</p>
+ <p><b>Co zrobić:</b> zrób przerwę od deficytu na 1–2 tygodnie, wróć do zapotrzebowania na utrzymanie. Dołóż węglowodanów w dni treningowe. Jeśli nie pomaga — zbadaj TSH, FT3 i FT4.</p>`,
+ fix:"Sprawdź w zakładce Ja, ile kcal na kilogram masy dostajesz. Aplikacja ostrzega poniżej 25."}
+];
+
+/* wyszukiwanie: dopasowanie po tytule i tagach, bez zewnętrznych bibliotek */
+function szukaj(q){
+  const s=q.toLowerCase().trim();
+  if(!s) return WIEDZA;
+  const slowa=s.split(/\s+/).filter(w=>w.length>2);
+  if(!slowa.length) return WIEDZA;
+  return WIEDZA.map(e=>{
+    const hay=(e.t+" "+e.s).toLowerCase();
+    let pkt=0;
+    slowa.forEach(w=>{
+      if(e.t.toLowerCase().includes(w)) pkt+=3;
+      else if(hay.includes(w)) pkt+=2;
+      else if(hay.split(/\s+/).some(t=>t.startsWith(w.slice(0,4)))) pkt+=1;
+    });
+    return {e,pkt};
+  }).filter(x=>x.pkt>0).sort((a,b)=>b.pkt-a.pkt).map(x=>x.e);
+}
+
+/* kontekst z ustawień — asystent wie, jak masz ustawiony plan */
+function kontekst(){
+  const P=ST.prof, r=dzien(ST.day);
+  const tr=P.train.filter(Boolean).length;
+  return `Profil: ${P.plec==="m"?"mężczyzna":"kobieta"}, ${P.weight} kg, ${P.wiek} lat, ${P.wzrost} cm. `+
+    `Cel kaloryczny ${P.kcal} kcal (${r1(P.kcal/P.weight)} kcal/kg). `+
+    `Białko ${r.cel.b} g, węglowodany bazowo ${P.carb} g, w dni treningowe +${P.bonus} g. `+
+    `Treningi: ${tr} w tygodniu, ${P.pora==="rano"?"rano":"po południu"}. `+
+    `Dzisiejszy dzień daje ${r0(r.sum.k)} kcal, ${r1(r.sum.b)} g białka, ${r1(r.sum.c)} g węgli, ${r1(r.sum.fb)} g błonnika.`;
+}
+
+let AI=null, aiSprawdzone=false;
+async function sprawdzAI(){
+  if(aiSprawdzone) return AI;
+  aiSprawdzone=true;
+  try{ if(window.claude&&claude.use) AI=await claude.use("sample"); }catch(e){ AI=null; }
+  if(AI) renderPomoc();
+  return AI;
+}
+
+let pytanie="";
+function renderPomoc(){
+  const wyniki=szukaj(pytanie);
+  const nic=pytanie&&!wyniki.length;
+  qClear.hidden=!pytanie;
+  pomoc.innerHTML=`
+    ${nic?`<div class="pusto">
+       <p><b>Nie mam na to gotowej odpowiedzi.</b></p>
+       ${AI?`<button class="btn pri" id="aiGo">Zapytaj Claude o to pytanie</button>`
+           :`<button class="btn" id="netGo">Poszukaj w internecie</button>
+             <p class="note">Żywy asystent AI działa w wersji otwartej na claude.ai. Tutaj masz bazę offline — odpowiada bez zasięgu.</p>`}
+     </div>`:""}
+    <div id="aiOut"></div>
+    ${wyniki.map(e=>`<div class="wpis" data-w="${e.id}">
+      <button class="wgl"><span>${e.t}</span>
+        <svg width="11" height="7" viewBox="0 0 11 7" fill="none"><path d="M1 1l4.5 4.5L10 1" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="wtr">${e.a}${e.fix?`<div class="wfix">${ikoTip()}<div>${e.fix}</div></div>`:""}</div>
+    </div>`).join("")}
+    ${!nic&&pytanie?`<p class="note" style="margin-top:18px">Nie to, czego szukasz? ${AI
+      ?`<button class="link" id="aiGo">Zapytaj Claude własnymi słowami</button>`
+      :`<button class="link" id="netGo">Poszukaj w internecie</button>`}</p>`:""}`;
+}
+
+async function zapytajAI(){
+  const out=document.getElementById("aiOut");
+  if(!out||!AI) return;
+  out.innerHTML=`<div class="aibox"><div class="aihdr">Claude odpowiada</div><div class="aitxt" id="aiTxt">Myślę…</div></div>`;
+  const cel=document.getElementById("aiTxt");
+  try{
+    const res=await AI([{role:"user",content:
+      `Jesteś dietetykiem prowadzącym pacjenta na diecie ketogenicznej wysokobiałkowej, `+
+      `ułożonej według polskich norm żywienia. Odpowiadaj po polsku, konkretnie i krótko `+
+      `(maksymalnie 200 słów), bez wstępów i bez listy zastrzeżeń. Jeśli coś wymaga lekarza, powiedz to jednym zdaniem.\n\n`+
+      `Dane pacjenta: ${kontekst()}\n\nPytanie: ${pytanie}`}],
+      {onText:({text})=>{cel.textContent=text;}, modelTier:"default"});
+    cel.textContent=res.text;
+  }catch(e){
+    cel.textContent="Nie udało się połączyć. Spróbuj ponownie albo skorzystaj z bazy poniżej.";
   }
-  advice.innerHTML=body;
 }
 
-/* ════════════════ ZAKŁADKI ════════════════ */
+/* ══════════ ZAKŁADKI ══════════ */
 const TABS=[["plan","Plan",'<path d="M3 4h14M3 10h14M3 16h9"/>'],
-            ["shop","Zakupy",'<path d="M3 4h2l2 9h9l2-6H6"/><circle cx="9" cy="16.5" r="1.3"/><circle cx="15" cy="16.5" r="1.3"/>'],
-            ["rec","Przepisy",'<path d="M5 3h10v14H5z"/><path d="M8 7h4M8 10h4"/>'],
-            ["rules","Zasady",'<circle cx="10" cy="10" r="7"/><path d="M10 6.5v4.5M10 13.4v.2"/>']];
+ ["pomoc","Pomoc",'<circle cx="10" cy="10" r="7.2"/><path d="M7.8 7.6a2.3 2.3 0 113.2 2.1c-.6.3-1 .9-1 1.6"/><circle cx="10" cy="14.3" r=".8" fill="currentColor" stroke="none"/>'],
+ ["shop","Zakupy",'<path d="M3 4h2l2 9h9l2-6H6"/><circle cx="9" cy="16.5" r="1.3"/><circle cx="15" cy="16.5" r="1.3"/>'],
+ ["rec","Przepisy",'<path d="M5 3h10v14H5z"/><path d="M8 7h4M8 10h4"/>'],
+ ["ja","Ja",'<circle cx="10" cy="7" r="3"/><path d="M4 17c0-3.3 2.7-5 6-5s6 1.7 6 5"/>']];
 let view="plan";
 function renderTabs(){
   tabs.innerHTML=TABS.map(([id,t,p])=>`<button class="tab${id===view?" on":""}" data-tab="${id}">
@@ -683,32 +1466,85 @@ function go(id){
   view=id;
   document.querySelectorAll(".view").forEach(v=>v.classList.toggle("on",v.id==="v-"+id));
   document.querySelector(".railwrap").style.display=(id==="plan")?"":"none";
+  document.querySelector(".szuk").style.display=(id==="pomoc")?"":"none";
+  if(id==="plan"){renderRail();renderPlan();}
+  if(id==="pomoc"){renderPomoc();sprawdzAI();}
   if(id==="shop")renderShop();
-  if(id==="rules")renderAdvice();
-  renderTabs();
-  window.scrollTo(0,0);
+  if(id==="rec")renderRecs();
+  if(id==="ja")renderJa();
+  renderTabs(); window.scrollTo(0,0);
 }
 
-/* ════════════════ ZDARZENIA ════════════════ */
+/* ══════════ IKONY ══════════ */
+const ikoWarn=()=>`<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M8 1.6L15 14H1L8 1.6z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M8 6v3.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="8" cy="11.6" r=".9" fill="currentColor"/></svg>`;
+const ikoTip=()=>`<svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.6" stroke="currentColor" stroke-width="1.4"/><path d="M8 7.4v3.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="8" cy="5.1" r=".9" fill="currentColor"/></svg>`;
+const ikoTren=()=>`<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 7v4M6 5v8M12 5v8M15 7v4M6 9h6"/></svg>`;
+const ikoTrenOn=()=>`<svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 7v4M6 5v8M12 5v8M15 7v4M6 9h6"/></svg>`;
+
+/* ══════════ ZDARZENIA ══════════ */
+function odswiez(){save();renderRail();renderPlan();}
 document.addEventListener("click",e=>{
   const rec=e.target.closest("[data-rec]");
   if(rec){e.stopPropagation();openRec(rec.dataset.rec);return;}
-
   const d=e.target.closest("[data-d]");
-  if(d){ST.day=+d.dataset.d;save();renderRail();renderPlan();return;}
-
+  if(d){ST.day=+d.dataset.d;odswiez();return;}
   const o=e.target.closest(".opt");
-  if(o){ST.pick[ST.day][o.dataset.slot]=+o.dataset.n;save();renderRail();renderPlan();return;}
-
+  if(o){ST.pick[ST.day][o.dataset.slot]=+o.dataset.n;odswiez();return;}
+  const su=e.target.closest("[data-su]");
+  if(su){ST.pick[ST.day].su=su.dataset.su;odswiez();return;}
+  const or=e.target.closest("[data-or]");
+  if(or){ST.pick[ST.day].or=or.dataset.or;odswiez();return;}
+  if(e.target.closest("#trnBtn")){
+    ST.prof.train[ST.day]=ST.prof.train[ST.day]?0:1; odswiez(); return;}
+  const tw=e.target.closest("[data-tw]");
+  if(tw){const i=+tw.dataset.tw;ST.prof.train[i]=ST.prof.train[i]?0:1;save();renderJa();renderRail();return;}
+  const sg=e.target.closest(".sg");
+  if(sg){
+    const k=sg.closest("[data-seg]").dataset.seg, v=sg.dataset.v;
+    ST.prof[k]=(k==="pora"||k==="plec")?v:parseFloat(v);
+    save(); odswiezJa(); renderRail(); renderPlan(); return;}
+  if(e.target.closest("#kalkUse")){
+    ST.prof.kcal=szacuj(ST.prof); save();
+    kInp.value=ST.prof.kcal; renderRail(); renderPlan(); odswiezJa();
+    return;}
   const it=e.target.closest("[data-item]");
   if(it){const n=it.dataset.item;ST.check[n]=!ST.check[n];save();renderShop();return;}
-
+  if(e.target.closest("#qClear")){pytanie="";qInp.value="";renderPomoc();qInp.focus();return;}
+  if(e.target.closest("#aiGo")){zapytajAI();return;}
+  if(e.target.closest("#netGo")){
+    window.open("https://www.google.com/search?q="+encodeURIComponent("dieta ketogeniczna "+pytanie),"_blank");return;}
+  const wg=e.target.closest(".wgl");
+  if(wg){wg.closest(".wpis").classList.toggle("on");return;}
   const tb=e.target.closest("[data-tab]");
   if(tb){go(tb.dataset.tab);return;}
 });
-scrim.onclick=closeRec;
-sheetX.onclick=closeRec;
+scrim.onclick=closeRec; sheetX.onclick=closeRec;
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeRec()});
+
+function odswiezJa(){
+  renderSegs(); renderKalk(); renderMakro(); renderCele(); renderTyg();
+}
+function num(el,key,min,max,puste){
+  el.addEventListener("input",()=>{
+    const s=el.value.trim();
+    if(puste&&s===""){ ST.prof[key]=""; save(); renderRail(); renderPlan();
+      if(view==="ja")odswiezJa(); return; }
+    const v=parseFloat(s);
+    if(!isFinite(v)||v<min||v>max)return;
+    ST.prof[key]=v; save(); renderRail(); renderPlan();
+    if(view==="ja")odswiezJa();
+  });
+}
+num(wInp,"weight",35,250); num(kInp,"kcal",1000,6000);
+num(aInp,"wiek",14,99);    num(hInp,"wzrost",130,220);
+num(mbInp,"mB",40,400,true); num(mtInp,"mT",20,400,true); num(mwInp,"mW",0,400,true);
+
+let qDeb;
+qInp.addEventListener("input",()=>{
+  pytanie=qInp.value;
+  clearTimeout(qDeb);
+  qDeb=setTimeout(renderPomoc,200);
+});
 
 btnCopy.onclick=async()=>{
   try{await navigator.clipboard.writeText(shopText());btnCopy.textContent="Skopiowane";}
@@ -716,42 +1552,36 @@ btnCopy.onclick=async()=>{
   setTimeout(()=>btnCopy.textContent="Skopiuj listę",1800);
 };
 btnClear.onclick=()=>{ST.check={};save();renderShop()};
-target.oninput=()=>{const v=+target.value;if(v>=1200&&v<=5000){ST.target=v;save();renderAdvice()}};
 
-/* ════════════════ START ════════════════ */
-/* ════════════════ PWA ════════════════ */
+/* ══════════ PWA ══════════ */
 if("serviceWorker" in navigator){
   addEventListener("load",()=>{
     navigator.serviceWorker.register("./sw.js").then(reg=>{
       reg.addEventListener("updatefound",()=>{
         const nw=reg.installing; if(!nw)return;
         nw.addEventListener("statechange",()=>{
-          if(nw.state==="installed" && navigator.serviceWorker.controller) showUpdate();
-        });
+          if(nw.state==="installed"&&navigator.serviceWorker.controller)pokazUpdate();});
       });
     }).catch(()=>{});
-    let reloaded=false;
+    const bylSW=!!navigator.serviceWorker.controller;   // pierwsza instalacja nie przeładowuje
+    let done=false;
     navigator.serviceWorker.addEventListener("controllerchange",()=>{
-      if(reloaded)return; reloaded=true; location.reload();
-    });
+      if(done||!bylSW)return; done=true; location.reload();});
   });
 }
-function showUpdate(){
+function pokazUpdate(){
   if(document.getElementById("upd"))return;
-  const b=document.createElement("div"); b.id="upd";
-  b.style.cssText="position:fixed;left:12px;right:12px;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:70;max-width:616px;margin:0 auto;background:var(--fat);color:#15201F;padding:12px 14px;border-radius:10px;display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;box-shadow:0 6px 24px rgba(0,0,0,.35)";
-  b.innerHTML='<span style="flex:1">Jest nowsza wersja planu.</span><button style="background:#15201F;color:#EDE8DF;padding:7px 13px;border-radius:7px;font-weight:600;font-size:13px">Odśwież</button>';
-  b.querySelector("button").onclick=()=>{
-    navigator.serviceWorker.getRegistration().then(r=>{
-      if(r&&r.waiting) r.waiting.postMessage("skip"); else location.reload();
-    });
-  };
+  const b=document.createElement("div"); b.id="upd"; b.className="upd";
+  b.innerHTML='<span>Jest nowsza wersja planu.</span><button>Odśwież</button>';
+  b.querySelector("button").onclick=()=>navigator.serviceWorker.getRegistration()
+    .then(r=>{if(r&&r.waiting)r.waiting.postMessage("skip");else location.reload();});
   document.body.appendChild(b);
 }
 
-load();
-target.value=ST.target;
-renderRail();renderPlan();renderRecs();renderTabs();
+/* ══════════ START ══════════ */
+document.getElementById("wer").textContent=`Wersja ${WER} — jeśli nie widzisz wyboru płci na górze tej zakładki, masz starszą wersję w pamięci telefonu.`;
+load(); renderRail(); renderPlan(); renderTabs(); renderPomoc();
+
 </script>
 </body>
 </html>
