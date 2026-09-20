@@ -35,6 +35,11 @@
     --bone:#15201F;--mute:#6B7A72;--fat:#B8851A;--iron:#A83E26;--moss:#4E6F45;
   }
 }
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ink:#0E1417;--slab:#182126;--slab-2:#202B31;--line:#2C3A41;
+  --bone:#EDE8DF;--mute:#8FA0A8;--fat:#E8B84B;--iron:#C4553A;--moss:#88A97C;
+}
 :root[data-theme="light"]{
   color-scheme:light;
   --ink:#F2EEE6;--slab:#FFFFFF;--slab-2:#F7F3EB;--line:#DFD7C8;
@@ -109,6 +114,21 @@ input{font:inherit}
   background:var(--ink);transition:transform var(--d-med) cubic-bezier(.22,.7,.3,1)}
 .trn.on .tsw i{transform:translateX(18px)}
 .sur.nut .sn{font-size:12.5px}
+.ggr{margin-top:14px}
+.ggr h4{font-size:11.5px;font-weight:700;color:var(--mute);margin:0 0 7px;letter-spacing:.02em}
+.gchips{display:flex;flex-wrap:wrap;gap:5px}
+.gch{display:inline-flex;align-items:center;gap:4px;padding:6px 10px;border-radius:999px;
+  background:var(--slab);border:1px solid var(--line);font-size:12.5px;font-weight:500;
+  transition:all var(--d-fast);line-height:1.2}
+.gch.off{background:color-mix(in srgb,var(--iron) 20%,transparent);border-color:var(--iron);
+  color:var(--iron);text-decoration:line-through;font-weight:600}
+.zamhdr{display:flex;gap:9px;align-items:flex-start;margin:-6px 0 16px;padding:11px 13px;
+  border-radius:var(--r-tile);background:color-mix(in srgb,var(--moss) 13%,transparent);
+  border-left:3px solid var(--moss);font-size:13px;line-height:1.45}
+.zamhdr svg{flex:0 0 auto;margin-top:2px;color:var(--moss)}
+.opt-zam{margin-top:6px;font-size:10.5px;font-weight:700;color:var(--moss)}
+tr.zam td:first-child{color:var(--moss)}
+tr.zam small{display:block;font-size:11px;opacity:.75;font-weight:400;margin-top:1px}
 .big.m3{gap:6px}
 .big.m3 input{padding:12px 34px 12px 11px;font-size:16px}
 .big.m3 .u{top:12px;right:10px;font-size:12px}
@@ -411,6 +431,14 @@ tr.xtra small{display:block;font-size:11px;opacity:.75;font-weight:400;margin-to
 
   <div id="segs"></div>
 
+  <div class="fld"><label>Czego nie lubisz</label>
+    <p class="note">Zaznacz, a przepisy przebudują się wokół Twoich gustów. Składnik zostaje
+    zamieniony na równoważny, nie usunięty — gramatura przelicza się tak, żeby zgadzał się
+    ten sam makroskładnik.</p>
+    <div id="gusta"></div>
+    <div id="skutki_"></div>
+  </div>
+
   <div class="fld"><label>Które dni są treningowe</label>
     <div class="tyg" id="tyg"></div>
     <p class="note">Stuknij dzień, żeby przełączyć. Liczby pod skrótem to kalorie i węglowodany po przeliczeniu.</p>
@@ -543,24 +571,34 @@ const NUTR = {
 const UNIT = {
 "Jajka":[55,"szt"],"Awokado":[200,"whole"],"Pomidor":[150,"whole"],"Ogórek":[200,"whole"],
 "Cebula":[80,"whole"],"Papryka czerwona":[180,"whole"],"Batat":[200,"whole"],"Ziemniaki":[110,"szt"],
-"Pieczarki":[20,"szt"],"Ser gouda":[25,"plaster"],"Twaróg półtłusty":[250,"kostka"],
-"Skyr naturalny":[150,"kubek"],"Tuńczyk w sosie własnym":[90,"puszka"],
-"Oliwa z oliwek":[10,"lyzka"],"Olej z awokado":[10,"lyzka"],"Masło klarowane":[12,"lyzka"],
-"Śmietana 30%":[16,"lyzka"],"Mleczko kokosowe":[15,"lyzka"],"Masło orzechowe 100%":[20,"lyzka"],
+"Pieczarki":[20,"szt"],"Brokuły":[500,"whole"],"Kalafior":[600,"whole"],
+"Cukinia":[250,"whole"],"Rzodkiewka":[100,"peczek"],"Seler korzeniowy":[400,"whole"],"Marchew":[70,"szt"],
+"Ser gouda":[25,"plaster"],"Twaróg półtłusty":[250,"kostka"],"Skyr naturalny":[150,"kubek"],
+"Mozzarella":[125,"kulka"],"Feta":[200,"opak"],"Camembert":[120,"krazek"],"Parmezan":[5,"lyzka"],"Mascarpone":[20,"lyzka"],
+"Tuńczyk w sosie własnym":[90,"puszka"],
+"Oliwa z oliwek":[10,"lyzka"],"Olej z awokado":[10,"lyzka"],"Olej lniany":[10,"lyzka"],
+"Masło klarowane":[12,"lyzka"],"Śmietana 30%":[16,"lyzka"],"Mleczko kokosowe":[15,"lyzka"],
+"Jogurt grecki 10%":[20,"lyzka"],"Majonez":[15,"lyzka"],"Masło orzechowe 100%":[20,"lyzka"],
 "Nasiona chia":[12,"lyzka"],"Siemię lniane mielone":[10,"lyzka"],"Pestki dyni":[15,"lyzka"],
+"Pestki słonecznika":[15,"lyzka"],"Szczypiorek":[5,"lyzka"],"Koperek":[4,"lyzka"],
 "Płatki jaglane":[10,"lyzka"],"Ryż basmati (suchy)":[12.5,"lyzka"],"Passata pomidorowa":[20,"lyzka"],
 "Kakao 100%":[5,"lyzeczka"],"Izolat białka wołowego":[30,"miarka"],
 "Migdały":[1.2,"szt"],"Orzechy makadamia":[2,"szt"],"Oliwki":[4,"szt"],
-"Maliny":[100,"garsc"],"Borówki":[100,"garsc"],"Szpinak":[50,"garsc"],"Rukola":[50,"garsc"]
+"Orzechy włoskie":[3,"szt"],"Orzechy laskowe":[1.2,"szt"],"Orzechy brazylijskie":[5,"szt"],
+"Orzechy pekan":[2,"szt"],"Pistacje":[0.8,"szt"],
+"Maliny":[100,"garsc"],"Borówki":[100,"garsc"],"Truskawki":[100,"garsc"],"Jeżyny":[100,"garsc"],
+"Szpinak":[50,"garsc"],"Rukola":[50,"garsc"],"Sałata rzymska":[60,"garsc"]
 };
 
 /* odmiana polska: 1 / 2-4 / 5+ */
 const PL = {
- lyzka:["łyżka","łyżki","łyżek"], lyzeczka:["łyżeczka","łyżeczki","łyżeczek"],
- szt:["szt.","szt.","szt."], plaster:["plaster","plastry","plastrów"],
- kostka:["kostka","kostki","kostek"], kubek:["kubek","kubki","kubków"],
- puszka:["puszka","puszki","puszek"], miarka:["miarka","miarki","miarek"],
- garsc:["garść","garście","garści"], whole:["sztuka","sztuki","sztuk"]
+ lyzka:["łyżka","łyżki","łyżek","łyżki"], lyzeczka:["łyżeczka","łyżeczki","łyżeczek","łyżeczki"],
+ szt:["szt.","szt.","szt.","szt."], plaster:["plaster","plastry","plastrów","plastra"],
+ kostka:["kostka","kostki","kostek","kostki"], kubek:["kubek","kubki","kubków","kubka"],
+ puszka:["puszka","puszki","puszek","puszki"], miarka:["miarka","miarki","miarek","miarki"],
+ garsc:["garść","garście","garści","garści"], whole:["sztuka","sztuki","sztuk","sztuki"],
+ kulka:["kulka","kulki","kulek","kulki"], opak:["opakowanie","opakowania","opakowań","opakowania"],
+ krazek:["krążek","krążki","krążków","krążka"], peczek:["pęczek","pęczki","pęczków","pęczka"]
 };
 function odmien(n,kind){
   const f=PL[kind]; if(!f) return "";
@@ -574,10 +612,10 @@ const UL=[[0.25,"1/4"],[0.33,"1/3"],[0.5,"1/2"],[0.67,"2/3"],[0.75,"3/4"]];
 function jednostka(name,g){
   const u=UNIT[name]; if(!u) return "";
   const [per,kind]=u, n=g/per;
-  if(kind==="whole"||kind==="kostka"||kind==="kubek"||kind==="puszka"){
+  if(["whole","kostka","kubek","puszka","kulka","opak","krazek","peczek"].includes(kind)){
     if(n<0.92){ let best=UL[0],bd=9;
       for(const [v,t] of UL){const d=Math.abs(n-v); if(d<bd){bd=d;best=[v,t];}}
-      return `${best[1]} ${odmien(1,kind)}`; }
+      return `${best[1]} ${(PL[kind][3]||PL[kind][1])}`; }
   }
   if(kind==="szt"&&per<=4) return `ok. ${Math.round(n)} ${odmien(Math.round(n),kind)}`;
   const r=n<3?Math.round(n*2)/2:Math.round(n);
@@ -736,52 +774,62 @@ const DAYS=[
 /* ══ silnik ══ */
 function nutr(name,g){const n=NUTR[name];if(!n)return[0,0,0,0,0];return n.map(v=>v*g/100);}
 
-/* sumy w koszykach B / T / W / X dla zestawu posiłków (przy współczynniku 1) */
-function buckets(ids){
-  const B={k:0,b:0,f:0,c:0,fb:0},T={...B},W={...B},X={...B};
-  const map={B,T,W,X};
-  ids.forEach(id=>DANIE[id].i.forEach(([n,g,cat])=>{
-    const [k,b,f,c,fb]=nutr(n,g), t=map[cat];
-    t.k+=k;t.b+=b;t.f+=f;t.c+=c;t.fb+=fb;
-  }));
-  return {B,T,W,X};
+/* Białko dzieli się na dwa koszyki. W serach, jajkach i tłustym mięsie tłuszcz jest
+   ZWIĄZANY z białkiem — nie da się go odjąć inaczej niż zmniejszając samo danie.
+   Dlatego dostaje własne pokrętło: gdy trzeba zejść z kaloriami, aplikacja zmniejsza
+   ser i nadrabia białko chudszym źródłem, zamiast zerować oliwę i się poddawać. */
+function kat(name,cat){
+  if(cat!=="B") return cat;
+  const n=NUTR[name];
+  if(!n||!n[1]) return "L";
+  return (n[2]/n[1] >= 0.75) ? "M" : "L";
 }
 
-/* układ 3 równań: białko / węgle / kalorie → współczynniki fB, fT, fW */
-function solve3(ids,tK,tB,tC){
-  const {B,T,W,X}=buckets(ids);
-  const A=[[B.b,T.b,W.b],[B.c,T.c,W.c],[B.k,T.k,W.k]];
-  const r=[tB-X.b, tC-X.c, tK-X.k];
+function buckets(ids){
+  const p=()=>({k:0,b:0,f:0,c:0,fb:0});
+  const kb={L:p(),M:p(),T:p(),W:p(),X:p()};
+  ids.forEach(id=>skladnikiDania(id).forEach(([n,g,cat])=>{
+    const t=kb[kat(n,cat)]; if(!t) return;
+    const v=nutr(n,g);
+    t.k+=v[0];t.b+=v[1];t.f+=v[2];t.c+=v[3];t.fb+=v[4];
+  }));
+  return kb;
+}
+
+/* układ trzech równań (białko / węgle / kalorie) przy ustalonym udziale tłustego białka */
+function solve3(kb,tK,tB,tC,fM){
+  const {L,M,T,W,X}=kb;
+  const A=[[L.b,T.b,W.b],[L.c,T.c,W.c],[L.k,T.k,W.k]];
+  const r=[tB-X.b-fM*M.b, tC-X.c-fM*M.c, tK-X.k-fM*M.k];
   const det=m=>
      m[0][0]*(m[1][1]*m[2][2]-m[1][2]*m[2][1])
     -m[0][1]*(m[1][0]*m[2][2]-m[1][2]*m[2][0])
     +m[0][2]*(m[1][0]*m[2][1]-m[1][1]*m[2][0]);
   const D=det(A);
-  const sub=(col)=>A.map((row,i)=>row.map((v,j)=>j===col?r[i]:v));
+  const sub=c=>A.map((row,i)=>row.map((v,j)=>j===c?r[i]:v));
   let f=[1,1,1];
-  if(Math.abs(D)>1e-6){ f=[0,1,2].map(c=>det(sub(c))/D); }
-  const CL=[[0.45,2.2],[0.30,2.6],[0.0,4.0]];   // limity: B, T, W
-  const clamped=f.map((v,i)=>!isFinite(v)?1:Math.min(CL[i][1],Math.max(CL[i][0],v)));
-  return {f:clamped, hit:clamped.map((v,i)=>Math.abs(v-f[i])>0.001)};
+  if(Math.abs(D)>1e-6) f=[0,1,2].map(c=>det(sub(c))/D);
+  const CL=[[0.40,2.6],[0.25,2.6],[0,4.0]];
+  const cl=f.map((v,i)=>!isFinite(v)?1:Math.min(CL[i][1],Math.max(CL[i][0],v)));
+  return {f:cl, hit:cl.map((v,i)=>Math.abs(v-f[i])>0.001)};
 }
 
-/* zaokrąglenie gramatury do sensownych wartości */
-function okragle(g,name){
-  if(g<4) return 0;                                    // ponizej tego nie ma co wazyc
-  if(g<12) return Math.round(g);
-  if(g<40) return Math.round(g/2.5)*2.5;
-  if(name==="Jajka") return Math.round(g/27.5)*27.5;   // pół jajka
-  return Math.round(g/5)*5;
-}
+const kcalZ=(kb,f,fM)=>kb.X.k + f[0]*kb.L.k + fM*kb.M.k + f[1]*kb.T.k + f[2]*kb.W.k;
 
-/* źródło dodatkowych węgli na trening — dobrane do tego, co już jest w posiłku */
-const CARBSRC=["Ryż basmati (suchy)","Batat","Ziemniaki","Płatki jaglane"];
-function bonusSkladnik(mealId,gramyWegli){
-  const m=MEALS[mealId];
-  let src=m.i.find(([n,,c])=>c==="W"&&CARBSRC.includes(n));
-  const name=src?src[0]:"Ryż basmati (suchy)";
-  const per=NUTR[name][3]/100;
-  return [name, Math.round(gramyWegli/per/5)*5];
+/* Bisekcja szuka NAJWIĘKSZEGO fM, przy którym kalorie jeszcze się mieszczą —
+   czyli najmniejszego możliwego cięcia sera. Dania nie okrawamy bardziej, niż trzeba. */
+function dopasuj(ids,tK,tB,tC){
+  const kb=buckets(ids);
+  const pelne=solve3(kb,tK,tB,tC,1);
+  if(!kb.M.k || kcalZ(kb,pelne.f,1)<=tK+40)
+    return {...pelne,fM:1,ciecie:0,kb};
+  let lo=0.35, hi=1.0;
+  for(let i=0;i<26;i++){
+    const mid=(lo+hi)/2;
+    if(kcalZ(kb,solve3(kb,tK,tB,tC,mid).f,mid)>tK) hi=mid; else lo=mid;
+  }
+  const s=solve3(kb,tK,tB,tC,lo);
+  return {...s,fM:lo,ciecie:1-lo,kb};
 }
 
 /* cele dnia: puste pole = z formuły, wypełnione = wprost od użytkownika */
@@ -791,29 +839,49 @@ function cele(prof,trening){
   const B = mB || Math.round(prof.weight*prof.gkg);
   const W = (mW || prof.carb) + bonusC;
   const K = mT ? Math.round(B*4 + mT*9 + W*4)
-              : prof.kcal + Math.round(bonusC*4);
-  return {B,W,K,Tfix:mT||null,
-          reczne:{B:!!mB,T:!!mT,W:!!mW}};
+               : prof.kcal + Math.round(bonusC*4);
+  return {B,W,K,Tfix:mT||null,reczne:{B:!!mB,T:!!mT,W:!!mW}};
 }
 
-/* ile węgli zostaje, gdy zupełnie wyzerować ryż/batat/ziemniaki */
-function podlogaW(ids,f){
-  const {B,T,W,X}=buckets(ids);
-  return X.c + B.c*f[0] + T.c*f[1];
+/* ile węgli zostaje, gdy zupełnie wyzerować ryż, batata i ziemniaki */
+function podlogaW(ids,f,fM){
+  const {L,M,T,X}=buckets(ids);
+  return X.c + L.c*f[0] + M.c*fM + T.c*f[1];
 }
+
+/* zaokrąglenie gramatury do wartości, które da się odmierzyć */
+function okragle(g,name){
+  if(g<4) return 0;                                  // poniżej tego nie ma co ważyć
+  if(g<12) return Math.round(g);
+  if(g<40) return Math.round(g/2.5)*2.5;
+  if(name==="Jajka") return Math.round(g/27.5)*27.5; // pół jajka
+  return Math.round(g/5)*5;
+}
+
+/* źródło dodatkowych węgli na trening — dobrane do tego, co już jest w posiłku */
+const CARBSRC=["Ryż basmati (suchy)","Batat","Ziemniaki","Płatki jaglane"];
+function bonusSkladnik(mealId,gramyWegli){
+  const src=skladnikiDania(mealId).find(([n,,c])=>c==="W"&&CARBSRC.includes(n));
+  const name=src?src[0]:"Ryż basmati (suchy)";
+  return [name, Math.round(gramyWegli/(NUTR[name][3]/100)/5)*5];
+}
+
+const SUMA0=()=>({k:0,b:0,f:0,c:0,fb:0});
+const dodaj=(a,s)=>({k:a.k+s.m[0],b:a.b+s.m[1],f:a.f+s.m[2],c:a.c+s.m[3],fb:a.fb+s.m[4]});
 
 /* pełne przeliczenie dnia */
 function przelicz(dayIdx,pick,prof){
   const D=DAYS[dayIdx];
-  const ids=[D.s[pick.s],D.o[pick.o],D.k[pick.k]];
-  if(pick.su&&SUROWKI[pick.su]) ids.push(pick.su);   // surówka wchodzi do układu równań
-  if(pick.or&&ORZECHY[pick.or]) ids.push(pick.or);   // orzechy tak samo
+  const ids=[opcje(dayIdx,"s")[pick.s],opcje(dayIdx,"o")[pick.o],opcje(dayIdx,"k")[pick.k]];
+  if(pick.su&&SUROWKI[pick.su]) ids.push(pick.su);
+  if(pick.or&&ORZECHY[pick.or]) ids.push(pick.or);
+
   const trening=!!prof.train[dayIdx];
   const bonusC=trening?prof.bonus:0;
   const C=cele(prof,trening);
   const tB=C.B, tK=C.K;
 
-  // dodatkowa porcja okołotreningowa liczona PRZED układem równań,
+  // porcja okołotreningowa liczona PRZED układem równań,
   // żeby jej własne białko i kalorie nie rozjechały reszty dnia
   let extra=null, slot=-1;
   if(trening&&bonusC>0){
@@ -823,60 +891,70 @@ function przelicz(dayIdx,pick,prof){
   }
   const eK=extra?extra.m[0]:0, eB=extra?extra.m[1]:0, eC=extra?extra.m[3]:0;
 
-  const {f,hit}=solve3(ids, tK-eK, tB-eB, C.W-eC);
+  const {f,hit,fM,ciecie}=dopasuj(ids, tK-eK, tB-eB, C.W-eC);
+  const wsp={L:f[0],M:fM,T:f[1],W:f[2],X:1};
 
   const posilki=ids.map((id,i)=>{
     const m=DANIE[id];
-    const skl=m.i.map(([n,g,cat])=>{
-      const fx={B:f[0],T:f[1],W:f[2],X:1}[cat];
-      const gg=okragle(g*fx,n);
-      return {n,g:gg,cat,u:jednostka(n,gg),m:nutr(n,gg)};
+    const skl=skladnikiDania(id).map(([n,g,cat,zam])=>{
+      const k2=kat(n,cat), gg=okragle(g*wsp[k2],n);
+      return {n,g:gg,cat,kat:k2,zam,u:jednostka(n,gg),m:nutr(n,gg)};
     });
-    return {id,...m,skl,side:!!SUROWKI[id],extra:i===slot?extra:null};
+    const ex=i===slot?extra:null;
+    const sum=(ex?[...skl,ex]:skl).reduce(dodaj,SUMA0());
+    return {id,...m,skl,sum,side:!!SUROWKI[id],nuts:!!ORZECHY[id],extra:ex};
   });
 
   const sum=posilki.reduce((a,p)=>{
-    (p.extra?[...p.skl,p.extra]:p.skl).forEach(s=>{
-      a.k+=s.m[0];a.b+=s.m[1];a.f+=s.m[2];a.c+=s.m[3];a.fb+=s.m[4];});
-    return a;
-  },{k:0,b:0,f:0,c:0,fb:0});
+    const s=p.sum;
+    return {k:a.k+s.k,b:a.b+s.b,f:a.f+s.f,c:a.c+s.c,fb:a.fb+s.fb};
+  },SUMA0());
 
   // uczciwe raportowanie rozjazdu zamiast cichego przycięcia
   const cel={k:tK,b:tB,c:C.W};
   const bledy=[];
-  if(Math.abs(sum.k-cel.k)>70)
-    bledy.push({co:"kcal",jest:sum.k,cel:cel.k});
-  if(Math.abs(sum.b-cel.b)>10)
-    bledy.push({co:"białko",jest:sum.b,cel:cel.b});
-  if(Math.abs(sum.c-cel.c)>8)
-    bledy.push({co:"węglowodany",jest:sum.c,cel:cel.c});
+  if(Math.abs(sum.k-cel.k)>70) bledy.push({co:"kcal",jest:sum.k,cel:cel.k});
+  if(Math.abs(sum.b-cel.b)>10) bledy.push({co:"białko",jest:sum.b,cel:cel.b});
+  if(Math.abs(sum.c-cel.c)>8)  bledy.push({co:"węglowodany",jest:sum.c,cel:cel.c});
 
   const udzT=sum.k?sum.f*9/sum.k:0, udzB=sum.k?sum.b*4/sum.k:0;
-  // tłuszcz "związany" — ten, który przychodzi razem z białkiem (sery, tłuste ryby)
-  const zTluszcz=posilki.map(p=>{
-    const t=(p.extra?[...p.skl,p.extra]:p.skl).filter(s=>s.cat==="B")
-      .reduce((a,s)=>a+s.m[2],0);
-    return {n:p.n,t};
-  }).sort((a,b)=>b.t-a.t);
-  return {posilki,sum,f,hit,trening,bonusC,slot,sufit:C.W,cel,bledy,reczne:C.reczne,
-          udzT,udzB,zTluszcz,podloga:podlogaW(ids,f)};
+
+  // które danie wnosi najwięcej tłuszczu związanego z białkiem
+  const zTluszcz=posilki.map(p=>({
+    n:p.n,
+    t:(p.extra?[...p.skl,p.extra]:p.skl).filter(s=>s.kat==="M").reduce((a,s)=>a+s.m[2],0)
+  })).sort((a,b)=>b.t-a.t);
+
+  // co zostało zmniejszone, żeby zmieścić się w kaloriach
+  const ciete=ciecie>0.03
+    ? posilki.flatMap(p=>{
+        const baza=Object.fromEntries(skladnikiDania(p.id).map(([n,g])=>[n,g]));
+        return p.skl.filter(s=>s.kat==="M"&&s.g>0)
+          .map(s=>({n:s.n,g:s.g,org:Math.round(baza[s.n]??s.g)}));})
+        .sort((a,b)=>(b.org-b.g)-(a.org-a.g))
+    : [];
+
+  return {posilki,sum,f,fM,ciecie,ciete,hit,trening,bonusC,slot,
+          sufit:C.W,cel,bledy,reczne:C.reczne,udzT,udzB,zTluszcz,
+          podloga:podlogaW(ids,f,fM)};
 }
 
 
 /* ══════════ STAN ══════════ */
-const WER="7";
+const WER="9";
 const KEY="dieta-keto-v2";
 let ST={
   pick:{}, check:{}, day:0,
   prof:{plec:"m",weight:85,kcal:2400,gkg:2.0,carb:55,bonus:40,pora:"po",train:[0,0,0,0,0,0,0],
         wiek:35,wzrost:178,akt:1.375,cel:1.0,kalk:false,
-        mB:"",mT:"",mW:""}
+        mB:"",mT:"",mW:"",motyw:"auto",nie:{}}
 };
 function load(){
   try{const r=localStorage.getItem(KEY);
     if(r){const p=JSON.parse(r);
       ST.pick=p.pick||{}; ST.check=p.check||{};
       ST.prof={...ST.prof,...(p.prof||{})};
+      ST.prof.nie=ST.prof.nie||{};
       if(!Array.isArray(ST.prof.train)||ST.prof.train.length!==7) ST.prof.train=[0,0,0,0,0,0,0];
     }}catch(e){}
   for(let i=0;i<7;i++){ if(!ST.pick[i]) ST.pick[i]={s:0,o:0,k:0};
@@ -886,8 +964,220 @@ function load(){
 }
 function save(){try{localStorage.setItem(KEY,JSON.stringify(ST))}catch(e){}}
 const dzien=i=>przelicz(i,ST.pick[i],ST.prof);
+
+/* auto = zgodnie z ustawieniem telefonu, jasny/ciemny = na sztywno */
+function ustawMotyw(){
+  const m=ST.prof.motyw||"auto";
+  const el=document.documentElement;
+  if(m==="auto") delete el.dataset.theme;
+  else el.dataset.theme = (m==="jasny"?"light":"dark");   // CSS używa angielskich nazw
+  const ciemny = m==="ciemny" || (m==="auto" &&
+    window.matchMedia && matchMedia("(prefers-color-scheme: dark)").matches);
+  document.querySelectorAll('meta[name="theme-color"]').forEach(t=>t.remove());
+  const t=document.createElement("meta");
+  t.name="theme-color"; t.content=ciemny?"#0E1417":"#F2EEE6";
+  document.head.appendChild(t);
+}
 const r1=n=>(Math.round(n*10)/10).toString().replace(".",",");
 const r0=n=>Math.round(n);
+
+/* ══════════ NIELUBIANE SKŁADNIKI ══════════ */
+/* Zamiennik musi pełnić tę samą rolę w daniu. Dlatego lista jest uporządkowana:
+   pierwszy pasuje najlepiej. Gramatura przelicza się tak, żeby zgadzał się
+   kluczowy makroskładnik — białko za białko, tłuszcz za tłuszcz, węgle za węgle. */
+const ZAMIENNIKI={
+ // białko chude
+ "Pierś z kurczaka":["Pierś z indyka","Dorsz, filet","Tuńczyk w sosie własnym"],
+ "Pierś z indyka":["Pierś z kurczaka","Dorsz, filet","Wołowina gulaszowa"],
+ "Dorsz, filet":["Łosoś, filet","Pierś z kurczaka","Tuńczyk w sosie własnym"],
+ "Łosoś, filet":["Dorsz, filet","Pierś z kurczaka","Pierś z indyka"],
+ "Tuńczyk w sosie własnym":["Makrela wędzona","Pierś z kurczaka","Dorsz, filet"],
+ "Łosoś wędzony":["Makrela wędzona","Tuńczyk w sosie własnym","Pierś z indyka"],
+ "Makrela wędzona":["Łosoś wędzony","Tuńczyk w sosie własnym","Dorsz, filet"],
+ "Twaróg półtłusty":["Skyr naturalny","Jogurt grecki 10%","Ser gouda"],
+ "Skyr naturalny":["Twaróg półtłusty","Jogurt grecki 10%"],
+ "Izolat białka wołowego":["Skyr naturalny","Twaróg półtłusty"],
+ // białko tłuste
+ "Feta":["Ser gouda","Camembert","Mozzarella","Twaróg półtłusty"],
+ "Ser gouda":["Camembert","Mozzarella","Feta"],
+ "Camembert":["Ser gouda","Mozzarella","Feta"],
+ "Mozzarella":["Ser gouda","Feta","Camembert"],
+ "Parmezan":["Ser gouda","Camembert"],
+ "Wołowina mielona 15%":["Wołowina gulaszowa","Pierś z indyka","Pierś z kurczaka"],
+ "Wołowina gulaszowa":["Wołowina mielona 15%","Pierś z indyka"],
+ "Jajka":["Twaróg półtłusty","Ser gouda","Pierś z kurczaka"],
+ // tłuszcze
+ "Oliwa z oliwek":["Olej z awokado","Masło klarowane","Olej lniany"],
+ "Olej z awokado":["Oliwa z oliwek","Masło klarowane"],
+ "Olej lniany":["Oliwa z oliwek","Olej z awokado"],
+ "Masło klarowane":["Oliwa z oliwek","Olej z awokado"],
+ "Awokado":["Orzechy makadamia","Oliwki","Orzechy włoskie"],
+ "Oliwki":["Awokado","Orzechy makadamia","Pestki dyni"],
+ "Śmietana 30%":["Jogurt grecki 10%","Mascarpone","Mleczko kokosowe"],
+ "Jogurt grecki 10%":["Śmietana 30%","Skyr naturalny","Mascarpone"],
+ "Mascarpone":["Śmietana 30%","Jogurt grecki 10%","Mleczko kokosowe"],
+ "Mleczko kokosowe":["Śmietana 30%","Jogurt grecki 10%","Mascarpone"],
+ "Majonez":["Jogurt grecki 10%","Śmietana 30%","Oliwa z oliwek"],
+ "Masło orzechowe 100%":["Migdały","Orzechy włoskie","Orzechy laskowe"],
+ "Migdały":["Orzechy laskowe","Orzechy włoskie","Orzechy pekan","Pestki dyni"],
+ "Orzechy włoskie":["Orzechy laskowe","Orzechy pekan","Migdały"],
+ "Orzechy laskowe":["Migdały","Orzechy włoskie","Orzechy pekan"],
+ "Orzechy makadamia":["Orzechy pekan","Orzechy laskowe","Migdały"],
+ "Orzechy pekan":["Orzechy makadamia","Orzechy laskowe","Orzechy włoskie"],
+ "Orzechy brazylijskie":["Orzechy laskowe","Migdały"],
+ "Pistacje":["Migdały","Orzechy laskowe"],
+ "Pestki dyni":["Pestki słonecznika","Migdały","Orzechy włoskie"],
+ "Pestki słonecznika":["Pestki dyni","Migdały"],
+ "Nasiona chia":["Siemię lniane mielone"],
+ "Siemię lniane mielone":["Nasiona chia","Pestki słonecznika"],
+ // węglowodany
+ "Ryż basmati (suchy)":["Batat","Ziemniaki","Płatki jaglane"],
+ "Batat":["Ziemniaki","Ryż basmati (suchy)"],
+ "Ziemniaki":["Batat","Ryż basmati (suchy)"],
+ "Płatki jaglane":["Ryż basmati (suchy)"],
+ // warzywa
+ "Pomidor":["Papryka czerwona","Ogórek","Rzodkiewka"],
+ "Papryka czerwona":["Pomidor","Cukinia","Marchew"],
+ "Ogórek":["Rzodkiewka","Cukinia","Papryka czerwona"],
+ "Rzodkiewka":["Ogórek","Papryka czerwona"],
+ "Cukinia":["Kalafior","Brokuły","Papryka czerwona"],
+ "Brokuły":["Kalafior","Cukinia","Szpinak"],
+ "Kalafior":["Brokuły","Cukinia"],
+ "Szpinak":["Rukola","Sałata rzymska","Brokuły"],
+ "Rukola":["Sałata rzymska","Szpinak"],
+ "Sałata rzymska":["Rukola","Szpinak"],
+ "Pieczarki":["Cukinia","Papryka czerwona"],
+ "Cebula":["Szczypiorek","Papryka czerwona"],
+ "Szczypiorek":["Koperek","Cebula"],
+ "Koperek":["Szczypiorek"],
+ "Kapusta kiszona":["Kapusta biała"],
+ "Kapusta biała":["Kapusta kiszona","Kalafior"],
+ "Seler korzeniowy":["Marchew","Kapusta biała"],
+ "Marchew":["Papryka czerwona","Seler korzeniowy"],
+ "Passata pomidorowa":["Pomidor"],
+ // owoce
+ "Maliny":["Jeżyny","Truskawki","Borówki"],
+ "Borówki":["Jeżyny","Maliny","Truskawki"],
+ "Truskawki":["Maliny","Jeżyny","Borówki"],
+ "Jeżyny":["Maliny","Borówki","Truskawki"],
+ "Kakao 100%":[]
+};
+
+/* Składniki, które można po prostu pominąć — dodatki smakowe, nie fundament dania */
+const POMIJALNE=new Set(["Kakao 100%","Koperek","Szczypiorek","Oliwki","Rukola","Cebula","Marchew"]);
+
+/* Bez tych składników danie przestaje być sobą — wtedy zamiast przebudowy wypada z rotacji */
+const NIEZBEDNE={s3:["Jajka"],s5:["Jajka"],s6:["Jajka"],ks2:["Nasiona chia"],su3:["Ogórek"]};
+
+const GRUPA={};
+[["Mięso i ryby",["Pierś z kurczaka","Pierś z indyka","Wołowina mielona 15%","Wołowina gulaszowa","Łosoś, filet","Dorsz, filet","Łosoś wędzony","Makrela wędzona","Tuńczyk w sosie własnym"]],
+ ["Nabiał i jaja",["Jajka","Feta","Ser gouda","Camembert","Mozzarella","Parmezan","Twaróg półtłusty","Skyr naturalny","Jogurt grecki 10%","Śmietana 30%","Mascarpone","Izolat białka wołowego"]],
+ ["Warzywa",["Pomidor","Papryka czerwona","Ogórek","Rzodkiewka","Cukinia","Brokuły","Kalafior","Szpinak","Rukola","Sałata rzymska","Pieczarki","Cebula","Kapusta kiszona","Kapusta biała","Seler korzeniowy","Marchew","Passata pomidorowa","Szczypiorek","Koperek","Awokado","Oliwki"]],
+ ["Owoce",["Maliny","Borówki","Truskawki","Jeżyny"]],
+ ["Orzechy i nasiona",["Migdały","Orzechy włoskie","Orzechy laskowe","Orzechy makadamia","Orzechy pekan","Orzechy brazylijskie","Pistacje","Pestki dyni","Pestki słonecznika","Nasiona chia","Siemię lniane mielone","Masło orzechowe 100%"]],
+ ["Tłuszcze i sosy",["Oliwa z oliwek","Olej z awokado","Olej lniany","Masło klarowane","Mleczko kokosowe","Majonez"]],
+ ["Węglowodany",["Ryż basmati (suchy)","Batat","Ziemniaki","Płatki jaglane","Kakao 100%"]]
+].forEach(([g,lista])=>lista.forEach(n=>GRUPA[n]=g));
+
+const nieLubi=n=>!!(ST.prof.nie&&ST.prof.nie[n]);
+
+/* Który makroskładnik decyduje o przeliczeniu porcji zamiennika */
+function rolaIdx(cat){ return cat==="B"?1 : cat==="T"?2 : cat==="W"?3 : -1; }
+
+/* Zwraca [nazwa, gramy] po ewentualnej podmianie, albo null gdy składnik odpada,
+   albo "STOP" gdy nie ma czym zastąpić czegoś niezbędnego. */
+function podmien(n,g,cat){
+  if(!nieLubi(n)) return [n,g,null];
+  const lista=ZAMIENNIKI[n]||[];
+  for(const z of lista){
+    if(nieLubi(z)||!NUTR[z]) continue;
+    const i=rolaIdx(cat);
+    let gg=g;
+    if(i>0){
+      const zrod=NUTR[n][i], cel=NUTR[z][i];
+      gg = cel>0 ? g*zrod/cel : g;
+    }
+    return [z,Math.min(gg,g*3),n];      // limit, żeby zamiennik nie urósł absurdalnie
+  }
+  return POMIJALNE.has(n) ? null : "STOP";
+}
+
+/* Ile dania niesie dany składnik — po tym poznajemy, czy jest jego fundamentem */
+function udzialW(id,nazwa){
+  const d=DANIE[id];
+  let kc=0,bi=0,kcAll=0,biAll=0;
+  d.i.forEach(([n,g])=>{
+    const v=nutr(n,g); kcAll+=v[0]; biAll+=v[1];
+    if(n===nazwa){kc+=v[0];bi+=v[1];}
+  });
+  return {kc:kcAll?kc/kcAll:0, bi:biAll?bi/biAll:0};
+}
+
+/* Danie wypada z rotacji tylko wtedy, gdy nielubiany składnik jest jego FUNDAMENTEM:
+   widnieje w nazwie i niesie dużą część dania. Jajka w „Jajecznicy" — tak.
+   Jajka w „Desce śniadaniowej — sery, jajka i warzywa" — nie, tam wystarczy podmiana. */
+function daSie(id){
+  const d=DANIE[id]; if(!d) return false;
+  const tytul=d.n.toLowerCase();
+  for(const [n,,cat] of d.i){
+    if(!nieLubi(n)) continue;
+    if((NIEZBEDNE[id]||[]).includes(n)) return false;
+    const rdzen=n.toLowerCase().split(/[\s,]+/)[0].slice(0,3);
+    if(rdzen.length>=3 && tytul.includes(rdzen)){
+      const u=udzialW(id,n);
+      if(u.kc>=0.35 || u.bi>=0.45) return false;
+    }
+    if(podmien(n,1,cat)==="STOP") return false;
+  }
+  return true;
+}
+
+/* Składniki dania po przebudowie */
+function skladnikiDania(id){
+  const out=[];
+  for(const [n,g,cat] of DANIE[id].i){
+    const r=podmien(n,g,cat);
+    if(r===null) continue;
+    if(r==="STOP") return DANIE[id].i.map(([a,b,c])=>[a,b,c,null]);
+    out.push([r[0],r[1],cat,r[2]]);
+  }
+  return out;
+}
+
+/* Pule dań na wypadek, gdyby oba warianty dnia wypadły */
+const PULE={
+  s:["s1","s2","s3","s4","s5","s6","s7"],
+  o:["o1","o2","o3","o4","o5","o6"],
+  ks:["ks1","ks2","ks3","ks4"],
+  kw:["kw1","kw2","kw3","kw4","kw5"]
+};
+const typK=id=>MEALS[id]&&MEALS[id].sw?"ks":"kw";
+
+/* Dwa warianty slotu po uwzględnieniu wykluczeń — słodka zostaje słodką */
+function opcje(dayIdx,key){
+  const bazowe=DAYS[dayIdx][key];
+  const uzyte=new Set();
+  return bazowe.map(id=>{
+    if(daSie(id)){uzyte.add(id);return id;}
+    const pula = key==="k" ? PULE[typK(id)] : PULE[key];
+    const zast = pula.find(x=>!uzyte.has(x)&&!bazowe.includes(x)&&daSie(x));
+    if(zast){uzyte.add(zast);return zast;}
+    return id;                                   // nic nie zostało — pokaż oryginał
+  });
+}
+
+/* Podsumowanie skutków wykluczeń */
+function skutki(){
+  const nie=Object.keys(ST.prof.nie||{}).filter(n=>ST.prof.nie[n]);
+  if(!nie.length) return null;
+  const wypadly=[],przebudowane=[];
+  Object.keys(DANIE).forEach(id=>{
+    const d=DANIE[id];
+    if(!daSie(id)){wypadly.push(d.n);return;}
+    if(d.i.some(([n])=>nieLubi(n))) przebudowane.push(d.n);
+  });
+  return {nie,wypadly,przebudowane};
+}
 
 /* ══════════ CO ZMIENIA PŁEĆ ══════════ */
 /* Płeć nie skaluje porcji — to robi waga. Wchodzi w trzech realnych miejscach:
@@ -956,8 +1246,8 @@ function renderPlan(){
       const zaDuzo=b.jest>b.cel;
       const zwiazany=r.hit[1]&&r.f[1]<0.5;
       const winny=r.zTluszcz[0];
-      if(zaDuzo&&zwiazany&&winny&&winny.t>25){
-        tekst=`<b>Ten zestaw nie zejdzie poniżej ${r0(b.jest)} kcal.</b> Oliwa i masło są już praktycznie wyzerowane — reszta tłuszczu siedzi <b>w samym białku</b>, najwięcej w daniu „${winny.n}" (${r0(winny.t)} g tłuszczu z sera lub tłustej ryby). Tego nie da się odjąć, nie zmieniając dania.<br>Zamień na chudsze białko: dorsz, pierś z kurczaka, indyk, tuńczyk albo twaróg.`;
+      if(zaDuzo&&winny&&winny.t>25){
+        tekst=`<b>Ten zestaw nie zejdzie poniżej ${r0(b.jest)} kcal.</b> Tłuszcze dodane są wyzerowane, a tłuste białko zmniejszone o ${r0(r.ciecie*100)}% — to granica, poniżej której z dania nic już nie zostaje. Najwięcej związanego tłuszczu ma „${winny.n}" (${r0(winny.t)} g).<br>Zamień to danie na chudsze białko: dorsz, pierś z kurczaka, indyk, tuńczyk albo twaróg.`;
       }else if(zaDuzo){
         tekst=`<b>Kaloryczność nie schodzi do celu.</b> Ten zestaw daje ${r0(b.jest)} kcal zamiast ${r0(b.cel)}. Przy ${P.weight} kg i ${r1(P.gkg)} g białka/kg samo białko to ${r0(cele(P,false).B*4)} kcal — na ${r0(b.cel)} kcal nie zostaje miejsca na tłuszcz potrzebny do keto. Podnieś zapotrzebowanie albo zejdź do 1,6 g/kg.`;
       }else{
@@ -984,6 +1274,10 @@ function renderPlan(){
     f+=`<div class="flag">${ikoWarn()}<div><b>${P.carb} g węglowodanów przy treningach to u kobiet ryzykowne połączenie.</b> Bardzo niska podaż węglowodanów razem z wysiłkiem zaburza oś podwzgórze–przysadka–jajnik. Zostań przy 60–70 g i korzystaj z puli okołotreningowej.</div></div>`;
   if(!r.bledy.length&&r.udzT<0.50)
     f+=`<div class="flag">${ikoWarn()}<div><b>Tłuszcz to tylko ${r0(r.udzT*100)}% kalorii — to już nie jest keto.</b> Przy ${P.weight} kg i ${r1(P.gkg)} g/kg samo białko zjada ${r0(r.udzB*100)}% energii. Podnieś zapotrzebowanie albo zejdź do 1,6 g/kg.</div></div>`;
+  if(r.ciecie>0.03&&r.ciete.length){
+    const lista=r.ciete.slice(0,3).map(c=>`${c.n.toLowerCase()} ${r1(c.org)} → <b>${r1(c.g)} g</b>`).join(", ");
+    f+=`<div class="flag tip">${ikoTip()}<div>Żeby zmieścić się w ${r0(r.cel.k)} kcal, zmniejszyłem tłuste białko o <b>${r0(r.ciecie*100)}%</b>: ${lista}. Białko nadrabiają chudsze składniki, więc suma ${r0(r.sum.b)} g została utrzymana.</div></div>`;
+  }
   if(s.fb<22)
     f+=`<div class="flag tip">${ikoTip()}<div>Błonnik dziś niski (${r1(s.fb)} g). Dorzuć 15 g siemienia lnianego albo dodatkową porcję brokułów.</div></div>`;
   if(r.trening&&r.slot>=0){
@@ -994,17 +1288,18 @@ function renderPlan(){
 
   /* sloty */
   slots.innerHTML=SLOTS.map((S,si)=>{
-    const ids=DAYS[ST.day][S.key], sel=ST.pick[ST.day][S.key];
+    const ids=opcje(ST.day,S.key), sel=ST.pick[ST.day][S.key];
     return `<div class="slot">
       <div class="slot-h"><h2>${S.t}</h2><span class="hint">${S.hint}</span></div>
       <div class="opts">${ids.map((id,n)=>{
         const m=MEALS[id];
-        const v=n===sel?r.posilki[si]:podglad(id,r.f);
+        const v=n===sel?r.posilki[si].sum:podglad(id,r.f,r.fM);
         return `<button class="opt${n===sel?" on":""}" data-slot="${S.key}" data-n="${n}">
           ${m.sw?'<span class="tag sw">na słodko</span>':""}${m.sav?'<span class="tag sav">wytrawna</span>':""}
           <span class="opt-n">${m.n}</span>
           <span class="opt-meta"><span class="kcal">${r0(v.k)}</span> kcal · ${m.t}</span>
           <span class="opt-carb"><i></i>${r1(v.c)} g węgli</span>
+          ${DANIE[id].i.some(([n])=>nieLubi(n))?'<span class="opt-zam">przebudowane</span>':""}
           <span class="opt-see" data-rec="${id}">przepis</span>
         </button>`;}).join("")}</div></div>`;
   }).join("")+renderSur(r)+renderOrz(r);
@@ -1019,7 +1314,7 @@ function renderOrz(r){
       const o=id?ORZECHY[id]:null;
       if(!o) return `<button class="sur${id===cur?" on":""}" data-or="">
         <span class="sn">Bez orzechów</span></button>`;
-      const v=podglad(id,r.f);
+      const v=podglad(id,r.f,r.fM);
       return `<button class="sur nut${id===cur?" on":""}" data-or="${id}">
         <span class="sn">${o.n}</span>
         <span class="sw">${r0(v.k)} kcal · ${r1(v.c)} g W</span></button>`;
@@ -1035,7 +1330,7 @@ function renderSur(r){
     <div class="slot-h"><h2>Surówka</h2><span class="hint">dodatek do obiadu lub kolacji</span></div>
     <div class="surrow">${opcje.map(id=>{
       const s=id?SUROWKI[id]:null;
-      const w=s?podglad(id,r.f).c:0;
+      const w=s?podglad(id,r.f,r.fM).c:0;
       return `<button class="sur${id===cur?" on":""}" data-su="${id}">
         <span class="sn">${s?s.n.replace(/^Surówka (z |ze )?/,"").replace(/^./,c=>c.toUpperCase()):"Bez surówki"}</span>
         ${s?`<span class="sw">${r1(w)} g W</span>`:""}</button>`;
@@ -1044,11 +1339,12 @@ function renderSur(r){
   </div>`;
 }
 /* szybkie makro alternatywy przy tych samych współczynnikach */
-function podglad(id,f){
-  return DANIE[id].i.reduce((a,[n,g,cat])=>{
-    const v=nutr(n,okragle(g*{B:f[0],T:f[1],W:f[2],X:1}[cat],n));
+function podglad(id,f,fM){
+  const wsp={L:f[0],M:fM,T:f[1],W:f[2],X:1};
+  return skladnikiDania(id).reduce((a,[n,g,cat])=>{
+    const v=nutr(n,okragle(g*wsp[kat(n,cat)],n));
     return {k:a.k+v[0],b:a.b+v[1],f:a.f+v[2],c:a.c+v[3],fb:a.fb+v[4]};
-  },{k:0,b:0,f:0,c:0,fb:0});
+  },SUMA0());
 }
 
 /* ══════════ ZAKUPY ══════════ */
@@ -1110,7 +1406,7 @@ function renderRecs(){
            ["Orzechy",Object.keys(ORZECHY)]];
   recSub.textContent=`Gramatury przeliczone pod ${ST.prof.weight} kg i ${ST.prof.kcal} kcal, w proporcjach z ${DAYS[ST.day].full.toLowerCase()}.`;
   recs.innerHTML=G.map(([t,ids])=>`<div class="rgroup"><h3>${t}</h3>${
-    ids.map(id=>{const v=podglad(id,r.f);return `<button class="rlink" data-rec="${id}">
+    ids.map(id=>{const v=podglad(id,r.f,r.fM);return `<button class="rlink" data-rec="${id}">
       <span class="rn">${DANIE[id].n}</span>
       <span class="rq">${r0(v.k)} kcal · ${r1(v.c)} g W</span>
       <svg width="7" height="11" viewBox="0 0 7 11" fill="none"><path d="M1 1l5 4.5L1 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1123,7 +1419,7 @@ function openRec(id){
   const wybrany=r.posilki.find(p=>p.id===id);
   const m=DANIE[id];
   const skl=wybrany?wybrany.skl:m.i.map(([n,g,cat])=>{
-    const gg=okragle(g*{B:r.f[0],T:r.f[1],W:r.f[2],X:1}[cat],n);
+    const gg=okragle(g*{L:r.f[0],M:r.fM,T:r.f[1],W:r.f[2],X:1}[kat(n,cat)],n);
     return {n,g:gg,cat,u:jednostka(n,gg),m:nutr(n,gg)};
   });
   const extra=wybrany?wybrany.extra:null;
@@ -1133,8 +1429,11 @@ function openRec(id){
   sheetIn.innerHTML=`<h2>${m.n}</h2>
     <div class="sheet-meta"><span>${m.t}</span><span>${r0(t[0])} kcal</span>
       <span>gramatura pod ${ST.prof.weight} kg</span></div>
+    ${skl.some(s=>s.zam)?`<div class="zamhdr">${ikoTip()}<div>Przebudowane pod Twoje gusta:
+      ${skl.filter(s=>s.zam).map(s=>`<b>${s.n.toLowerCase()}</b> zamiast ${s.zam.toLowerCase()}`).join(", ")}.
+      Nazwa dania została oryginalna, gramatura przeliczona tak, żeby zgadzał się ten sam makroskładnik.</div></div>`:""}
     <table><thead><tr><th>Składnik</th><th>Gramy</th><th></th></tr></thead><tbody>
-    ${skl.filter(s=>s.g>0).map(s=>`<tr><td>${s.n}</td><td>${r1(s.g)} g</td><td>${s.u}</td></tr>`).join("")}
+    ${skl.filter(s=>s.g>0).map(s=>`<tr${s.zam?' class="zam"':""}><td>${s.n}${s.zam?`<small>zamiast: ${s.zam.toLowerCase()}</small>`:""}</td><td>${r1(s.g)} g</td><td>${s.u}</td></tr>`).join("")}
     ${extra?`<tr class="xtra"><td>${extra.n}<small>dodatek okołotreningowy</small></td><td>${r0(extra.g)} g</td><td>${extra.u}</td></tr>`:""}
     </tbody></table>
     <p class="how">${m.h}</p>
@@ -1157,7 +1456,7 @@ const SEG=(id,val,opts,fmt)=>`<div class="seg" data-seg="${id}">${
 function renderJa(){
   const P=ST.prof;
   wInp.value=P.weight; kInp.value=P.kcal; aInp.value=P.wiek; hInp.value=P.wzrost;
-  renderSegs(); renderKalk(); renderMakro();
+  renderSegs(); renderKalk(); renderMakro(); renderGusta();
 }
 
 const SEG2=(id,val,opts,fmt,rec)=>`<div class="seg" data-seg="${id}">${
@@ -1195,7 +1494,13 @@ function renderSegs(){
   plecBox.innerHTML=
     `<div class="fld"><label>Płeć</label>
        ${SEG("plec",P.plec,["m","k"],v=>v==="m"?"Mężczyzna":"Kobieta")}
-       <p class="note">Nie zmienia wielkości porcji — to robi waga. Wpływa na wzór szacowania zapotrzebowania, na wartości zalecane poniżej i na progi ostrzeżeń.</p></div>`;
+       <p class="note">Nie zmienia wielkości porcji — to robi waga. Wpływa na wzór szacowania zapotrzebowania, na wartości zalecane poniżej i na progi ostrzeżeń.</p></div>
+
+     <div class="fld"><label>Wygląd</label>
+       ${SEG("motyw",P.motyw||"auto",["auto","jasny","ciemny"],v=>({auto:"Automatycznie",jasny:"Jasny",ciemny:"Ciemny"})[v])}
+       <p class="note">${(P.motyw||"auto")==="auto"
+         ? "Aplikacja idzie za ustawieniem telefonu — ciemna w nocy, jasna w dzień."
+         : "Ustawione na sztywno, niezależnie od telefonu."}</p></div>`;
 
   segs.innerHTML=
     `     <div class="fld"><label>Białko na kilogram masy ciała</label>
@@ -1217,6 +1522,34 @@ function renderSegs(){
        <p class="note">Dodatkowa porcja ląduje w posiłku <b>po</b> treningu — ${P.pora==="rano"?"w obiedzie":"w kolacji"}.</p></div>`;
 
   renderCele(); renderTyg();
+}
+
+function renderGusta(){
+  const nie=ST.prof.nie||{};
+  const uzyte=new Set();
+  Object.values(DANIE).forEach(d=>d.i.forEach(([n])=>uzyte.add(n)));
+  const grupy={};
+  [...uzyte].forEach(n=>{const g=GRUPA[n]||"Pozostałe";(grupy[g]=grupy[g]||[]).push(n);});
+  gusta.innerHTML=Object.keys(grupy).map(g=>`<div class="ggr">
+    <h4>${g}</h4>
+    <div class="gchips">${grupy[g].sort((a,b)=>a.localeCompare(b,"pl")).map(n=>
+      `<button class="gch${nie[n]?" off":""}" data-nie="${n.replace(/"/g,"&quot;")}">
+        ${nie[n]?'<svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>':""}
+        ${n}</button>`).join("")}</div></div>`).join("");
+
+  const s=skutki();
+  if(!s){ skutki_.innerHTML=""; return; }
+  const linie=[];
+  if(s.przebudowane.length)
+    linie.push(`<b>${s.przebudowane.length} dań przebudowanych</b> — składnik zamieniony, danie zostaje.`);
+  if(s.wypadly.length)
+    linie.push(`<b>${s.wypadly.length} dań wypadło</b> z rotacji, bo bez tego składnika przestają być sobą: ${s.wypadly.slice(0,4).join(", ")}${s.wypadly.length>4?" i inne":""}.`);
+  const zostalo={s:PULE.s.filter(daSie).length,o:PULE.o.filter(daSie).length,
+                 ks:PULE.ks.filter(daSie).length,kw:PULE.kw.filter(daSie).length};
+  const malo=Object.values(zostalo).some(v=>v<2);
+  linie.push(`Zostaje: ${zostalo.s} pierwszych posiłków, ${zostalo.o} obiadów, ${zostalo.ks} słodkich i ${zostalo.kw} wytrawnych kolacji.`);
+  skutki_.innerHTML=`<div class="flag ${malo?"":"tip"}" style="margin-top:12px">
+    ${malo?ikoWarn():ikoTip()}<div>${linie.join("<br>")}${malo?"<br><b>To już za mało na sensowną rotację</b> — odznacz coś, albo tydzień zrobi się monotonny.":""}</div></div>`;
 }
 
 function renderCele(){
@@ -1502,13 +1835,20 @@ document.addEventListener("click",e=>{
   if(or){ST.pick[ST.day].or=or.dataset.or;odswiez();return;}
   if(e.target.closest("#trnBtn")){
     ST.prof.train[ST.day]=ST.prof.train[ST.day]?0:1; odswiez(); return;}
+  const gn=e.target.closest("[data-nie]");
+  if(gn){
+    const n=gn.dataset.nie;
+    ST.prof.nie=ST.prof.nie||{};
+    if(ST.prof.nie[n]) delete ST.prof.nie[n]; else ST.prof.nie[n]=1;
+    save(); renderGusta(); renderCele(); renderTyg(); renderRail(); renderPlan(); return;}
   const tw=e.target.closest("[data-tw]");
   if(tw){const i=+tw.dataset.tw;ST.prof.train[i]=ST.prof.train[i]?0:1;save();renderJa();renderRail();return;}
   const sg=e.target.closest(".sg");
   if(sg){
     const k=sg.closest("[data-seg]").dataset.seg, v=sg.dataset.v;
-    ST.prof[k]=(k==="pora"||k==="plec")?v:parseFloat(v);
-    save(); odswiezJa(); renderRail(); renderPlan(); return;}
+    ST.prof[k]=(k==="pora"||k==="plec"||k==="motyw")?v:parseFloat(v);
+    save(); if(k==="motyw")ustawMotyw();
+    odswiezJa(); renderRail(); renderPlan(); return;}
   if(e.target.closest("#kalkUse")){
     ST.prof.kcal=szacuj(ST.prof); save();
     kInp.value=ST.prof.kcal; renderRail(); renderPlan(); odswiezJa();
@@ -1528,7 +1868,7 @@ scrim.onclick=closeRec; sheetX.onclick=closeRec;
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeRec()});
 
 function odswiezJa(){
-  renderSegs(); renderKalk(); renderMakro(); renderCele(); renderTyg();
+  renderSegs(); renderKalk(); renderMakro(); renderGusta(); renderCele(); renderTyg();
 }
 function num(el,key,min,max,puste){
   el.addEventListener("input",()=>{
@@ -1585,8 +1925,13 @@ function pokazUpdate(){
 }
 
 /* ══════════ START ══════════ */
+if(window.matchMedia){
+  const mq=matchMedia("(prefers-color-scheme: dark)");
+  const on=()=>{ if((ST.prof.motyw||"auto")==="auto") ustawMotyw(); };
+  mq.addEventListener ? mq.addEventListener("change",on) : mq.addListener(on);
+}
 document.getElementById("wer").textContent=`Wersja ${WER} — jeśli nie widzisz wyboru płci na górze tej zakładki, masz starszą wersję w pamięci telefonu.`;
-load(); renderRail(); renderPlan(); renderTabs(); renderPomoc();
+load(); ustawMotyw(); renderRail(); renderPlan(); renderTabs(); renderPomoc();
 
 </script>
 </body>

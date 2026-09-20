@@ -87,6 +87,29 @@ Jeśli nie znasz swojej liczby, w zakładce Ja rozwija się kalkulator: wiek, wz
 Liczy wzorem Mifflina–St Jeora z mnożnikiem aktywności i korektą celu (−15% redukcja, +10% masa).
 Wynik to szacunek z przedziałem błędu około ±10% — punkt wyjścia, nie wyrocznia.
 
+## Czego nie lubię
+
+W zakładce Ja zaznaczasz składniki, których nie chcesz jeść. Aplikacja **przebudowuje przepisy**,
+a nie chowa dania:
+
+- **Podmiana** — składnik zostaje zamieniony na równoważny z tej samej roli, a gramatura
+  przelicza się tak, żeby zgadzał się ten sam makroskładnik. Kurczak 200 g → indyk 226 g,
+  bo obydwa dają dokładnie 43 g białka. Śmietana → jogurt grecki po zawartości tłuszczu.
+- **Wypadnięcie z rotacji** tylko wtedy, gdy składnik jest **fundamentem** dania: widnieje
+  w nazwie i niesie ponad 35% jego kalorii albo 45% białka. Jajka w „Jajecznicy" — tak.
+  Jajka w „Desce śniadaniowej — sery, jajka i warzywa" — nie, tam wystarczy podmiana.
+- Gdy oba warianty dnia wypadną, aplikacja dobiera zastępstwo z puli tego samego typu.
+  Słodka kolacja zostaje słodką.
+
+Zakładka Ja pokazuje od razu skutki: ile dań przebudowanych, ile wypadło i co zostaje w rotacji.
+Gdy zostaje mniej niż dwa dania w którejś puli, dostajesz ostrzeżenie, że tydzień zrobi się monotonny.
+
+Przepis pokazuje wprost, co zostało zamienione i na co. Nazwa dania zostaje oryginalna —
+wolę to niż podmienianie jej na siłę i produkowanie łamanej polszczyzny.
+
+Dane: `ZAMIENNIKI` (mapa zamian), `POMIJALNE` (dodatki, które można po prostu usunąć),
+`NIEZBEDNE` (składniki bez których danie przestaje istnieć, a nazwa tego nie zdradza).
+
 ## Ręczne makroskładniki
 
 W zakładce Ja są trzy pola: białko, tłuszcz, węgle. **Puste = liczone z formuły.**
@@ -98,6 +121,11 @@ i aplikacja to napisze.
 
 Wiek i wzrost są teraz zwykłymi polami na górze, a kalkulator Mifflina–St Jeora liczy z nich
 na bieżąco i pokazuje różnicę wobec wpisanego zapotrzebowania.
+
+## Wygląd
+
+Przełącznik w zakładce Ja: automatycznie (za ustawieniem telefonu, przełącza się na żywo),
+jasny albo ciemny na sztywno. Zmienia też kolor paska systemowego.
 
 ## Pomoc — asystent
 
