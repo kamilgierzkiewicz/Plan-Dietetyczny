@@ -1,6 +1,6 @@
 /* Dieta keto — service worker
    Podbij WERSJA przy każdej zmianie index.html, żeby telefon pobrał nową wersję. */
-const WERSJA = "dieta-keto-v6";
+const WERSJA = "dieta-keto-v7";
 const SHELL  = WERSJA + "-shell";
 const RUNTIME = WERSJA + "-runtime";
 

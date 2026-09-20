@@ -168,6 +168,7 @@ input{font:inherit}
 .opt.on{background:var(--slab-2);border-color:var(--line)}
 .opt.on::before{background:var(--fat)}
 .opt-n{font-weight:600;font-size:14px;line-height:1.28;margin-bottom:auto;padding-bottom:9px}
+.opt{padding-top:12px}
 .opt-meta{display:flex;gap:6px;font-size:12px;color:var(--mute);font-variant-numeric:tabular-nums}
 .opt-meta .kcal{color:var(--bone);font-weight:600}
 .opt-carb{display:inline-flex;align-items:center;gap:4px;margin-top:6px;font-size:12px;
@@ -175,7 +176,12 @@ input{font:inherit}
 .opt-carb i{width:5px;height:5px;border-radius:50%;background:var(--iron)}
 .opt-see{margin-top:9px;font-size:12px;color:var(--mute);font-weight:500;align-self:flex-start;
   text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--line)}
-.mk{position:absolute;top:11px;right:11px;font-size:14px;line-height:1;opacity:.75}
+.tag{display:inline-block;align-self:flex-start;margin-bottom:7px;padding:3px 7px;
+  border-radius:5px;font-size:10.5px;font-weight:700;line-height:1.2;letter-spacing:.01em}
+.tag.sw{background:color-mix(in srgb,var(--fat) 26%,transparent);color:var(--fat)}
+.tag.sav{background:color-mix(in srgb,var(--moss) 26%,transparent);color:var(--moss)}
+.opt.on .tag.sw{background:var(--fat);color:var(--ink)}
+.opt.on .tag.sav{background:var(--moss);color:var(--ink)}
 .surrow{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
 .surrow::-webkit-scrollbar{display:none}
 .sur{flex:0 0 auto;padding:9px 12px;border-radius:999px;background:var(--slab);
@@ -858,7 +864,7 @@ function przelicz(dayIdx,pick,prof){
 
 
 /* ══════════ STAN ══════════ */
-const WER="6";
+const WER="7";
 const KEY="dieta-keto-v2";
 let ST={
   pick:{}, check:{}, day:0,
@@ -912,9 +918,9 @@ function renderRail(){
 }
 
 /* ══════════ PLAN ══════════ */
-const SLOTS=[{key:"s",t:"Posiłek 1",hint:"bez zbóż i owoców"},
-             {key:"o",t:"Obiad",hint:"tu wchodzą węglowodany"},
-             {key:"k",t:"Kolacja",hint:"słodka albo wytrawna"}];
+const SLOTS=[{key:"s",t:"Posiłek 1",hint:"dwa dania do wyboru"},
+             {key:"o",t:"Obiad",hint:"dwa dania, tu wchodzą węgle"},
+             {key:"k",t:"Kolacja",hint:"jedna słodka, jedna wytrawna"}];
 
 function renderPlan(){
   const r=dzien(ST.day), s=r.sum, P=ST.prof;
@@ -995,7 +1001,7 @@ function renderPlan(){
         const m=MEALS[id];
         const v=n===sel?r.posilki[si]:podglad(id,r.f);
         return `<button class="opt${n===sel?" on":""}" data-slot="${S.key}" data-n="${n}">
-          ${m.sw?'<span class="mk" title="na słodko">◗</span>':""}${m.sav?'<span class="mk" title="wytrawna">◖</span>':""}
+          ${m.sw?'<span class="tag sw">na słodko</span>':""}${m.sav?'<span class="tag sav">wytrawna</span>':""}
           <span class="opt-n">${m.n}</span>
           <span class="opt-meta"><span class="kcal">${r0(v.k)}</span> kcal · ${m.t}</span>
           <span class="opt-carb"><i></i>${r1(v.c)} g węgli</span>
